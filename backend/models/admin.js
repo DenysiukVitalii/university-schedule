@@ -6,15 +6,13 @@ const connection = mysql.createConnection({
     database: 'un_schedule'
 });
 
-connection.connect(function() {
-    console.log("Database connected");
-});
+connection.connect(() => console.log("Database connected"));
 
-module.exports.getAllTeachers = function(data, callback) {
-    return new Promise(function(resolve, c) {
-        connection.query("SELECT * FROM Teacher ORDER BY id DESC", function(err, rows, fields) {
+module.exports.getAllTeachers = () => {
+    return new Promise((resolve, reject) => {
+        connection.query("SELECT * FROM Teacher ORDER BY id DESC", (err, rows, fields) => {
             if (err) {
-                return resolve(err);
+                return reject(err);
             }
             resolve(rows);
         });
