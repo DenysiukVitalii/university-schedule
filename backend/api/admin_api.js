@@ -14,8 +14,8 @@ app.use((req, res, next) => {
 
 // API Routes
 app.get('/', async(req, res) => {
-    let teachers = await admin.getAllTeachers();
-    res.json(teachers);
+    let groups = await admin.getGroups();
+    res.json(groups);
 });
 
 module.exports = app;

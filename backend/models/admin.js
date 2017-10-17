@@ -16,5 +16,16 @@ module.exports.getAllTeachers = () => {
             }
             resolve(rows);
         });
-    })
+    });
+}
+
+module.exports.getGroups = () => {
+    return new Promise((resolve, reject) => {
+        connection.query("SELECT * FROM Un_group ORDER BY id DESC", (err, rows, fields) => {
+            if (err) {
+                return reject(err);
+            }
+            resolve(rows);
+        });
+    });
 }

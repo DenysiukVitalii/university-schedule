@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import { Link } from 'react-router-dom';
+import { InputAutocomplete } from 'input-autocomplete'
+//import logo from './logo.svg';
 import './App.css';
 
 class App extends Component {
@@ -9,22 +11,16 @@ class App extends Component {
   }
 
   componentDidMount() {
-    console.log("here");
-    fetch('http://localhost:8080/')
-    .then(response => {
+   this.getGroups();
+  }
+
+  getGroups() {
+    fetch('http://localhost:8080/').then(response => {
       return response.json();
     }).then( data => { 
       console.log(data);
-      let teachers = data.map(e => {
-        return (
-          <li key={e.id}>
-            {e.surname} {e.name} {e.lastname} ({e.position}, {e.phone})
-          </li>
-        )
-      })
-      this.setState({
-        teachers: teachers
-      });
+      let groups = data.map(e => e.id);
+      this.setState({ groups: groups });
     })
     .catch(error => {
       console.log('Error fetching and parsing data', error);
@@ -32,20 +28,32 @@ class App extends Component {
   }
 
   render() {
-    console.log(this.state);
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-        <ul>
-          {this.state.teachers}
-        </ul>
-      </div>
+       <div className="container">
+         <Header/>
+         <div className="choose_group">
+          <span>Choose group: </span>
+          <InputAutocomplete
+            type='text'
+            name="group"
+            class="form-control"
+            autocompleteValues={this.state.groups}
+            placeholder="Group"
+           />
+          <button className="btn">Get schedule</button>
+         </div>
+       </div>
+    );
+  }
+}
+
+class Header extends Component {
+  render() {
+    return (
+      <header>
+        <h1 className="text-left">University Schedule</h1>
+        <Link to="/admin" className="btn">Admin</Link>
+      </header>
     );
   }
 }
