@@ -34,6 +34,19 @@ body {
     text-align: left;
 }
 
+.bold {
+    font-weight: bold;
+}
+
+.blue-background {
+    background-color: #006064;
+    color: #fff;
+}
+
+.table {
+    border: 1px solid #006064;
+}
+
 .btn {
     padding: 10px 20px;
     background-color: #006064;
@@ -60,4 +73,49 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.btn-danger {
+    color: #fff;
+    background-color: #d9534f;
+    border-color: #d43f3a;
+}
+
+.btn-danger:hover {
+    color: #fff;
+    background-color: #c9302c;
+    border-color: #ac2925;
+}
+
+.btn-warning {
+    color: #fff;
+    background-color: #f0ad4e;
+    border-color: #eea236;
+}
+
+.btn-warning:hover {
+    color: #fff;
+    background-color: #ec971f;
+    border-color: #d58512;
+}
+
+.table>tbody>tr>td,
+.table>tbody>tr>th,
+.table>tfoot>tr>td,
+.table>tfoot>tr>th,
+.table>thead>tr>td,
+.table>thead>tr>th {
+    padding: 2px;
+    line-height: 4.428571;
+    vertical-align: top;
+    border-top: 1px solid #ddd;
+}
+
+.table-bordered>tbody>tr>td,
+.table-bordered>tbody>tr>th,
+.table-bordered>tfoot>tr>td,
+.table-bordered>tfoot>tr>th,
+.table-bordered>thead>tr>td,
+.table-bordered>thead>tr>th {
+    border: 1px solid #006064;
 }

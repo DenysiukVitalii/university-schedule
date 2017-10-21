@@ -29,3 +29,34 @@ module.exports.getGroups = () => {
         });
     });
 }
+
+module.exports.getSpecialties = () => {
+    return new Promise((resolve, reject) => {
+        connection.query("SELECT * FROM Specialty ORDER BY id ASC", (err, rows, fields) => {
+            if (err) {
+                return reject(err);
+            }
+            resolve(rows);
+        });
+    });
+}
+
+module.exports.findBySpecname = function(spec_name, callback) {
+    connection.query("SELECT * FROM Specialty WHERE spec_name = '" + spec_name + "'", callback);
+}
+
+module.exports.addSpecialty = function(data, callback) {
+    connection.query("INSERT INTO Specialty SET ?", data, callback);
+}
+
+module.exports.deleteSpecialty = function(idSpecialty, callback) {
+    connection.query("DELETE FROM Specialty WHERE id = ?", idSpecialty, callback);
+}
+
+module.exports.sendResponse = function(success, res) {
+    if (success) {
+        res.send({ 'success': 'true' });
+    } else {
+        res.send({ 'success': 'false' });
+    }
+}

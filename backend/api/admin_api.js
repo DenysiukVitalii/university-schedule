@@ -18,4 +18,35 @@ app.get('/', async(req, res) => {
     res.json(groups);
 });
 
+app.get('/all_specs', async(req, res) => {
+    let specs = await admin.getSpecialties();
+    res.json(specs);
+});
+
+app.post('/create_spec', (req, res) => {
+    var data = req.body;
+    console.log(data);
+    admin.findBySpecname(data.spec_name, function(err, rows, fields) {
+        if (rows.length == 1) {
+            admin.sendResponse(false, res);
+        } else {
+            admin.addSpecialty(data, function(err, info) {
+                if (err) throw err;
+                console.log(info);
+                admin.sendResponse(true, res);
+            });
+        };
+    });
+});
+
+app.delete('/delete_spec', (req, res) => {
+    var data = req.body;
+    console.log(data.id);
+    admin.deleteSpecialty(data.id, function(err, info) {
+        if (err) throw err;
+        console.log(info);
+        admin.sendResponse(true, res);
+    });
+})
+
 module.exports = app;
