@@ -1,0 +1,28 @@
+.actions {
+    display: flex;
+}
+
+.btn {
+    margin: 0 10px;
+}
+
+#createSpec main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    padding: 20px;
+    width: 50%;
+}
+
+form div {
+    width: 100%;
+}

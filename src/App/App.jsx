@@ -36,7 +36,7 @@ class App extends Component {
           <InputAutocomplete
             type='text'
             name="group"
-            class="form-control"
+            className="form-control"
             autocompleteValues={this.state.groups}
             placeholder="Group"
            />
