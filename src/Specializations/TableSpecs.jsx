@@ -20,16 +20,7 @@ class TableSpecs extends Component {
        return response.json();
      }).then( data => { 
        console.log(data);
-       let specs = data.map(e => (
-         <tr key={e.id} align="center">
-           <td>{e.id}</td>
-           <td>{e.spec_name}</td>
-           <td width="25%">
-              <button className="btn btn-warning">Edit</button>
-              <button className="btn btn-danger" onClick={() => this.deleteSpecialty(e)}>Delete</button>
-           </td>
-         </tr>
-       ));
+       let specs = data;
        this.setState({ specs: specs });
      })
      .catch(error => {
@@ -53,7 +44,7 @@ class TableSpecs extends Component {
       console.log(data);
       if (data.success) {
         let specs = this.state.specs;
-        let ids = specs.map(i => +i.key);
+        let ids = specs.map(i => +i.id);
         let index = ids.indexOf(item.id);
         specs.splice(index, 1);
         this.setState({specs: specs });
@@ -96,7 +87,18 @@ class TableSpecs extends Component {
                         <td>Actions</td>
                     </tr>
                   </thead>
-                  <tbody>{this.state.specs}</tbody>
+                  <tbody>
+                    {this.state.specs.map(e => (
+                        <tr key={e.id} align="center">
+                          <td>{e.id}</td>
+                          <td>{e.spec_name}</td>
+                          <td width="25%">
+                              <button className="btn btn-warning">Edit</button>
+                              <button className="btn btn-danger" onClick={() => this.deleteSpecialty(e)}>Delete</button>
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
               </table>
               {this.state.alert}
           </main>
