@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import SweetAlert from 'react-bootstrap-sweetalert';
-import { Modal } from 'react-bootstrap';
 import myfetch from '../myfetch';
+import EditSpec from './EditSpec'
 
 class TableSpecs extends Component {
   constructor() {
     super();
     this.state = {specs: [], alert: null, showModal: false, currentItem: ''};
-    this.getSpecialties = this.getSpecialties.bind(this);
-    this.deleteSpecialty = this.deleteSpecialty.bind(this);
     this.dataAfterEdit = this.dataAfterEdit.bind(this);
     this.close = this.close.bind(this);
     this.open = this.open.bind(this);
@@ -46,7 +44,7 @@ class TableSpecs extends Component {
           alert: getError()
         });
       }
-    }).catch(error => {console.log('Error!', error);});
+    });
   }
 
   deletedItem(item) {
@@ -107,7 +105,7 @@ class TableSpecs extends Component {
               </table>
               {this.state.alert}
           </main>
-          <EditModal show={this.state.showModal} 
+          <EditSpec show={this.state.showModal} 
                      hide={this.close} 
                      value={this.state.currentItem}
                      response={this.dataAfterEdit}
@@ -115,73 +113,6 @@ class TableSpecs extends Component {
                      hideAlert={this.hideAlert}/>
       </div>
     );
-  }
-}
-
-class EditModal extends TableSpecs {
-  constructor(props) {
-    super(props);
-    this.state = {newSpecName: ''};
-    this.onChange = this.onChange.bind(this);
-    this.editSpecialty = this.editSpecialty.bind(this);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      newSpecName: nextProps.value.spec_name
-    });
-  }
-
-  onChange(e) {
-    var val = e.target.value;
-    this.setState({newSpecName: val});
-  }
-
-  editSpecialty() {
-    let item = {
-      id: this.props.value.id,
-      spec_name: this.state.newSpecName
-    };
-
-    myfetch('edit_spec', 'put', item)
-    .then( data => { 
-      data.success = JSON.parse(data.success);
-      if (data.success) {
-        const getSuccess = () => (
-          <SweetAlert success title="Success" onConfirm={this.props.hideAlert}>
-            You edit this specialty!
-          </SweetAlert>
-        );
-        this.props.alert(getSuccess());
-        this.props.response(item);  
-      } else {
-        const getError = () => (
-          <SweetAlert error title="Error" onConfirm={this.props.hideAlert}>
-            You can't edit this specialty!
-          </SweetAlert>
-        );
-        this.props.alert(getError());
-      }
-    });
-  }
-
-  render() {
-    return (
-      <div>
-          <Modal show={this.props.show} onHide={this.props.hide}>
-              <Modal.Header closeButton><Modal.Title>Edit Specialty</Modal.Title></Modal.Header>
-              <Modal.Body>
-                <input type="text" name="e_spec_name" className="form-control" 
-                       defaultValue={this.state.newSpecName} onChange={this.onChange}/>
-              </Modal.Body>
-              <Modal.Footer>
-                <button className="btn btn-warning" onClick={this.editSpecialty}>Edit</button>
-                <button className="btn" onClick={this.props.hide}>Close</button>
-              </Modal.Footer>
-          </Modal>
-          {this.state.alert}
-      </div>
-    )
   }
 }
 

@@ -39,11 +39,14 @@ app.post('/create_spec', (req, res) => {
     });
 });
 
-app.delete('/delete_spec', (req, res) => {
+app.delete('/delete_spec', (req, res, next) => {
     var data = req.body;
     console.log(data.id);
     admin.deleteSpecialty(data.id, function(err, info) {
-        if (err) throw err;
+        if (err) {
+            next(err);
+            return res.send({ 'success': 'false' });
+        }
         console.log(info);
         admin.sendResponse(true, res);
     });
