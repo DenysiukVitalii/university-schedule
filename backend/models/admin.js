@@ -53,6 +53,10 @@ module.exports.deleteSpecialty = function(idSpecialty, callback) {
     connection.query("DELETE FROM Specialty WHERE id = ?", idSpecialty, callback);
 }
 
+module.exports.editSpecialty = function(idSpecialty, newSpec, callback) {
+    connection.query(`UPDATE Specialty SET spec_name = '${newSpec}' WHERE id = ${idSpecialty}`, callback);
+}
+
 module.exports.sendResponse = function(success, res) {
     if (success) {
         res.send({ 'success': 'true' });

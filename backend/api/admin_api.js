@@ -49,4 +49,14 @@ app.delete('/delete_spec', (req, res) => {
     });
 })
 
+app.put('/edit_spec', (req, res) => {
+    var data = req.body;
+    console.log(data);
+    admin.editSpecialty(data.id, data.spec_name, function(err, info) {
+        if (err) throw err;
+        console.log(info);
+        admin.sendResponse(true, res);
+    });
+});
+
 module.exports = app;
