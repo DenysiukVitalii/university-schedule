@@ -35,19 +35,19 @@ class EditSpec extends Component {
           this.props.alert(this.getAlert(true, 'You edit this specialty!'));
           this.props.response(item);  
         } else {
-          this.props.alert(this.getAlert(false, "You can't edit this specialty!"));
+          this.props.alert(this.getAlert(false, "Such specialty already exist! Rename, please."));
         }
       });
     }
 
-    getAlert(state, message, hideAlert) {
+    getAlert(state, message) {
       return (state) ? (
           <SweetAlert success title="Success" onConfirm={this.props.hideAlert}>
             {message}
           </SweetAlert>
         ) : (
           <SweetAlert error title="Error" onConfirm={this.props.hideAlert}>
-          {message}You edit this specialty!
+            {message}
           </SweetAlert>
         );
     }

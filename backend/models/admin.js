@@ -42,7 +42,7 @@ module.exports.getSpecialties = () => {
 }
 
 module.exports.findBySpecname = function(spec_name, callback) {
-    connection.query("SELECT * FROM Specialty WHERE spec_name = '" + spec_name + "'", callback);
+    connection.query(`SELECT * FROM Specialty WHERE spec_name = '${spec_name}'`, callback);
 }
 
 module.exports.addSpecialty = function(data, callback) {
@@ -50,7 +50,7 @@ module.exports.addSpecialty = function(data, callback) {
 }
 
 module.exports.deleteSpecialty = function(idSpecialty, callback) {
-    connection.query("DELETE FROM Specialty WHERE id = ?", idSpecialty, callback);
+    connection.query(`DELETE FROM Specialty WHERE id = ${idSpecialty}`, callback);
 }
 
 module.exports.editSpecialty = function(idSpecialty, newSpec, callback) {
