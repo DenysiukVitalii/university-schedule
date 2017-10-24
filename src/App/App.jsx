@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { InputAutocomplete } from 'input-autocomplete'
 //import logo from './logo.svg';
 import './App.css';
+import myfetch from '../myfetch';
 
 class App extends Component {
   constructor() {
@@ -15,9 +16,8 @@ class App extends Component {
   }
 
   getGroups() {
-    fetch('http://localhost:8080/').then(response => {
-      return response.json();
-    }).then( data => { 
+    myfetch('')
+    .then( data => { 
       console.log(data);
       let groups = data.map(e => e.id);
       this.setState({ groups: groups });
