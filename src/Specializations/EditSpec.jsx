@@ -32,22 +32,24 @@ class EditSpec extends Component {
       .then( data => { 
         data.success = JSON.parse(data.success);
         if (data.success) {
-          const getSuccess = () => (
-            <SweetAlert success title="Success" onConfirm={this.props.hideAlert}>
-              You edit this specialty!
-            </SweetAlert>
-          );
-          this.props.alert(getSuccess());
+          this.props.alert(this.getAlert(true, 'You edit this specialty!'));
           this.props.response(item);  
         } else {
-          const getError = () => (
-            <SweetAlert error title="Error" onConfirm={this.props.hideAlert}>
-              You can't edit this specialty!
-            </SweetAlert>
-          );
-          this.props.alert(getError());
+          this.props.alert(this.getAlert(false, "You can't edit this specialty!"));
         }
       });
+    }
+
+    getAlert(state, message, hideAlert) {
+      return (state) ? (
+          <SweetAlert success title="Success" onConfirm={this.props.hideAlert}>
+            {message}
+          </SweetAlert>
+        ) : (
+          <SweetAlert error title="Error" onConfirm={this.props.hideAlert}>
+          {message}You edit this specialty!
+          </SweetAlert>
+        );
     }
   
     render() {
@@ -56,6 +58,7 @@ class EditSpec extends Component {
             <Modal show={this.props.show} onHide={this.props.hide}>
                 <Modal.Header closeButton><Modal.Title>Edit Specialty</Modal.Title></Modal.Header>
                 <Modal.Body>
+                  <label htmlFor="e_spec_name">Specialty name</label>
                   <input type="text" name="e_spec_name" className="form-control" 
                          defaultValue={this.state.newSpecName} onChange={this.onChange}/>
                 </Modal.Body>
