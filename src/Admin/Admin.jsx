@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Route, Switch } from 'react-router-dom';
-import Specializations from '../Specializations/Specializations';
 
 class Admin extends Component {
   constructor() {
@@ -17,13 +15,11 @@ class Admin extends Component {
           <Link to="/" className="btn">Home</Link>
         </header>
         <main> 
-          <ul>
+          <ul className="admin-items">
             <li><Link to="/specs" className="btn">Specializations</Link></li>
+            <li><Link to="/groups" className="btn">Groups</Link></li>
           </ul>
         </main>
-        <Switch>
-          <Route path="/specs" component={Specializations}/>
-        </Switch>
       </div>
     );
   }

@@ -120,3 +120,15 @@ header {
 .table-bordered>thead>tr>th {
     border: 1px solid #006064;
 }
+
+.admin-items {
+    list-style: none;
+}
+
+.admin-items li {
+    margin-bottom: 10px;
+}
+
+.btn {
+    margin: 0 5px;
+}

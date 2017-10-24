@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import myfetch from '../myfetch';
-import EditSpec from './EditSpec'
+import EditSpec from './EditSpec';
 
 class TableSpecs extends Component {
   constructor() {

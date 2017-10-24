@@ -45,6 +45,10 @@ module.exports.findBySpecname = function(spec_name, callback) {
     connection.query(`SELECT * FROM Specialty WHERE spec_name = '${spec_name}'`, callback);
 }
 
+module.exports.findByGroup = function(group, callback) {
+    connection.query(`SELECT * FROM Un_group WHERE id = '${group}'`, callback);
+}
+
 module.exports.addSpecialty = function(data, callback) {
     connection.query("INSERT INTO Specialty SET ?", data, callback);
 }
@@ -55,6 +59,14 @@ module.exports.deleteSpecialty = function(idSpecialty, callback) {
 
 module.exports.editSpecialty = function(idSpecialty, newSpec, callback) {
     connection.query(`UPDATE Specialty SET spec_name = '${newSpec}' WHERE id = ${idSpecialty}`, callback);
+}
+
+module.exports.addGroup = function(data, callback) {
+    connection.query("INSERT INTO Un_group SET ?", data, callback);
+}
+
+module.exports.deleteGroup = function(group, callback) {
+    connection.query(`DELETE FROM Un_group WHERE id = '${group}'`, callback);
 }
 
 module.exports.sendResponse = function(success, res) {
