@@ -75,7 +75,6 @@ class CreateGroup extends Component {
     }
   
     render() {
-        console.log(this.state.selectedSpec);
       return (
         <div>
             <Modal show={this.props.show} onHide={this.props.hide}>

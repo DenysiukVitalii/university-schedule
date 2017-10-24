@@ -11,6 +11,7 @@ class GroupsTable extends Component {
     this.openCreateModal = this.openCreateModal.bind(this);
     this.closeCreateModal = this.closeCreateModal.bind(this);
     this.callAlert = this.callAlert.bind(this); 
+    this.dataAfterCreate = this.dataAfterCreate.bind(this);
   }
 
   componentDidMount() {
@@ -62,7 +63,7 @@ class GroupsTable extends Component {
 
   deletedItem(item) {
     let groups = this.state.groups;
-    let ids = groups.map(i => +i.id);
+    let ids = groups.map(i => i.id);
     let index = ids.indexOf(item.id);
     groups.splice(index, 1);
     return groups;
@@ -86,6 +87,14 @@ class GroupsTable extends Component {
   callAlert(value) {
     this.setState({
       alert: value
+    });
+  }
+
+  dataAfterCreate(data) {
+    let groups = this.state.groups;
+    groups.push(data);
+    this.setState({
+      groups: groups
     });
   }
 
@@ -121,6 +130,7 @@ class GroupsTable extends Component {
           <CreateGroup show={this.state.createModal} 
                      hide={this.closeCreateModal}
                      alert={this.callAlert}
+                     response={this.dataAfterCreate}
                      specialties={this.state.specs}
                      hideAlert={this.hideAlert}/>
       </div>
