@@ -69,6 +69,10 @@ module.exports.deleteGroup = function(group, callback) {
     connection.query(`DELETE FROM Un_group WHERE id = '${group}'`, callback);
 }
 
+module.exports.editGroup = function(data, callback) {
+    connection.query(`UPDATE Un_group SET id = '${data.newName}', specialtyID = ${data.specialtyID}, course = ${data.course}, amount_students = ${data.amount_students} WHERE id = '${data.id}'`, callback);
+}
+
 module.exports.sendResponse = function(success, res) {
     if (success) {
         res.send({ 'success': 'true' });
