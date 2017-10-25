@@ -86,6 +86,7 @@ app.post('/create_group', (req, res) => {
     var data = req.body;
     console.log(data);
     admin.findByGroup(data.id, function(err, rows, fields) {
+        console.log(rows.length);
         if (rows.length == 1) {
             admin.sendResponse(false, res);
         } else {

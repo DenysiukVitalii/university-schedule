@@ -11,6 +11,7 @@ class GroupsTable extends Component {
     this.openCreateModal = this.openCreateModal.bind(this);
     this.closeCreateModal = this.closeCreateModal.bind(this);
     this.callAlert = this.callAlert.bind(this); 
+    this.hideAlert = this.hideAlert.bind(this);
     this.dataAfterCreate = this.dataAfterCreate.bind(this);
   }
 
@@ -47,11 +48,11 @@ class GroupsTable extends Component {
       console.log(data);
       data.success = JSON.parse(data.success);
       if (data.success) {
-        this.setState({specs: this.deletedItem(item) });
+        this.setState({groups: this.deletedItem(item) });
       } else {
         const getError = () => (
           <SweetAlert error title="Error" onConfirm={this.hideAlert}>
-            You can't delete this specialty!
+            You can't delete this group!
           </SweetAlert>
         );
         this.setState({
@@ -91,11 +92,12 @@ class GroupsTable extends Component {
   }
 
   dataAfterCreate(data) {
-    let groups = this.state.groups;
+    /*let groups = this.state.groups;
     groups.push(data);
     this.setState({
       groups: groups
-    });
+    });*/
+    this.getGroups();
   }
 
   render() {
@@ -126,6 +128,7 @@ class GroupsTable extends Component {
                       ))}
                 </tbody>
             </table>
+            {this.state.alert}
           </main>
           <CreateGroup show={this.state.createModal} 
                      hide={this.closeCreateModal}
