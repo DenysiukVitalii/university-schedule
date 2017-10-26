@@ -23,17 +23,30 @@ class CreateGroup extends Component {
     }
 
     onChange(e) {
+      console.log(e);
         this.setState({[e.target.name]: e.target.value});
+    }
+
+    validation() {
+      let group = this.state.newGroupName,
+          groupRegex = /^[a-zA-Z]{2}-[0-9]{2}$/,
+          amount = this.state.selectedAmount;
+      return (!group || !groupRegex.test(group) || !amount) ? false : true;
     }
   
     createGroup() {
+      if (this.validation() === false) {
+        this.props.alert(this.getAlert(false, "Fill all fields correctly, please!"));
+        return;
+      } 
+
       let item = {
-        id: this.state.newGroupName,
+        id: this.state.newGroupName.toUpperCase(),
         specialtyID: +this.state.selectedSpec,
         course: this.state.selectedYear,
         amount_students: this.state.selectedAmount
       };
-
+   
       myfetch('create_group', 'post', item)
       .then( data => { 
         if (JSON.parse(data.success)) {
@@ -94,7 +107,7 @@ class CreateGroup extends Component {
   
   const Footer = (props) => (
       <Modal.Footer>
-        <button className="btn btn-warning" onClick={props.create}>Create</button>
+        <button type="submit" className="btn btn-warning" onClick={props.create}>Create</button>
         <button className="btn" onClick={props.hide}>Close</button>
       </Modal.Footer>
   )
@@ -104,7 +117,7 @@ class CreateGroup extends Component {
       <label htmlFor="newGroupName">Group name (For example: XX-11)</label>
           <input type="text" name="newGroupName" className="form-control" 
                   defaultValue={props.defVal} onChange={props.change} 
-                  ref={props.refProp}/>
+                  ref={props.refProp} required/>
     </div>
   );
 

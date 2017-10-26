@@ -6,7 +6,7 @@ import myfetch from '../myfetch';
 class EditGroup extends Component {
     constructor(props) {
         super(props);
-        this.state = {specs: [], groupName: '', newName:'', selectedSpec: '', selectedYear: '' , selectedAmount: ''};
+        this.state = {specs: [], groupName: '', newName: '', selectedSpec: '', selectedYear: '' , selectedAmount: ''};
         this.onChange = this.onChange.bind(this);
         this.editGroup = this.editGroup.bind(this);
     }
@@ -15,6 +15,7 @@ class EditGroup extends Component {
         this.setState({
             specs: nextProps.specialties,
             groupName: nextProps.item.id,
+            newName: nextProps.item.id,
             selectedSpec: nextProps.item.specialtyID,
             selectedYear: nextProps.item.course,
             selectedAmount: nextProps.item.amount_students
@@ -24,17 +25,28 @@ class EditGroup extends Component {
     onChange(e) {
         this.setState({[e.target.name]: e.target.value});
     }
+
+    validation() {
+      let group = this.state.newName,
+          groupRegex = /^[a-zA-Z]{2}-[0-9]{2}$/,
+          amount = this.state.selectedAmount;
+      return (!group || !groupRegex.test(group) || !amount) ? false : true;
+    }
   
     editGroup() {
+      if (this.validation() === false) {
+        this.props.alert(this.getAlert(false, "Fill all fields correctly, please!"));
+        return;
+      } 
+
       let item = {
         id: this.state.groupName,
-        newName: this.state.newName,
+        newName: this.state.newName.toUpperCase(),
         specialtyID: +this.state.selectedSpec,
         course: +this.state.selectedYear,
         amount_students: +this.state.selectedAmount
       };
      
-      console.log(item);
       myfetch('edit_group', 'put', item)
       .then( data => { 
         if (JSON.parse(data.success)) {
@@ -48,11 +60,11 @@ class EditGroup extends Component {
 
     getAlert(state, message) {
       return (state) ? (
-          <SweetAlert success title="Success" onConfirm={this.props.hideAlert}>
+          <SweetAlert success title="Success" onConfirm={() => this.props.hideAlert(true)}>
             {message}
           </SweetAlert>
         ) : (
-          <SweetAlert error title="Error" onConfirm={this.props.hideAlert}>
+          <SweetAlert error title="Error" onConfirm={() => this.props.hideAlert(false)}>
             {message}
           </SweetAlert>
         );

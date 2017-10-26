@@ -93,11 +93,18 @@ class GroupsTable extends Component {
   }
 
   // methods for alert
-  hideAlert() {
-    this.setState({
-      alert: null,
-      editModal: false
-    });
+  hideAlert(state) {
+    if (!state) {
+      this.setState({
+        alert: null
+      });
+    } else {
+      this.setState({
+        alert: null,
+        editModal: false
+      });
+    }
+    
   }
 
   callAlert(value) {
@@ -142,7 +149,7 @@ class GroupsTable extends Component {
                     alert={this.callAlert} hideAlert={this.hideAlert}
                     response={this.dataAfterCreate} specialties={this.state.specs} />
         <EditGroup show={this.state.editModal} hide={this.closeEditModal} 
-                   alert={this.callAlert} hideAlert={this.hideAlert}
+                   alert={this.callAlert} hideAlert={(e) => this.hideAlert(e)}
                    item={this.state.currentItem} response={this.dataAfterEdit}
                    specialties={this.state.specs} />
       </div>

@@ -102,7 +102,7 @@ app.put('/edit_group', (req, res) => {
     var data = req.body;
     console.log(data);
     admin.findByGroup(data.newName, function(err, rows, fields) {
-        if (rows.length == 1) {
+        if (rows.length == 1 && data.newName !== data.id) {
             admin.sendResponse(false, res);
         } else {
             admin.editGroup(data, function(err, info) {
