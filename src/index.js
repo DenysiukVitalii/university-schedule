@@ -9,6 +9,7 @@ import Admin from './Admin/Admin';
 
 import TableSpecs from './Specializations/TableSpecs';
 import GroupsTable from './Groups/GroupsTable';
+import TeachersTable from './Teachers/TeachersTable';
 import CreateSpec from './Specializations/CreateSpec';
 
 ReactDOM.render(( 
@@ -20,6 +21,7 @@ ReactDOM.render((
        <Route path="/specs" component={TableSpecs}/>
        <Route path='/newspec' component={CreateSpec}/>
        <Route path='/groups' component={GroupsTable}/>
+       <Route path='/teachers' component={TeachersTable}/>
      </Switch>
     </BrowserRouter>
 ), document.getElementById('root'));

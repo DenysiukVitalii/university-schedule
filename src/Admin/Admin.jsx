@@ -18,6 +18,7 @@ class Admin extends Component {
           <ul className="admin-items">
             <li><Link to="/specs" className="btn">Specializations</Link></li>
             <li><Link to="/groups" className="btn">Groups</Link></li>
+            <li><Link to="/teachers" className="btn">Teachers</Link></li>
           </ul>
         </main>
       </div>

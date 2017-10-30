@@ -22,10 +22,11 @@ class GroupsTable extends Component {
     this.getSpecialties();
     this.getGroups();
   }
- 
+
   getGroups() {
     myfetch('')
-    .then( data => { 
+    .then( data => {  
+      console.log(data);
       this.bindSpecialty(data);
     }).catch(error => {console.log('Error!', error);});
   }
@@ -34,6 +35,7 @@ class GroupsTable extends Component {
     myfetch('all_specs')
     .then( data => { 
       let specs = data;
+      console.log(specs);
       this.setState({ specs: specs });
     }).catch(error => {console.log('Error!', error);});
   }
@@ -49,10 +51,12 @@ class GroupsTable extends Component {
   }
 
   deleteGroup(item) {
+    console.log(item);
     myfetch('delete_group', 'delete', item)
     .then((data) => {
       console.log(data);
       data.success = JSON.parse(data.success);
+      console.log(data);
       if (data.success) {
         this.setState({groups: this.deletedItem(item) });
       } else {
