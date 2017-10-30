@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import myfetch from '../myfetch';
 import CreateTeacher from './CreateTeacher';
-// import EditTeacher from './EditTeacher';
+import EditTeacher from './EditTeacher';
 
 class TeachersTable extends Component {
   constructor() {
@@ -11,11 +11,11 @@ class TeachersTable extends Component {
     this.state = {teachers: [], createModal: false, editModal: false, currentItem: '', alert: null};
     this.openCreateModal = this.openCreateModal.bind(this);
     this.closeCreateModal = this.closeCreateModal.bind(this);
-    // this.closeEditModal = this.closeEditModal.bind(this);
+    this.closeEditModal = this.closeEditModal.bind(this);
     this.callAlert = this.callAlert.bind(this); 
     this.hideAlert = this.hideAlert.bind(this);
     this.dataAfterCreate = this.dataAfterCreate.bind(this);
-    // this.dataAfterEdit = this.dataAfterEdit.bind(this);
+    this.dataAfterEdit = this.dataAfterEdit.bind(this);
   }
 
   componentDidMount() {
@@ -67,13 +67,15 @@ class TeachersTable extends Component {
     await this.setState({ createModal: true });
   }
 
-  // closeEditModal() {
-  //   this.setState({ editModal: false, currentItem: '' });
-  // }
+  closeEditModal() {
+    this.setState({ editModal: false, currentItem: '' });
+  }
 
-  // async openEditModal(item) {
-  //   await this.setState({ editModal: true, currentItem: item });
-  // }
+  async openEditModal(item) {
+    console.log(item);
+    await this.setState({ editModal: true, currentItem: item });
+    console.log(this.state.currentItem);
+  }
 
   // methods for alert
   hideAlert(state) {
@@ -100,23 +102,12 @@ class TeachersTable extends Component {
     this.getTeachers();
   }
 
-  // dataAfterEdit(data) {
-  //   let groups = this.state.groups;
-  //   let specs = this.state.specs;
-  //   groups = groups.map(e => {
-  //     if (e.id === data.id)  {
-  //       data.id = data.newName;
-  //       delete data.newName;
-  //       specs.forEach(spec => {
-  //         if (data.specialtyID === spec.id) data.spec_name = spec.spec_name;
-  //       });
-  //       return data;
-  //     } else {
-  //       return e;
-  //     }
-  //   });
-  //   this.setState({groups: groups});
-  // }
+  dataAfterEdit(data) {
+    console.log(data);
+    let teachers = this.state.teachers;
+    teachers = teachers.map(e => (e.id === data.id) ? data : e);
+    this.setState({teachers: teachers});
+  }
 
   render() {
     return (
@@ -124,12 +115,16 @@ class TeachersTable extends Component {
         <Header click={this.openCreateModal} />
          <main>
           <Table teachers={this.state.teachers} 
+                 openEditModal={(e) => this.openEditModal(e)}
                  deleteTeacher={(e) => this.deleteTeacher(e)}/>
           {this.state.alert}
         </main>
         <CreateTeacher show={this.state.createModal} hide={this.closeCreateModal}
                        alert={this.callAlert} hideAlert={this.hideAlert}
                        response={this.dataAfterCreate}/>
+        <EditTeacher show={this.state.editModal} hide={this.closeEditModal} 
+                   alert={this.callAlert} hideAlert={(e) => this.hideAlert(e)}
+                   item={this.state.currentItem} response={this.dataAfterEdit}/>
       </div>
     );
   }

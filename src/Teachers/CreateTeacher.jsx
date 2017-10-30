@@ -167,7 +167,7 @@ class CreateTeacher extends Component {
       <label htmlFor="phone">Phone</label>
           <input type="text" name="phone" className="form-control" 
                   defaultValue={props.defVal} onChange={props.change} 
-                  ref={props.refProp} placeholder="+380674853265"/>
+                  ref={props.refProp} placeholder="0674853265"/>
     </div>
   );
 

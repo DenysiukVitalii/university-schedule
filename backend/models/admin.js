@@ -89,12 +89,23 @@ module.exports.deleteTeacher = function(idTeacher, callback) {
 }
 
 module.exports.findByTeacher = function(teacher, callback) {
-    connection.query(`SELECT * FROM Teacher WHERE name = '${teacher.surname}'
+    connection.query(`SELECT * FROM Teacher WHERE name = '${teacher.name}'
+                                             and surname = '${teacher.surname}'
+                                             and lastname = '${teacher.lastname}'
+                                             and position = '${teacher.position}'
+                                             and rank = '${teacher.rank}'
                                              and phone = '${teacher.phone}'`, callback);
 }
 
 module.exports.addTeacher = function(data, callback) {
     connection.query("INSERT INTO Teacher SET ?", data, callback);
+}
+
+module.exports.editTeacher = function(data, callback) {
+    console.log(data);
+    connection.query(`UPDATE Teacher SET name = '${data.name}', surname = '${data.surname}',
+     lastname = '${data.lastname}', position = '${data.position}', rank = '${data.rank}',
+     phone = ${data.phone} WHERE id = '${data.id}'`, callback);
 }
 
 module.exports.sendResponse = function(success, res) {
