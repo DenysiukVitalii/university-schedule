@@ -52,6 +52,17 @@ module.exports.getTeachers = () => {
     });
 }
 
+module.exports.getSubjects = () => {
+    return new Promise((resolve, reject) => {
+        connection.query("SELECT * FROM Subjects ORDER BY id ASC", (err, rows, fields) => {
+            if (err) {
+                return reject(err);
+            }
+            resolve(rows);
+        });
+    });
+}
+
 module.exports.findBySpecname = function(spec_name, callback) {
     connection.query(`SELECT * FROM Specialty WHERE spec_name = '${spec_name}'`, callback);
 }
@@ -106,6 +117,19 @@ module.exports.editTeacher = function(data, callback) {
     connection.query(`UPDATE Teacher SET name = '${data.name}', surname = '${data.surname}',
      lastname = '${data.lastname}', position = '${data.position}', rank = '${data.rank}',
      phone = ${data.phone} WHERE id = '${data.id}'`, callback);
+}
+
+module.exports.findBySubject = function(subject, callback) {
+    console.log(subject);
+    connection.query(`SELECT * FROM Subjects WHERE subject_name = '${subject.subject_name}'`, callback);
+}
+
+module.exports.addSubject = function(data, callback) {
+    connection.query("INSERT INTO Subjects SET ?", data, callback);
+}
+
+module.exports.deleteSubject = function(idSubject, callback) {
+    connection.query(`DELETE FROM Subjects WHERE id = ${idSubject}`, callback);
 }
 
 module.exports.sendResponse = function(success, res) {

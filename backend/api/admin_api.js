@@ -165,6 +165,41 @@ app.put('/edit_teacher', (req, res) => {
     });
 });
 
+app.get('/subjects', async(req, res) => {
+    let subjects = await admin.getSubjects();
+    res.json(subjects);
+});
+
+app.post('/create_subject', (req, res) => {
+    var data = req.body;
+    console.log(data);
+    admin.findBySubject(data, function(err, rows, fields) {
+        console.log(rows.length);
+        if (rows.length == 1) {
+            admin.sendResponse(false, res);
+        } else {
+            admin.addSubject(data, function(err, info) {
+                if (err) throw err;
+                console.log(info);
+                admin.sendResponse(true, res);
+            });
+        };
+    });
+});
+
+app.delete('/delete_subject', (req, res, next) => {
+    var data = req.body;
+    console.log(data.id);
+    admin.deleteSubject(data.id, function(err, info) {
+        if (err) {
+            next(err);
+            return res.send({ 'success': 'false' });
+        }
+        console.log(info);
+        admin.sendResponse(true, res);
+    });
+});
+
 
 // -- for quizzzy
 app.get('/get_tasks', async(req, res) => {
@@ -272,6 +307,7 @@ app.put('/edit_disc', (req, res) => {
         };
     });
 });
+
 
 
 module.exports = app;
