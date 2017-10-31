@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import myfetch from '../myfetch';
 import CreateSubject from './CreateSubject';
-//import EditTeacher from './EditTeacher';
+import EditSubject from './EditSubject';
 
 class SubjectsTable extends Component {
   constructor() {
@@ -11,11 +11,11 @@ class SubjectsTable extends Component {
     this.state = {subjects: [], createModal: false, editModal: false, currentItem: '', alert: null};
     this.openCreateModal = this.openCreateModal.bind(this);
     this.closeCreateModal = this.closeCreateModal.bind(this);
-   // this.closeEditModal = this.closeEditModal.bind(this);
+    this.closeEditModal = this.closeEditModal.bind(this);
     this.callAlert = this.callAlert.bind(this); 
     this.hideAlert = this.hideAlert.bind(this);
     this.dataAfterCreate = this.dataAfterCreate.bind(this);
-   // this.dataAfterEdit = this.dataAfterEdit.bind(this);
+    this.dataAfterEdit = this.dataAfterEdit.bind(this);
   }
 
   componentDidMount() {
@@ -67,16 +67,15 @@ class SubjectsTable extends Component {
     await this.setState({ createModal: true });
   }
 
-/*  closeEditModal() {
+  closeEditModal() {
     this.setState({ editModal: false, currentItem: '' });
   }
 
   async openEditModal(item) {
-    console.log(item);
     await this.setState({ editModal: true, currentItem: item });
     console.log(this.state.currentItem);
   }
-*/
+
   // methods for alert
   hideAlert(state) {
     if (!state) {
@@ -101,14 +100,13 @@ class SubjectsTable extends Component {
   dataAfterCreate(data) {
     this.getSubjects();
   }
-/*
+  
   dataAfterEdit(data) {
-    console.log(data);
-    let teachers = this.state.teachers;
-    teachers = teachers.map(e => (e.id === data.id) ? data : e);
-    this.setState({teachers: teachers});
+    let subjects = this.state.subjects;
+    subjects = subjects.map(e => (e.id === data.id) ? data : e);
+    this.setState({subjects: subjects});
   }
-*/
+
   render() {
     return (
       <div className="container">
@@ -122,6 +120,9 @@ class SubjectsTable extends Component {
         <CreateSubject show={this.state.createModal} hide={this.closeCreateModal}
                        alert={this.callAlert} hideAlert={this.hideAlert}
                        response={this.dataAfterCreate}/>
+        <EditSubject show={this.state.editModal} hide={this.closeEditModal} 
+                   alert={this.callAlert} hideAlert={(e) => this.hideAlert(e)}
+                   item={this.state.currentItem} response={this.dataAfterEdit}/>
       </div>
     );
   }

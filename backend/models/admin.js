@@ -132,6 +132,13 @@ module.exports.deleteSubject = function(idSubject, callback) {
     connection.query(`DELETE FROM Subjects WHERE id = ${idSubject}`, callback);
 }
 
+module.exports.editSubject = function(data, callback) {
+    console.log(data);
+    connection.query(`UPDATE Subjects 
+                      SET subject_name = '${data.subject_name}' 
+                      WHERE id = '${data.id}'`, callback);
+}
+
 module.exports.sendResponse = function(success, res) {
     if (success) {
         res.send({ 'success': 'true' });

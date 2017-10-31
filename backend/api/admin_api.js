@@ -200,6 +200,22 @@ app.delete('/delete_subject', (req, res, next) => {
     });
 });
 
+app.put('/edit_subject', (req, res) => {
+    var data = req.body;
+    console.log(data);
+    admin.findBySubject(data, function(err, rows, fields) {
+        if (rows.length == 1) {
+            admin.sendResponse(false, res);
+        } else {
+            admin.editSubject(data, function(err, info) {
+                if (err) throw err;
+                console.log(info);
+                admin.sendResponse(true, res);
+            });
+        };
+    });
+});
+
 
 // -- for quizzzy
 app.get('/get_tasks', async(req, res) => {
