@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import myfetch from '../myfetch';
 import CreateTeacher from './CreateTeacher';
 import EditTeacher from './EditTeacher';
+import Header from '../shared/Header';
 
 class TeachersTable extends Component {
   constructor() {
@@ -72,9 +72,7 @@ class TeachersTable extends Component {
   }
 
   async openEditModal(item) {
-    console.log(item);
     await this.setState({ editModal: true, currentItem: item });
-    console.log(this.state.currentItem);
   }
 
   // methods for alert
@@ -112,7 +110,7 @@ class TeachersTable extends Component {
   render() {
     return (
       <div className="container">
-        <Header click={this.openCreateModal} />
+        <Header title="Teachers" button="Create teacher" click={this.openCreateModal} />
          <main>
           <Table teachers={this.state.teachers} 
                  openEditModal={(e) => this.openEditModal(e)}
@@ -129,16 +127,6 @@ class TeachersTable extends Component {
     );
   }
 }
-
-const Header = props => (
-  <header>
-    <h1>Teachers</h1>
-    <div className="actions">
-      <button className="btn" onClick={props.click}>Create teacher</button>
-      <Link to="/admin" className="btn">Back</Link>
-    </div>
-  </header>
-);
 
 const Table = props => (
   <table className="table table-hover">

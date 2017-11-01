@@ -9,7 +9,6 @@ class Specializations extends Component {
     return (
         <Switch>
           <Route exact path="/specs" component={TableSpecs}/>
-          <Route path='/newspec' component={CreateSpec}/>
         </Switch>
     );
   }

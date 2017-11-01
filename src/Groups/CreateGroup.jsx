@@ -23,8 +23,7 @@ class CreateGroup extends Component {
     }
 
     onChange(e) {
-      console.log(e);
-        this.setState({[e.target.name]: e.target.value});
+      this.setState({[e.target.name]: e.target.value});
     }
 
     validation() {

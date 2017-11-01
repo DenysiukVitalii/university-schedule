@@ -1,18 +1,21 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import myfetch from '../myfetch';
+import CreateSpec from './CreateSpec';
 import EditSpec from './EditSpec';
+import Header from '../shared/Header';
 
 class TableSpecs extends Component {
   constructor() {
     super();
-    this.state = {specs: [], alert: null, showModal: false, currentItem: ''};
-    this.dataAfterEdit = this.dataAfterEdit.bind(this);
-    this.close = this.close.bind(this);
-    this.open = this.open.bind(this);
+    this.state = {specs: [], createModal: false, editModal: false, currentItem: '', alert: null};
+    this.openCreateModal = this.openCreateModal.bind(this);
+    this.closeCreateModal = this.closeCreateModal.bind(this);
+    this.closeEditModal = this.closeEditModal.bind(this);
     this.hideAlert = this.hideAlert.bind(this);
     this.callAlert = this.callAlert.bind(this); 
+    this.dataAfterCreate = this.dataAfterCreate.bind(this);
+    this.dataAfterEdit = this.dataAfterEdit.bind(this);
   }
 
   componentDidMount() {
@@ -61,13 +64,26 @@ class TableSpecs extends Component {
     this.setState({specs: specs});
   }
 
-  // methods for modal
-  close() {
-    this.setState({ showModal: false,  currentItem: '' });
+  dataAfterCreate() {
+    this.getSpecialties();
   }
 
-  async open(e) {
-    await this.setState({ showModal: true, currentItem: e});
+  // methods for modal
+  closeCreateModal() {
+    this.setState({ createModal: false });
+  }
+
+  async openCreateModal() {
+    await this.setState({ createModal: true });
+  }
+
+  closeEditModal() {
+    this.setState({ editModal: false, currentItem: '' });
+  }
+
+  async openEditModal(item) {
+    await this.setState({ editModal: true, currentItem: item });
+    console.log(this.state.currentItem);
   }
 
   // methods for alert
@@ -86,7 +102,7 @@ class TableSpecs extends Component {
   render() {
     return (
       <div className="container">
-        <Header />
+        <Header title="Specialties" button="Create specialty" click={this.openCreateModal} />
           <main>
               <table className="table table-hover">
                   <Thead />
@@ -96,7 +112,7 @@ class TableSpecs extends Component {
                           <td>{e.id}</td>
                           <td>{e.spec_name}</td>
                           <td width="25%">
-                              <button className="btn btn-warning" onClick={() => this.open(e)}>Edit</button>
+                              <button className="btn btn-warning" onClick={() => this.openEditModal(e)}>Edit</button>
                               <button className="btn btn-danger" onClick={() => this.deleteSpecialty(e)}>Delete</button>
                           </td>
                         </tr>
@@ -105,26 +121,16 @@ class TableSpecs extends Component {
               </table>
               {this.state.alert}
           </main>
-          <EditSpec show={this.state.showModal} 
-                     hide={this.close} 
-                     value={this.state.currentItem}
-                     response={this.dataAfterEdit}
-                     alert={this.callAlert}
-                     hideAlert={this.hideAlert}/>
+          <CreateSpec show={this.state.createModal} hide={this.closeCreateModal}
+                         alert={this.callAlert} hideAlert={this.hideAlert}
+                         response={this.dataAfterCreate}/>
+          <EditSpec show={this.state.editModal} hide={this.closeEditModal} 
+                    value={this.state.currentItem} response={this.dataAfterEdit}
+                    alert={this.callAlert} hideAlert={this.hideAlert}/>
       </div>
     );
   }
 }
-
-const Header = () => (
-  <header>
-    <h1>TableSpecs</h1>
-    <div className="actions">
-      <Link to="/newspec" className="btn">Create Spec</Link>
-      <Link to="/admin" className="btn">Back</Link>
-    </div>
-  </header>
-);
 
 const Thead = () => (
   <thead align="center" className="blue-background bold">

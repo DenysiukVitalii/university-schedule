@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import myfetch from '../myfetch';
 import CreateGroup from './CreateGroup';
 import EditGroup from './EditGroup';
+import Header from '../shared/Header';
 
 class GroupsTable extends Component {
   constructor() {
@@ -26,37 +26,22 @@ class GroupsTable extends Component {
   getGroups() {
     myfetch('')
     .then( data => {  
-      console.log(data);
-      this.bindSpecialty(data);
+      this.setState({ groups: data });
     }).catch(error => {console.log('Error!', error);});
   }
 
   getSpecialties() {
     myfetch('all_specs')
     .then( data => { 
-      let specs = data;
-      console.log(specs);
-      this.setState({ specs: specs });
+      this.setState({ specs: data });
     }).catch(error => {console.log('Error!', error);});
-  }
-
-  bindSpecialty(groups) {
-    let specs = this.state.specs;
-    for (let i = 0; i < groups.length; i++){
-      for (let j = 0; j < specs.length; j++){
-          if (groups[i].specialtyID === specs[j].id) groups[i].spec_name = specs[j].spec_name;
-      }
-    }
-    this.setState({ groups: groups });
   }
 
   deleteGroup(item) {
     console.log(item);
     myfetch('delete_group', 'delete', item)
     .then((data) => {
-      console.log(data);
       data.success = JSON.parse(data.success);
-      console.log(data);
       if (data.success) {
         this.setState({groups: this.deletedItem(item) });
       } else {
@@ -142,7 +127,7 @@ class GroupsTable extends Component {
   render() {
     return (
       <div className="container">
-        <Header click={this.openCreateModal} />
+        <Header title="Groups" button="Create group" click={this.openCreateModal}/>
         <main>
           <Table groups={this.state.groups} 
                   openEditModal={(e) => this.openEditModal(e)}
@@ -160,16 +145,6 @@ class GroupsTable extends Component {
     );
   }
 }
-
-const Header = props => (
-  <header>
-    <h1>Groups</h1>
-    <div className="actions">
-      <button className="btn" onClick={props.click}>Create group</button>
-      <Link to="/admin" className="btn">Back</Link>
-    </div>
-  </header>
-);
 
 const Table = props => (
   <table className="table table-hover">

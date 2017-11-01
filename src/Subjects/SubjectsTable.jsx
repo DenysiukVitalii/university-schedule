@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import myfetch from '../myfetch';
 import CreateSubject from './CreateSubject';
 import EditSubject from './EditSubject';
+import Header from '../shared/Header';
 
 class SubjectsTable extends Component {
   constructor() {
@@ -110,7 +110,7 @@ class SubjectsTable extends Component {
   render() {
     return (
       <div className="container">
-        <Header click={this.openCreateModal} />
+        <Header title="Subjects" button="Create subject" click={this.openCreateModal} />
          <main>
             <Table subjects={this.state.subjects} 
                     openEditModal={(e) => this.openEditModal(e)}
@@ -127,16 +127,6 @@ class SubjectsTable extends Component {
     );
   }
 }
-
-const Header = props => (
-  <header>
-    <h1>Subjects</h1>
-    <div className="actions">
-      <button className="btn" onClick={props.click}>Create group</button>
-      <Link to="/admin" className="btn">Back</Link>
-    </div>
-  </header>
-);
 
 const Table = props => (
   <table className="table table-hover">

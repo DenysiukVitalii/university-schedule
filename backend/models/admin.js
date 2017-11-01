@@ -21,7 +21,10 @@ module.exports.getAllTeachers = () => {
 
 module.exports.getGroups = () => {
     return new Promise((resolve, reject) => {
-        connection.query("SELECT * FROM Un_group ORDER BY id DESC", (err, rows, fields) => {
+        connection.query(`select Un_group.id, specialtyID, spec_name, course, amount_students 
+                          from Un_group
+                          join Specialty on Un_group.specialtyID = Specialty.id 
+                          ORDER BY id DESC`, (err, rows, fields) => {
             if (err) {
                 return reject(err);
             }
