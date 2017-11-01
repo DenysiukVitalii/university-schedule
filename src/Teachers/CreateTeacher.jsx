@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import { Modal } from 'react-bootstrap';
 import myfetch from '../myfetch';
+import InputText from '../shared/InputText';
+import ModalFooter from '../shared/ModalFooter';
 
 class CreateTeacher extends Component {
     constructor(props) {
@@ -67,6 +69,7 @@ class CreateTeacher extends Component {
         this.inputLastname.value = "";
         this.inputPosition.value = "";
         this.inputRank.value = "";
+        this.inputPhone.value = "";
         this.setState({
           name: '',
           surname: '', 
@@ -83,92 +86,31 @@ class CreateTeacher extends Component {
             <Modal show={this.props.show} onHide={this.props.hide}>
                 <Modal.Header closeButton><Modal.Title>Create teacher</Modal.Title></Modal.Header>
                 <Modal.Body>
-                  <SurnameInput defValue={this.state.surname} 
-                             change={this.onChange} 
+                  <InputText name="surname" label="Surname" placeholder="Ivanov" 
+                             value={this.state.surname} change={this.onChange} 
                              refProp={el => this.inputSurname = el}/>
-                  <NameInput defValue={this.state.name} 
-                             change={this.onChange} 
+                  <InputText name="name" label="Name" placeholder="Ivan" 
+                             value={this.state.name} change={this.onChange} 
                              refProp={el => this.inputName = el}/>
-                  <LastnameInput defValue={this.state.lastname} 
-                             change={this.onChange} 
+                  <InputText name="lastname" label="Lastname" placeholder="Ivanovich"
+                             value={this.state.lastname} change={this.onChange} 
                              refProp={el => this.inputLastname = el}/>
-                  <PositionInput defValue={this.state.position} 
-                             change={this.onChange} 
+                  <InputText name="position" label="Position" placeholder="Professor"
+                             value={this.state.position} change={this.onChange} 
                              refProp={el => this.inputPosition = el}/>
-                  <RankInput defValue={this.state.rank} 
-                             change={this.onChange} 
+                  <InputText name="rank" label="Rank" placeholder="Mathematician"
+                             value={this.state.rank} change={this.onChange} 
                              refProp={el => this.inputRank = el}/>
-                  <PhoneInput defValue={this.state.phone} 
-                             change={this.onChange} 
+                  <InputText name="phone" label="Phone" placeholder="0674853265" 
+                             value={this.state.phone} change={this.onChange} 
                              refProp={el => this.inputPhone = el}/> 
                 </Modal.Body>
-                <Footer create={this.createTeacher} hide={this.props.hide}/>
+                <ModalFooter action={this.createTeacher} hide={this.props.hide} submitText="Create"/>
             </Modal>
             {this.state.alert}
         </div>
       )
     }
   }
-  
-  const Footer = (props) => (
-      <Modal.Footer>
-        <button type="submit" className="btn btn-warning" onClick={props.create}>Create</button>
-        <button className="btn" onClick={props.hide}>Close</button>
-      </Modal.Footer>
-  )
-
-  const SurnameInput = (props) => (
-    <div className="form-group">
-      <label htmlFor="surname">Surname</label>
-          <input type="text" name="surname" className="form-control" 
-                  defaultValue={props.defVal} onChange={props.change} 
-                  ref={props.refProp} placeholder="Ivanov"/>
-    </div>
-  );
- 
-  const NameInput = (props) => (
-    <div className="form-group">
-      <label htmlFor="name">Name</label>
-          <input type="text" name="name" className="form-control" 
-                  defaultValue={props.defVal} onChange={props.change} 
-                  ref={props.refProp} placeholder="Ivan"/>
-    </div>
-  );
-
-  const LastnameInput = (props) => (
-    <div className="form-group">
-      <label htmlFor="lastname">Lastname</label>
-          <input type="text" name="lastname" className="form-control" 
-                  defaultValue={props.defVal} onChange={props.change} 
-                  ref={props.refProp} placeholder="Ivanovich"/>
-    </div>
-  );
-
-  const PositionInput = (props) => (
-    <div className="form-group">
-      <label htmlFor="position">Position</label>
-          <input type="text" name="position" className="form-control" 
-                  defaultValue={props.defVal} onChange={props.change} 
-                  ref={props.refProp} placeholder="Mathematician"/>
-    </div>
-  );
-
-  const RankInput = (props) => (
-    <div className="form-group">
-      <label htmlFor="rank">Rank</label>
-          <input type="text" name="rank" className="form-control" 
-                  defaultValue={props.defVal} onChange={props.change} 
-                  ref={props.refProp} placeholder="Professor"/>
-    </div>
-  );
-  
-  const PhoneInput = (props) => (
-    <div className="form-group">
-      <label htmlFor="phone">Phone</label>
-          <input type="text" name="phone" className="form-control" 
-                  defaultValue={props.defVal} onChange={props.change} 
-                  ref={props.refProp} placeholder="0674853265"/>
-    </div>
-  );
 
 export default CreateTeacher;

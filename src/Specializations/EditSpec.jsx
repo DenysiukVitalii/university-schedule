@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import { Modal } from 'react-bootstrap';
 import myfetch from '../myfetch';
+import InputText from '../shared/InputText';
+import ModalFooter from '../shared/ModalFooter';
 
 class EditSpec extends Component {
     constructor(props) {
@@ -42,11 +44,11 @@ class EditSpec extends Component {
 
     getAlert(state, message) {
       return (state) ? (
-          <SweetAlert success title="Success" onConfirm={this.props.hideAlert}>
+          <SweetAlert success title="Success" onConfirm={() => this.props.hideAlert(true)}>
             {message}
           </SweetAlert>
         ) : (
-          <SweetAlert error title="Error" onConfirm={this.props.hideAlert}>
+          <SweetAlert error title="Error" onConfirm={() => this.props.hideAlert(false)}>
             {message}
           </SweetAlert>
         );
@@ -58,14 +60,10 @@ class EditSpec extends Component {
             <Modal show={this.props.show} onHide={this.props.hide}>
                 <Modal.Header closeButton><Modal.Title>Edit Specialty</Modal.Title></Modal.Header>
                 <Modal.Body>
-                  <label htmlFor="e_spec_name">Specialty name</label>
-                  <input type="text" name="e_spec_name" className="form-control" 
-                         defaultValue={this.state.newSpecName} onChange={this.onChange}/>
+                  <InputText name="e_spec_name" label="Specialty name" placeholder="Software Engineering" 
+                             value={this.state.newSpecName} change={this.onChange} />
                 </Modal.Body>
-                <Modal.Footer>
-                  <button className="btn btn-warning" onClick={this.editSpecialty}>Edit</button>
-                  <button className="btn" onClick={this.props.hide}>Close</button>
-                </Modal.Footer>
+                <ModalFooter action={this.editSpecialty} hide={this.props.hide} submitText="Edit"/>
             </Modal>
             {this.state.alert}
         </div>

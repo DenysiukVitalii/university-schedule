@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import { Modal } from 'react-bootstrap';
 import myfetch from '../myfetch';
+import InputText from '../shared/InputText';
+import ModalFooter from '../shared/ModalFooter';
 
 class CreateSpec extends Component {
     constructor(props) {
@@ -57,33 +59,16 @@ class CreateSpec extends Component {
             <Modal show={this.props.show} onHide={this.props.hide}>
                 <Modal.Header closeButton><Modal.Title>Create specialty</Modal.Title></Modal.Header>
                 <Modal.Body>
-                  <SubjectInput defValue={this.state.spec_name} 
-                             change={this.onChange} 
+                  <InputText name="spec_name" label="Group name" placeholder="Software Engineering" 
+                             value={this.state.spec_name} change={this.onChange} 
                              refProp={el => this.inputSpecName = el}/>
                 </Modal.Body>
-                <Footer create={this.createSpecialty} hide={this.props.hide}/>
+                <ModalFooter action={this.createSpecialty} hide={this.props.hide} submitText="Create"/>
             </Modal>
             {this.state.alert}
         </div>
       )
     }
   }
-  
-  const Footer = (props) => (
-      <Modal.Footer>
-        <button type="submit" className="btn btn-warning" onClick={props.create}>Create</button>
-        <button className="btn" onClick={props.hide}>Close</button>
-      </Modal.Footer>
-  )
-
-  const SubjectInput = (props) => (
-    <div className="form-group">
-      <label htmlFor="spec_name">Specialty</label>
-          <input type="text" name="spec_name" className="form-control" 
-                  defaultValue={props.defVal} onChange={props.change} 
-                  ref={props.refProp} placeholder="Software Engineering"/>
-    </div>
-  );
-
 
 export default CreateSpec;

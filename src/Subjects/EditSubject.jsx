@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import { Modal } from 'react-bootstrap';
 import myfetch from '../myfetch';
+import ModalFooter from '../shared/ModalFooter';
+import InputText from '../shared/InputText';
 
 class EditSubject extends Component {
     constructor(props) {
@@ -55,34 +57,17 @@ class EditSubject extends Component {
       return (
         <div>
             <Modal show={this.props.show} onHide={this.props.hide}>
-                <Modal.Header closeButton><Modal.Title>Edit teacher</Modal.Title></Modal.Header>
+                <Modal.Header closeButton><Modal.Title>Edit subject</Modal.Title></Modal.Header>
                 <Modal.Body>
-                <SubjectInput value={this.state.subject_name} 
-                              change={this.onChange} />
+                <InputText name="subject_name" label="Subject" placeholder="Math"  
+                             value={this.state.subject_name} change={this.onChange} />
                 </Modal.Body>
-                <Footer edit={this.editSubject} hide={this.props.hide}/>
+                <ModalFooter action={this.editSubject} hide={this.props.hide} submitText="Edit"/>
             </Modal>
             {this.state.alert}
         </div>
       )
     }
   }
-
-  const Footer = (props) => (
-    <Modal.Footer>
-        <button className="btn btn-warning" onClick={props.edit}>Edit</button>
-        <button className="btn" onClick={props.hide}>Close</button>
-    </Modal.Footer>
-  );
-
-  const SubjectInput = (props) => (
-    <div className="form-group">
-      <label htmlFor="subject_name">Subject</label>
-          <input type="text" name="subject_name" className="form-control" 
-                  defaultValue={props.value} onChange={props.change} placeholder="Math"/>
-    </div>
-  );
-
-
-
+  
 export default EditSubject;

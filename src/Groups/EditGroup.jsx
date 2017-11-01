@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import { Modal } from 'react-bootstrap';
 import myfetch from '../myfetch';
+import ModalFooter from '../shared/ModalFooter';
+import InputText from '../shared/InputText';
 
 class EditGroup extends Component {
     constructor(props) {
@@ -76,36 +78,21 @@ class EditGroup extends Component {
             <Modal show={this.props.show} onHide={this.props.hide}>
                 <Modal.Header closeButton><Modal.Title>Edit group</Modal.Title></Modal.Header>
                 <Modal.Body>
-                  <GroupNameInput value={this.state.groupName} 
-                                  change={this.onChange} />
+                  <InputText name="newName" label="Group name" placeholder="XX-11" 
+                             value={this.state.groupName} change={this.onChange} />
                   <SpecialtySelect value={this.state.selectedSpec}
                                    change={this.onChange}
                                    specs={this.state.specs}/>
                   <YearSelect value={this.state.selectedYear} change={this.onChange}/>
                   <AmountStudentsInput value={this.state.selectedAmount} change={this.onChange} />
                 </Modal.Body>
-                <Footer edit={this.editGroup} hide={this.props.hide}/>
+                <ModalFooter action={this.editGroup} hide={this.props.hide} submitText="Edit"/>
             </Modal>
             {this.state.alert}
         </div>
       )
     }
   }
-
-  const Footer = (props) => (
-    <Modal.Footer>
-        <button className="btn btn-warning" onClick={props.edit}>Edit</button>
-        <button className="btn" onClick={props.hide}>Close</button>
-    </Modal.Footer>
-  );
-
-  const GroupNameInput = (props) => (
-    <div className="form-group">
-      <label htmlFor="newName">Group name (For example: XX-11)</label>
-          <input type="text" name="newName" className="form-control" 
-                  defaultValue={props.value} onChange={props.change}/>
-    </div>
-  );
 
   const SpecialtySelect = (props) => (
      <div className="form-group">

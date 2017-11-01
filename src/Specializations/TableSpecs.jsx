@@ -85,12 +85,21 @@ class TableSpecs extends Component {
     await this.setState({ editModal: true, currentItem: item });
     console.log(this.state.currentItem);
   }
+  
 
   // methods for alert
-  hideAlert() {
-    this.setState({
-      alert: null
-    });
+  hideAlert(state) {
+    if (!state) {
+      this.setState({
+        alert: null
+      });
+    } else {
+      this.setState({
+        alert: null,
+        editModal: false
+      });
+    }
+    
   }
 
   callAlert(value) {
@@ -126,7 +135,7 @@ class TableSpecs extends Component {
                          response={this.dataAfterCreate}/>
           <EditSpec show={this.state.editModal} hide={this.closeEditModal} 
                     value={this.state.currentItem} response={this.dataAfterEdit}
-                    alert={this.callAlert} hideAlert={this.hideAlert}/>
+                    alert={this.callAlert} hideAlert={(e) => this.hideAlert(e)}/>
       </div>
     );
   }

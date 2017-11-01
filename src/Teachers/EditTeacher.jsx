@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import { Modal } from 'react-bootstrap';
 import myfetch from '../myfetch';
+import InputText from '../shared/InputText';
+import ModalFooter from '../shared/ModalFooter';
 
 class EditTeacher extends Component {
     constructor(props) {
@@ -79,86 +81,25 @@ class EditTeacher extends Component {
             <Modal show={this.props.show} onHide={this.props.hide}>
                 <Modal.Header closeButton><Modal.Title>Edit teacher</Modal.Title></Modal.Header>
                 <Modal.Body>
-                <SurnameInput value={this.state.surname} 
-                              change={this.onChange} />
-                <NameInput value={this.state.name} 
-                           change={this.onChange} />
-                <LastnameInput value={this.state.lastname} 
-                               change={this.onChange}/>
-                <PositionInput value={this.state.position} 
-                            change={this.onChange}/>
-                <RankInput value={this.state.rank} 
-                            change={this.onChange}/>
-                <PhoneInput value={this.state.phone} 
-                            change={this.onChange}/> 
+                <InputText name="surname" label="Surname" placeholder="Ivanov" 
+                             value={this.state.surname} change={this.onChange} />
+                  <InputText name="name" label="Name" placeholder="Ivan" 
+                             value={this.state.name} change={this.onChange} />
+                  <InputText name="lastname" label="Lastname" placeholder="Ivanovich"
+                             value={this.state.lastname} change={this.onChange} />
+                  <InputText name="position" label="Position" placeholder="Professor"
+                             value={this.state.position} change={this.onChange} />
+                  <InputText name="rank" label="Rank" placeholder="Mathematician"
+                             value={this.state.rank} change={this.onChange} />
+                  <InputText name="phone" label="Phone" placeholder="0674853265" 
+                             value={this.state.phone} change={this.onChange} /> 
                 </Modal.Body>
-                <Footer edit={this.editTeacher} hide={this.props.hide}/>
+                <ModalFooter action={this.editTeacher} hide={this.props.hide} submitText="Edit"/>
             </Modal>
             {this.state.alert}
         </div>
       )
     }
   }
-
-  const Footer = (props) => (
-    <Modal.Footer>
-        <button className="btn btn-warning" onClick={props.edit}>Edit</button>
-        <button className="btn" onClick={props.hide}>Close</button>
-    </Modal.Footer>
-  );
-
-  const SurnameInput = (props) => (
-    <div className="form-group">
-      <label htmlFor="surname">Surname</label>
-          <input type="text" name="surname" className="form-control" 
-                  defaultValue={props.value} onChange={props.change}
-                  placeholder="Ivanov"/>
-    </div>
-  );
- 
-  const NameInput = (props) => (
-    <div className="form-group">
-      <label htmlFor="name">Name</label>
-          <input type="text" name="name" className="form-control" 
-                  defaultValue={props.value} onChange={props.change} 
-                  placeholder="Ivan"/>
-    </div>
-  );
-
-  const LastnameInput = (props) => (
-    <div className="form-group">
-      <label htmlFor="lastname">Lastname</label>
-          <input type="text" name="lastname" className="form-control" 
-                  defaultValue={props.value} onChange={props.change} 
-                  placeholder="Ivanovich"/>
-    </div>
-  );
-
-  const PositionInput = (props) => (
-    <div className="form-group">
-      <label htmlFor="position">Position</label>
-          <input type="text" name="position" className="form-control" 
-                  defaultValue={props.value} onChange={props.change} 
-                  placeholder="Mathematician"/>
-    </div>
-  );
-
-  const RankInput = (props) => (
-    <div className="form-group">
-      <label htmlFor="rank">Rank</label>
-          <input type="text" name="rank" className="form-control" 
-                  defaultValue={props.value} onChange={props.change} 
-                  placeholder="Professor"/>
-    </div>
-  );
-  
-  const PhoneInput = (props) => (
-    <div className="form-group">
-      <label htmlFor="phone">Phone</label>
-          <input type="text" name="phone" className="form-control" 
-                  defaultValue={props.value} onChange={props.change} 
-                  placeholder="0674853265"/>
-    </div>
-  );
 
 export default EditTeacher;

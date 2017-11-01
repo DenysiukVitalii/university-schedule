@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import { Modal } from 'react-bootstrap';
 import myfetch from '../myfetch';
+import ModalFooter from '../shared/ModalFooter';
+import InputText from '../shared/InputText';
 
 class CreateGroup extends Component {
     constructor(props) {
@@ -87,38 +89,22 @@ class CreateGroup extends Component {
             <Modal show={this.props.show} onHide={this.props.hide}>
                 <Modal.Header closeButton><Modal.Title>Create group</Modal.Title></Modal.Header>
                 <Modal.Body>
-                  <GroupNameInput defValue={this.state.newGroupName} 
-                                  change={this.onChange} 
-                                  refProp={el => this.inputGroupName = el}/>
+                  <InputText name="newGroupName" label="Group name" placeholder="XX-11" 
+                             value={this.state.newGroupName} change={this.onChange} 
+                             refProp={el => this.inputGroupName = el}/>
                   <SpecialtySelect value={this.state.selectedSpec}
                                    change={this.onChange}
                                    specs={this.state.specs}/>
                   <YearSelect change={this.onChange} refProp={el => this.inputYear = el}/>
                   <AmountStudentsInput change={this.onChange} refProp={el => this.inputAmount = el} />
                 </Modal.Body>
-                <Footer create={this.createGroup} hide={this.props.hide}/>
+                <ModalFooter action={this.createGroup} hide={this.props.hide} submitText="Create"/>
             </Modal>
             {this.state.alert}
         </div>
       )
     }
   }
-  
-  const Footer = (props) => (
-      <Modal.Footer>
-        <button type="submit" className="btn btn-warning" onClick={props.create}>Create</button>
-        <button className="btn" onClick={props.hide}>Close</button>
-      </Modal.Footer>
-  )
-
-  const GroupNameInput = (props) => (
-    <div className="form-group">
-      <label htmlFor="newGroupName">Group name (For example: XX-11)</label>
-          <input type="text" name="newGroupName" className="form-control" 
-                  defaultValue={props.defVal} onChange={props.change} 
-                  ref={props.refProp} required/>
-    </div>
-  );
 
   const SpecialtySelect = (props) => (
      <div className="form-group">
@@ -145,7 +131,7 @@ class CreateGroup extends Component {
   const AmountStudentsInput = (props) => (
       <div className="form-group">
         <label htmlFor="selectedAmount">Amount of students</label>
-        <input type="number" name="selectedAmount" className="form-control" onChange={props.change} min="1" max="45" ref={props.refProp}/>
+        <input type="number" name="selectedAmount" className="form-control" onChange={props.change} ref={props.refProp}/>
       </div>
   );
 
