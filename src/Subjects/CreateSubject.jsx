@@ -16,8 +16,19 @@ class CreateSubject extends Component {
     onChange(e) {
         this.setState({[e.target.name]: e.target.value});
     }
+
+    validation() {
+      let subject_name = this.state.subject_name,
+          nameRegex = /^[a-zA-Z]{3,30}$/;
+      return (!subject_name || !nameRegex.test(subject_name)) ? false : true;
+    }
   
     createSubject() {
+      if (this.validation() === false) {
+        this.props.alert(this.getAlert(false, "Fill all fields correctly, please!"));
+        return;
+      } 
+
       let item = {
         subject_name: this.state.subject_name
       };
@@ -61,7 +72,8 @@ class CreateSubject extends Component {
                 <Modal.Body>
                   <InputText name="subject_name" label="Subject" placeholder="Math"  
                              value={this.state.subject_name} change={this.onChange} 
-                             refProp={el => this.inputSubjectName = el}/>
+                             refProp={el => this.inputSubjectName = el}
+                             pattern="^[a-zA-Z\s]{3,30}$"/>
                 </Modal.Body>
                 <ModalFooter action={this.createSubject} hide={this.props.hide} submitText="Create"/>
             </Modal>

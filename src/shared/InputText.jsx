@@ -5,7 +5,7 @@ const InputText = (props) => (
         <label htmlFor={props.name}>{props.label}</label>
             <input type="text" name={props.name} className="form-control" 
                     defaultValue={props.value} onChange={props.change} 
-                    ref={props.refProp} placeholder={props.placeholder}/>
+                    ref={props.refProp} placeholder={props.placeholder} pattern={props.pattern}/>
     </div>
 );
 

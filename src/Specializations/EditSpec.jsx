@@ -23,8 +23,19 @@ class EditSpec extends Component {
       var val = e.target.value;
       this.setState({newSpecName: val});
     }
+    
+    validation() {
+      let spec_name = this.state.newSpecName,
+          nameRegex = /^[a-zA-Z]{3,40}$/;
+      return (!spec_name || !nameRegex.test(spec_name)) ? false : true;
+    }
   
     editSpecialty() {
+      if (this.validation() === false) {
+        this.props.alert(this.getAlert(false, "Fill all fields correctly, please!"));
+        return;
+      } 
+
       let item = {
         id: this.props.value.id,
         spec_name: this.state.newSpecName
@@ -61,7 +72,8 @@ class EditSpec extends Component {
                 <Modal.Header closeButton><Modal.Title>Edit Specialty</Modal.Title></Modal.Header>
                 <Modal.Body>
                   <InputText name="e_spec_name" label="Specialty name" placeholder="Software Engineering" 
-                             value={this.state.newSpecName} change={this.onChange} />
+                             value={this.state.newSpecName} change={this.onChange}
+                             pattern="^[a-zA-Z\s/+]{3,40}$" />
                 </Modal.Body>
                 <ModalFooter action={this.editSpecialty} hide={this.props.hide} submitText="Edit"/>
             </Modal>

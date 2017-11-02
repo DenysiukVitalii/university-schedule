@@ -131,7 +131,7 @@ class CreateGroup extends Component {
   const AmountStudentsInput = (props) => (
       <div className="form-group">
         <label htmlFor="selectedAmount">Amount of students</label>
-        <input type="number" name="selectedAmount" className="form-control" onChange={props.change} ref={props.refProp}/>
+        <input type="number" name="selectedAmount" className="form-control" onChange={props.change} ref={props.refProp} placeholder="25"/>
       </div>
   );
 

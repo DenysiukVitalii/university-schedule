@@ -16,8 +16,19 @@ class CreateSpec extends Component {
     onChange(e) {
         this.setState({[e.target.name]: e.target.value});
     }
+
+    validation() {
+      let spec_name = this.state.spec_name,
+          nameRegex = /^[a-zA-Z]{3,40}$/;
+      return (!spec_name || !nameRegex.test(spec_name)) ? false : true;
+    }
   
     createSpecialty() {
+      if (this.validation() === false) {
+        this.props.alert(this.getAlert(false, "Fill all fields correctly, please!"));
+        return;
+      } 
+
       let item = {
         spec_name: this.state.spec_name
       };
@@ -59,9 +70,10 @@ class CreateSpec extends Component {
             <Modal show={this.props.show} onHide={this.props.hide}>
                 <Modal.Header closeButton><Modal.Title>Create specialty</Modal.Title></Modal.Header>
                 <Modal.Body>
-                  <InputText name="spec_name" label="Group name" placeholder="Software Engineering" 
+                  <InputText name="spec_name" label="Specialty name" placeholder="Software Engineering" 
                              value={this.state.spec_name} change={this.onChange} 
-                             refProp={el => this.inputSpecName = el}/>
+                             refProp={el => this.inputSpecName = el}
+                             pattern="^[a-zA-Z\s/+]{3,40}$"/>
                 </Modal.Body>
                 <ModalFooter action={this.createSpecialty} hide={this.props.hide} submitText="Create"/>
             </Modal>

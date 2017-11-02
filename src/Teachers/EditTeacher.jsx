@@ -30,17 +30,27 @@ class EditTeacher extends Component {
     }
 
     validation() {
-      let group = this.state.newName,
-          groupRegex = /^[a-zA-Z]{2}-[0-9]{2}$/,
-          amount = this.state.selectedAmount;
-      return (!group || !groupRegex.test(group) || !amount) ? false : true;
+      let name = this.state.name,
+          surname = this.state.surname,
+          lastname = this.state.lastname,
+          position = this.state.position,
+          rank = this.state.name,
+          phone = this.state.phone,
+          nameRegex = /^[a-zA-Z\s]{3,20}$/,
+          phoneRegex = /[0-9]{10}/;
+      return (!name || !surname || !lastname || 
+              !position || !rank || !nameRegex.test(name) ||
+              !nameRegex.test(surname) || !nameRegex.test(lastname) ||
+              !nameRegex.test(position) || !nameRegex.test(rank) ||
+              !nameRegex.test(position) || !phoneRegex.test(phone)) ? false : true;
     }
   
     editTeacher() {
-     /* if (this.validation() === false) {
+      console.log(this.validation());
+      if (this.validation() === false) {
         this.props.alert(this.getAlert(false, "Fill all fields correctly, please!"));
         return;
-      } */
+      }
 
       let item = {
         id: this.state.id,
@@ -82,17 +92,23 @@ class EditTeacher extends Component {
                 <Modal.Header closeButton><Modal.Title>Edit teacher</Modal.Title></Modal.Header>
                 <Modal.Body>
                 <InputText name="surname" label="Surname" placeholder="Ivanov" 
-                             value={this.state.surname} change={this.onChange} />
+                             value={this.state.surname} change={this.onChange}
+                             pattern="^[a-zA-Z]{3,20}$" />
                   <InputText name="name" label="Name" placeholder="Ivan" 
-                             value={this.state.name} change={this.onChange} />
+                             value={this.state.name} change={this.onChange}
+                             pattern="^[a-zA-Z]{3,20}$" />
                   <InputText name="lastname" label="Lastname" placeholder="Ivanovich"
-                             value={this.state.lastname} change={this.onChange} />
+                             value={this.state.lastname} change={this.onChange}
+                             pattern="^[a-zA-Z]{3,20}$" />
                   <InputText name="position" label="Position" placeholder="Professor"
-                             value={this.state.position} change={this.onChange} />
+                             value={this.state.position} change={this.onChange}
+                             pattern="^[a-zA-Z\s]{3,20}$" />
                   <InputText name="rank" label="Rank" placeholder="Mathematician"
-                             value={this.state.rank} change={this.onChange} />
+                             value={this.state.rank} change={this.onChange}
+                             pattern="^[a-zA-Z\s]{3,20}$" />
                   <InputText name="phone" label="Phone" placeholder="0674853265" 
-                             value={this.state.phone} change={this.onChange} /> 
+                             value={this.state.phone} change={this.onChange}
+                             pattern="[0-9]{10}" /> 
                 </Modal.Body>
                 <ModalFooter action={this.editTeacher} hide={this.props.hide} submitText="Edit"/>
             </Modal>

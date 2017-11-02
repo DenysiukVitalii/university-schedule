@@ -119,7 +119,7 @@ class EditGroup extends Component {
   const AmountStudentsInput = (props) => (
       <div className="form-group">
         <label htmlFor="selectedAmount">Amount of students</label>
-        <input type="number" name="selectedAmount" className="form-control" defaultValue={props.value} onChange={props.change} min="1" max="45"/>
+        <input type="number" name="selectedAmount" className="form-control" defaultValue={props.value}              onChange={props.change} min="1" max="45" placeholder="25"/>
       </div>
   );
 

@@ -23,8 +23,19 @@ class EditSubject extends Component {
     onChange(e) {
         this.setState({[e.target.name]: e.target.value});
     }
+    
+    validation() {
+      let subject_name = this.state.subject_name,
+          nameRegex = /^[a-zA-Z\s/+]{3,40}$/;
+      return (!subject_name || !nameRegex.test(subject_name)) ? false : true;
+    }
   
     editSubject() {
+      if (this.validation() === false) {
+        this.props.alert(this.getAlert(false, "Fill all fields correctly, please!"));
+        return;
+      } 
+
       let item = {
         id: this.state.id,
         subject_name: this.state.subject_name,
@@ -60,7 +71,8 @@ class EditSubject extends Component {
                 <Modal.Header closeButton><Modal.Title>Edit subject</Modal.Title></Modal.Header>
                 <Modal.Body>
                 <InputText name="subject_name" label="Subject" placeholder="Math"  
-                             value={this.state.subject_name} change={this.onChange} />
+                           value={this.state.subject_name} change={this.onChange}
+                           pattern="^[a-zA-Z\s/+]{3,40}$" />
                 </Modal.Body>
                 <ModalFooter action={this.editSubject} hide={this.props.hide} submitText="Edit"/>
             </Modal>
