@@ -6,113 +6,53 @@ const connection = mysql.createConnection({
     database: 'un_schedule'
 });
 
-connection.connect(() => console.log("Database connected"));
+//connection.connect(() => console.log("Database connected"));
 
-module.exports.getAllTeachers = () => {
-    return new Promise((resolve, reject) => {
-        connection.query("SELECT * FROM Teacher ORDER BY id DESC", (err, rows, fields) => {
-            if (err) {
-                return reject(err);
-            }
-            resolve(rows);
-        });
-    });
-}
+let request = require('./requests');
+let queries = require('./queries');
+let table = require('./tables');
 
-module.exports.getGroups = () => {
-    return new Promise((resolve, reject) => {
-        connection.query(`select Un_group.id, specialtyID, spec_name, course, amount_students 
-                          from Un_group
-                          join Specialty on Un_group.specialtyID = Specialty.id 
-                          ORDER BY id DESC`, (err, rows, fields) => {
-            if (err) {
-                return reject(err);
-            }
-            resolve(rows);
-        });
-    });
-}
+module.exports.getSpecialties = () => request.getData(queries.getSpecialties);
+module.exports.addSpecialty = (data, callback) => 
+                              request.insertData(data, queries.insert(table.specialties), callback);
+module.exports.deleteSpecialty = (idSpecialty, callback) => 
+                                 request.findBy(queries.delete(table.specialties, idSpecialty), callback);
+module.exports.findBySpecname = (spec_name, callback) => 
+                                request.findBy(queries.findBySpecname(spec_name), callback);
+        
 
-module.exports.getSpecialties = () => {
-    return new Promise((resolve, reject) => {
-        connection.query("SELECT * FROM Specialty ORDER BY id ASC", (err, rows, fields) => {
-            if (err) {
-                return reject(err);
-            }
-            resolve(rows);
-        });
-    });
-}
+module.exports.getGroups = () => request.getData(queries.getGroups);
+module.exports.addGroup = (data, callback) => 
+                          request.insertData(data, queries.insert(table.groups), callback);
+module.exports.deleteGroup = (idGroup, callback) => 
+                          request.findBy(queries.delete(table.groups, idGroup), callback);
+module.exports.findByGroup = (group, callback) =>
+                             request.findBy(queries.findByGroup(group), callback);
+                        
 
-module.exports.getTeachers = () => {
-    return new Promise((resolve, reject) => {
-        connection.query("SELECT * FROM Teacher ORDER BY id ASC", (err, rows, fields) => {
-            if (err) {
-                return reject(err);
-            }
-            resolve(rows);
-        });
-    });
-}
+module.exports.getSubjects = () => request.getData(queries.getSubjects);
+module.exports.addSubject = (data, callback) => 
+                            request.insertData(data, queries.insert(table.subjects), callback);
+module.exports.deleteSubject = (idSubject, callback) => 
+                             request.findBy(queries.delete(table.subjects, idSubject), callback);
+module.exports.findBySubject = (subject, callback) => 
+                               request.findBy(queries.findBySubject(subject), callback);
 
-module.exports.getSubjects = () => {
-    return new Promise((resolve, reject) => {
-        connection.query("SELECT * FROM Subjects ORDER BY id ASC", (err, rows, fields) => {
-            if (err) {
-                return reject(err);
-            }
-            resolve(rows);
-        });
-    });
-}
+module.exports.getTeachers = () => request.getData(queries.getTeachers);
+module.exports.addTeacher = (data, callback) => 
+                            request.insertData(data, queries.insert(table.teachers), callback);
+module.exports.deleteTeacher = (idTeacher, callback) => 
+                            request.findBy(queries.delete(table.teachers, idTeacher), callback);
+module.exports.findByTeacher = (teacher, callback) => 
+                               request.findBy(queries.findByTeacher(teacher), callback);
 
-module.exports.findBySpecname = function(spec_name, callback) {
-    connection.query(`SELECT * FROM Specialty WHERE spec_name = '${spec_name}'`, callback);
-}
-
-module.exports.findByGroup = function(group, callback) {
-    connection.query(`SELECT * FROM Un_group WHERE id = '${group}'`, callback);
-}
-
-module.exports.addSpecialty = function(data, callback) {
-    connection.query("INSERT INTO Specialty SET ?", data, callback);
-}
-
-module.exports.deleteSpecialty = function(idSpecialty, callback) {
-    connection.query(`DELETE FROM Specialty WHERE id = ${idSpecialty}`, callback);
-}
 
 module.exports.editSpecialty = function(idSpecialty, newSpec, callback) {
     connection.query(`UPDATE Specialty SET spec_name = '${newSpec}' WHERE id = ${idSpecialty}`, callback);
 }
 
-module.exports.addGroup = function(data, callback) {
-    connection.query("INSERT INTO Un_group SET ?", data, callback);
-}
-
-module.exports.deleteGroup = function(group, callback) {
-    connection.query(`DELETE FROM Un_group WHERE id = '${group}'`, callback);
-}
-
 module.exports.editGroup = function(data, callback) {
     connection.query(`UPDATE Un_group SET id = '${data.newName}', specialtyID = ${data.specialtyID}, course = ${data.course}, amount_students = ${data.amount_students} WHERE id = '${data.id}'`, callback);
-}
-
-module.exports.deleteTeacher = function(idTeacher, callback) {
-    connection.query(`DELETE FROM Teacher WHERE id = ${idTeacher}`, callback);
-}
-
-module.exports.findByTeacher = function(teacher, callback) {
-    connection.query(`SELECT * FROM Teacher WHERE name = '${teacher.name}'
-                                             and surname = '${teacher.surname}'
-                                             and lastname = '${teacher.lastname}'
-                                             and position = '${teacher.position}'
-                                             and rank = '${teacher.rank}'
-                                             and phone = '${teacher.phone}'`, callback);
-}
-
-module.exports.addTeacher = function(data, callback) {
-    connection.query("INSERT INTO Teacher SET ?", data, callback);
 }
 
 module.exports.editTeacher = function(data, callback) {
@@ -120,19 +60,6 @@ module.exports.editTeacher = function(data, callback) {
     connection.query(`UPDATE Teacher SET name = '${data.name}', surname = '${data.surname}',
      lastname = '${data.lastname}', position = '${data.position}', rank = '${data.rank}',
      phone = ${data.phone} WHERE id = '${data.id}'`, callback);
-}
-
-module.exports.findBySubject = function(subject, callback) {
-    console.log(subject);
-    connection.query(`SELECT * FROM Subjects WHERE subject_name = '${subject.subject_name}'`, callback);
-}
-
-module.exports.addSubject = function(data, callback) {
-    connection.query("INSERT INTO Subjects SET ?", data, callback);
-}
-
-module.exports.deleteSubject = function(idSubject, callback) {
-    connection.query(`DELETE FROM Subjects WHERE id = ${idSubject}`, callback);
 }
 
 module.exports.editSubject = function(data, callback) {

@@ -173,7 +173,7 @@ app.get('/subjects', async(req, res) => {
 app.post('/create_subject', (req, res) => {
     var data = req.body;
     console.log(data);
-    admin.findBySubject(data, function(err, rows, fields) {
+    admin.findBySubject(data.subject_name, function(err, rows, fields) {
         console.log(rows.length);
         if (rows.length == 1) {
             admin.sendResponse(false, res);

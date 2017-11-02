@@ -26,6 +26,7 @@ class TableSpecs extends Component {
     myfetch('all_specs')
     .then( data => { 
       let specs = data;
+      console.log(specs);
       this.setState({ specs: specs });
     }).catch(error => {console.log('Error!', error);});
   }
