@@ -50,7 +50,7 @@ class CreateGroup extends Component {
    
       myfetch('create_group', 'post', item)
       .then( data => { 
-        if (JSON.parse(data.success)) {
+        if (data.success) {
           this.props.alert(this.getAlert(true, 'You create new group!'));
           this.props.response(item);  
           this.clearForm();

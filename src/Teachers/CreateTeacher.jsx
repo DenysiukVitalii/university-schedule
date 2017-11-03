@@ -50,7 +50,7 @@ class CreateTeacher extends Component {
    
       myfetch('create_teacher', 'post', item)
       .then( data => { 
-        if (JSON.parse(data.success)) {
+        if (data.success) {
           this.props.alert(this.getAlert(true, 'You create new teacher!'));
           this.props.response(item);  
           this.clearForm();

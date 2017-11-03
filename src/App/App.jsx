@@ -18,7 +18,6 @@ class App extends Component {
   getGroups() {
     myfetch('')
     .then( data => { 
-      console.log(data);
       let groups = data.map(e => e.id);
       this.setState({ groups: groups });
     })

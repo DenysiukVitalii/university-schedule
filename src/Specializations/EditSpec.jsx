@@ -43,7 +43,6 @@ class EditSpec extends Component {
   
       myfetch('edit_spec', 'put', item)
       .then( data => { 
-        data.success = JSON.parse(data.success);
         if (data.success) {
           this.props.alert(this.getAlert(true, 'You edit this specialty!'));
           this.props.response(item);  

@@ -43,7 +43,7 @@ class EditSubject extends Component {
      
       myfetch('edit_subject', 'put', item)
       .then( data => { 
-        if (JSON.parse(data.success)) {
+        if (data.success) {
           this.props.alert(this.getAlert(true, 'You edited subject!'));
           this.props.response(item);
         } else {

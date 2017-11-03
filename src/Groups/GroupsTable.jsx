@@ -38,10 +38,8 @@ class GroupsTable extends Component {
   }
 
   deleteGroup(item) {
-    console.log(item);
     myfetch('delete_group', 'delete', item)
     .then((data) => {
-      data.success = JSON.parse(data.success);
       if (data.success) {
         this.setState({groups: this.deletedItem(item) });
       } else {

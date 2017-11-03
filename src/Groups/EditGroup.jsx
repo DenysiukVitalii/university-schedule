@@ -51,7 +51,7 @@ class EditGroup extends Component {
      
       myfetch('edit_group', 'put', item)
       .then( data => { 
-        if (JSON.parse(data.success)) {
+        if (data.success) {
           this.props.alert(this.getAlert(true, 'You edited group!'));
           this.props.response(item);
         } else {

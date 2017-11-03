@@ -26,7 +26,6 @@ class TableSpecs extends Component {
     myfetch('all_specs')
     .then( data => { 
       let specs = data;
-      console.log(specs);
       this.setState({ specs: specs });
     }).catch(error => {console.log('Error!', error);});
   }
@@ -34,8 +33,6 @@ class TableSpecs extends Component {
   deleteSpecialty(item) {
     myfetch('delete_spec', 'delete', item)
     .then((data) => {
-      console.log(data);
-      data.success = JSON.parse(data.success);
       if (data.success) {
         this.setState({specs: this.deletedItem(item) });
       } else {
@@ -84,10 +81,8 @@ class TableSpecs extends Component {
 
   async openEditModal(item) {
     await this.setState({ editModal: true, currentItem: item });
-    console.log(this.state.currentItem);
   }
   
-
   // methods for alert
   hideAlert(state) {
     if (!state) {

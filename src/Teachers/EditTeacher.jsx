@@ -64,7 +64,7 @@ class EditTeacher extends Component {
      
       myfetch('edit_teacher', 'put', item)
       .then( data => { 
-        if (JSON.parse(data.success)) {
+        if (data.success) {
           this.props.alert(this.getAlert(true, 'You edited teacher!'));
           this.props.response(item);
         } else {

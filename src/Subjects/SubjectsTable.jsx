@@ -25,7 +25,6 @@ class SubjectsTable extends Component {
   getSubjects() {
     myfetch('subjects')
     .then( data => {  
-      console.log(data);
       this.setState({subjects: data});
     }).catch(error => {console.log('Error!', error);});
   }
@@ -34,8 +33,6 @@ class SubjectsTable extends Component {
     console.log(item);
     myfetch('delete_subject', 'delete', item)
     .then((data) => {
-      data.success = JSON.parse(data.success);
-      console.log(data);
       if (data.success) {
         this.setState({teachers: this.deletedItem(item) });
       } else {

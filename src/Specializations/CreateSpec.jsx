@@ -35,7 +35,7 @@ class CreateSpec extends Component {
    
       myfetch('create_spec', 'post', item)
       .then( data => { 
-        if (JSON.parse(data.success)) {
+        if (data.success) {
           this.props.alert(this.getAlert(true, 'You create new specialty!'));
           this.props.response(item);  
           this.clearForm();

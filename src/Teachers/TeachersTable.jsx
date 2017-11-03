@@ -34,8 +34,6 @@ class TeachersTable extends Component {
     console.log(item);
     myfetch('delete_teacher', 'delete',item)
     .then((data) => {
-      data.success = JSON.parse(data.success);
-      console.log(data);
       if (data.success) {
         this.setState({teachers: this.deletedItem(item) });
       } else {
