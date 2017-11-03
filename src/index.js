@@ -11,6 +11,7 @@ import TableSpecs from './Specializations/TableSpecs';
 import GroupsTable from './Groups/GroupsTable';
 import TeachersTable from './Teachers/TeachersTable';
 import SubjectsTable from './Subjects/SubjectsTable';
+import SemestersTable from './Semesters/SemestersTable';
 import CreateSpec from './Specializations/CreateSpec';
 
 ReactDOM.render(( 
@@ -24,6 +25,7 @@ ReactDOM.render((
        <Route path='/groups' component={GroupsTable}/>
        <Route path='/teachers' component={TeachersTable}/>
        <Route path='/subjects' component={SubjectsTable}/>
+       <Route path='/semesters' component={SemestersTable}/>
      </Switch>
     </BrowserRouter>
 ), document.getElementById('root'));

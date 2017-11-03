@@ -4,6 +4,7 @@ module.exports = {
                 join Specialty on Un_group.specialtyID = Specialty.id ORDER BY id DESC`,
     getSpecialties: "SELECT * FROM Specialty ORDER BY id ASC",
     getTeachers: "SELECT * FROM Teacher ORDER BY id ASC",
+    getSemesters: "SELECT * FROM Semesters ORDER BY number_semester ASC",
 
     insert: (table) => `INSERT INTO ${table} SET ?`,
     delete: (table, id) => `DELETE FROM ${table} WHERE id = '${id}'`,
@@ -23,5 +24,8 @@ module.exports = {
     editGroup: (group) => `UPDATE Un_group SET id = '${group.newName}', specialtyID = ${group.specialtyID}, course = ${group.course}, amount_students = ${group.amount_students} WHERE id = '${group.id}'`,
     editSubject: (subject) => `UPDATE Subjects SET subject_name = '${subject.subject_name}' WHERE id = '${subject.id}'`,
     editTeacher: (teacher) => `UPDATE Teacher SET name = '${teacher.name}', surname = '${teacher.surname}',
-                                lastname = '${teacher.lastname}', position = '${teacher.position}', rank = '${teacher.rank}', phone = ${teacher.phone} WHERE id = '${teacher.id}'`
+                                lastname = '${teacher.lastname}', position = '${teacher.position}', rank = '${teacher.rank}', phone = ${teacher.phone} WHERE id = '${teacher.id}'`,
+    editSemester: (semester) => `UPDATE Semesters SET init_data = '${semester.init_data}',
+                                                     end_data = '${semester.end_data}'  
+                                                     WHERE number_semester = '${semester.number_semester}'`
 } 

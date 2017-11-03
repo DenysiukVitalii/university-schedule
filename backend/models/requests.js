@@ -3,7 +3,8 @@ const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: '1111',
-    database: 'un_schedule'
+    database: 'un_schedule',
+    timezone: 'utc'  
 });
 
 connection.connect(() => console.log("Database connected"));
