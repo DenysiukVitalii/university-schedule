@@ -8,21 +8,21 @@ const connection = mysql.createConnection({
 
 connection.connect(() => console.log("Database connected"));
 
-module.exports.getData = (query) => {
-    return new Promise((resolve, reject) => {
-        connection.query(query, (err, rows, fields) => {
-            if (err) {
-                return reject(err);
-            }
-            resolve(rows);
+module.exports = {
+    getData: query => {
+        return new Promise((resolve, reject) => {
+            connection.query(query, (err, rows, fields) => {
+                if (err) {
+                    return reject(err);
+                }
+                resolve(rows);
+            });
         });
-    });
-}
-
-module.exports.insertData = (data, query, callback) => {
-    connection.query(query, data, callback);
-} 
-
-module.exports.findBy = function(query, callback) {
-    connection.query(query, callback);
+    },
+    insertData: (data, query, callback) => {
+        connection.query(query, data, callback);
+    },
+    find: (query, callback) => {
+        connection.query(query, callback);
+    }
 }

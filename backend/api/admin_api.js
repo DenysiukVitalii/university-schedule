@@ -1,7 +1,6 @@
 const express = require('express'),
     app = express();
 
-// Import User Module Containing Functions Related To User Data
 let admin = require('../models/admin');
 
 app.use((req, res, next) => {
@@ -45,7 +44,7 @@ app.delete('/delete_spec', (req, res, next) => {
     admin.deleteSpecialty(data.id, function(err, info) {
         if (err) {
             next(err);
-            return res.send({ 'success': 'false' });
+            return res.json({ success: false });
         }
         console.log(info);
         admin.sendResponse(true, res);
@@ -59,7 +58,7 @@ app.put('/edit_spec', (req, res) => {
         if (rows.length == 1) {
             admin.sendResponse(false, res);
         } else {
-            admin.editSpecialty(data.id, data.spec_name, function(err, info) {
+            admin.editSpecialty(data, function(err, info) {
                 if (err) throw err;
                 console.log(info);
                 admin.sendResponse(true, res);
@@ -74,7 +73,7 @@ app.delete('/delete_group', (req, res, next) => {
     admin.deleteGroup(data.id, function(err, info) {
         if (err) {
             next(err);
-            return res.send({ 'success': 'false' });
+            return res.json({ success: false });
         }
         console.log(info);
         admin.sendResponse(true, res);
@@ -142,7 +141,7 @@ app.delete('/delete_teacher', (req, res, next) => {
     admin.deleteTeacher(data.id, function(err, info) {
         if (err) {
             next(err);
-            return res.send({ 'success': 'false' });
+            return res.json({ success: false });
         }
         console.log(info);
         admin.sendResponse(true, res);
@@ -193,7 +192,7 @@ app.delete('/delete_subject', (req, res, next) => {
     admin.deleteSubject(data.id, function(err, info) {
         if (err) {
             next(err);
-            return res.send({ 'success': 'false' });
+            return res.json({ success: false });
         }
         console.log(info);
         admin.sendResponse(true, res);
@@ -294,14 +293,15 @@ app.post('/create_question', (req, res) => {
                 if (err) throw err;
                 console.log(info);
                 id_question = info.insertId;
-                let insert_aswers = [];
+                let insert_answers = [];
                 answers.forEach(el => el.id_question = id_question);
-                answers.forEach(i => insert_aswers.push([i.id_question, i.answer, i.isTrue]))
-                console.log(insert_aswers);
-                admin.addAnswers(insert_aswers, function(err, info) {
+                answers.forEach(i => insert_answers.push([i.id_question, i.answer, i.isTrue]))
+                console.log(insert_answers);
+                admin.addAnswers(insert_answers, function(err, info) {
                     if (err) throw err;
                     console.log(info);
                 });
+                
                 admin.sendResponse(true, res);
             });
         };
