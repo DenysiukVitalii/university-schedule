@@ -46,6 +46,8 @@ module.exports = {
     getSemesters: () => request.getData(queries.getSemesters),
     editSemester: (data, callback) => 
                  request.find(queries.editSemester(data), callback),
+    
+    getCurriculum: (data) => request.getData(queries.getCurriculum(data)),
 
     sendResponse: (success, res) => (success) ? res.json({ success: true }) : res.json({ success: false })
 }

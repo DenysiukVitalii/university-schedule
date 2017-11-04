@@ -236,6 +236,28 @@ app.put('/edit_semester', (req, res) => {
     });
 });
 
+app.post('/get_curriculum', async(req, res) => {
+    var data = req.body;
+    console.log(data);
+    let curriculum = await admin.getCurriculum(data);
+    console.log(curriculum);
+    curriculum = curriculum.map(el => JSON.parse(el.curriculum));
+    console.log(curriculum);
+    curriculum = curriculum.map(el => {
+        let types = el.types_lesson;
+        types = types[0];
+        types = types.slice(1,-1);
+        types = types.split('`,`');
+        console.log(types);
+        types = '{"types_lesson":['.concat(types, "]}");
+        el.types_lesson = JSON.parse(types).types_lesson;
+        return el;
+    });
+    console.log(curriculum);
+    res.json(curriculum);
+});
+
+
 
 // -- for quizzzy
 app.get('/get_tasks', async(req, res) => {

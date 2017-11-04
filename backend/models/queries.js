@@ -27,5 +27,24 @@ module.exports = {
                                 lastname = '${teacher.lastname}', position = '${teacher.position}', rank = '${teacher.rank}', phone = ${teacher.phone} WHERE id = '${teacher.id}'`,
     editSemester: (semester) => `UPDATE Semesters SET init_data = '${semester.init_data}',
                                                      end_data = '${semester.end_data}'  
-                                                     WHERE number_semester = '${semester.number_semester}'`
+                                                     WHERE number_semester = '${semester.number_semester}'`,
+    
+    getCurriculum: (data) => `select json_object(
+        'id',  Сurriculum.id,
+        'subject_id', Subjects.id,
+        'teacher_id', Teachers.id,
+        'subject', Subjects.subject_name,
+        'teacher', concat(Teachers.surname, ' ', left(Teachers.name, 1), '.', left(Teachers.lastname, 1), '.'),
+        'types_lesson', json_array(
+              (select GROUP_CONCAT('\`', 
+                                      json_object('type_lesson',TypeLesson.name, 
+                                                  'amount_hours', AmountHours.amount_hours), '\`'
+              )
+              from AmountHours
+              join TypeLesson on TypeLesson.id = AmountHours.type_lessonID
+              where Сurriculum.id = AmountHours.curriculumID))) as curriculum
+      from Сurriculum
+      join Subjects on Subjects.id = Сurriculum.subjectID
+      join Teachers on Teachers.id = Сurriculum.teacherID
+      WHERE Сurriculum.semesterID = ${data.semesterID} and Сurriculum.specialtyID = ${data.specialtyID};`
 } 

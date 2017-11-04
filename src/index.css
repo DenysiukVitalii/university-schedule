@@ -108,7 +108,7 @@ header {
 .table>thead>tr>th {
     padding: 2px;
     line-height: 4.428571;
-    vertical-align: top;
+    vertical-align: middle;
     border-top: 1px solid #ddd;
 }
 
@@ -140,4 +140,9 @@ input:invalid {
 input,
 input:valid {
     border-color: #ccc;
+}
+
+.get_curriculum {
+    width: 30%;
+    margin: 20px auto;
 }
