@@ -257,7 +257,50 @@ app.post('/get_curriculum', async(req, res) => {
     res.json(curriculum);
 });
 
+app.post('/create_curriculum', (req, res) => {
+    let data = req.body;
+  //  console.log(data);
+    let types_lesson = data.types_lesson;
+    delete data.types_lesson;
+    types_lesson = types_lesson.map(e => {
+        delete e.selected;
+        return e;
+    })
+   // console.log(data);
+   // console.log(types_lesson);
+    admin.findByCurriculum(data, function(err, rows, fields) {
+        console.log(rows.length);
+        if (rows.length == 1) {
+            admin.sendResponse(false, res);
+        } else {
+            admin.addCurriculum(data, function(err, info) {
+                if (err) throw err;
+                console.log(info);
+                types_lesson = types_lesson.map(e => {
+                    e.type_lessonID = e.id;
+                    delete e.id;
+                    delete e.name;
+                    e.curriculumID = info.insertId;
+                    return e;
+                });
+                types_lesson = types_lesson.filter(e => e.amount_hours !== '');
+                console.log(types_lesson);
+                types_lesson.forEach(e => {
+                    admin.addTypesLesson(e, function(err, info) {
+                        if (err) throw err;
+                        console.log(info);
+                    });
+                });
+                admin.sendResponse(true, res);
+            });
+        };
+    });
+});
 
+app.get('/types_lesson', async(req, res) => {
+    let types = await admin.getTypesLesson();
+    res.json(types);
+});
 
 // -- for quizzzy
 app.get('/get_tasks', async(req, res) => {
@@ -366,6 +409,7 @@ app.put('/edit_disc', (req, res) => {
         };
     });
 });
+
 
 
 

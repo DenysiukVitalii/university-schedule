@@ -48,7 +48,13 @@ module.exports = {
                  request.find(queries.editSemester(data), callback),
     
     getCurriculum: (data) => request.getData(queries.getCurriculum(data)),
-
+    findByCurriculum: (curriculum, callback) => 
+                      request.find(queries.findByCurriculum(curriculum), callback),
+    addCurriculum: (data, callback) => 
+                    request.insertData(data, queries.insert(table.curriculum), callback),
+    addTypesLesson: (data, callback) => 
+                     request.insertData(data, queries.insert(table.amount_hours), callback),
+    getTypesLesson: () => request.getData(queries.getTypesLesson),
     sendResponse: (success, res) => (success) ? res.json({ success: true }) : res.json({ success: false })
 }
 
