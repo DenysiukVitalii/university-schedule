@@ -3,59 +3,67 @@ import SweetAlert from 'react-bootstrap-sweetalert';
 import { Modal } from 'react-bootstrap';
 import myfetch from '../myfetch';
 import ModalFooter from '../shared/ModalFooter';
-import InputText from '../shared/InputText';
+//import InputText from '../shared/InputText';
 
-class CreateGroup extends Component {
+class CreateCurriculum extends Component {
     constructor(props) {
         super(props);
-        this.state = {specs: [], newGroupName: '', selectedSpec: '', selectedYear: '1' , selectedAmount: ''};
+        this.state = {specs: [], semesters: [], subjects: [], teachers: [], types_lesson: [],
+                      selectedSpec: '', selectedSemester: '', selectedSubject: '', 
+                      selectedTeacher: ''};
         this.onChange = this.onChange.bind(this);
-        this.createGroup = this.createGroup.bind(this);
+        this.changeSelection = this.changeSelection.bind(this);
+        this.createCurriculum = this.createCurriculum.bind(this);
+        this.changeAmount = this.changeAmount.bind(this);
     }
 
     componentWillReceiveProps(nextProps) {
         this.setState({
-            specs: nextProps.specialties
+            specs: nextProps.data.specs,
+            semesters: nextProps.data.semesters,
+            subjects: nextProps.data.subjects,
+            teachers: nextProps.data.teachers,
+            types_lesson: nextProps.data.types_lesson,
+            selectedSpec: nextProps.selected.spec,
+            selectedSemester: nextProps.selected.semester,
+            selectedSubject: nextProps.selected.subject,
+            selectedTeacher: nextProps.selected.teacher
         });
-        if (this.state.specs.length) {
-          this.setState({
-              selectedSpec: this.state.specs[0].id
-          });
-        }
+    }
+    
+    componentWillMount() {
+      this.selectedCheckboxes = new Set();
     }
 
     onChange(e) {
-      this.setState({[e.target.name]: e.target.value});
-    }
-
-    validation() {
-      let group = this.state.newGroupName,
-          groupRegex = /^[a-zA-Z]{2}-[0-9]{2}$/,
-          amount = this.state.selectedAmount;
-      return (!group || !groupRegex.test(group) || !amount) ? false : true;
+      this.setState({[e.target.name]: +e.target.value});
     }
   
-    createGroup() {
-      if (this.validation() === false) {
-        this.props.alert(this.getAlert(false, "Fill all fields correctly, please!"));
-        return;
-      } 
-
+    createCurriculum() {
       let item = {
-        id: this.state.newGroupName.toUpperCase(),
-        specialtyID: +this.state.selectedSpec,
-        course: this.state.selectedYear,
-        amount_students: this.state.selectedAmount
+        specialtyID: this.state.selectedSpec,
+        semesterID: this.state.selectedSemester,
+        subjectID: this.state.selectedSubject,
+        teacherID: this.state.selectedTeacher,
+        types_lesson: this.state.types_lesson
       };
+      console.log(item);
    
-      myfetch('create_group', 'post', item)
+     myfetch('create_curriculum', 'post', item)
       .then( data => { 
         if (data.success) {
-          this.props.alert(this.getAlert(true, 'You create new group!'));
+          this.props.alert(this.getAlert(true, 'You create new curriculum!'));
           this.props.response(item);  
-          this.clearForm();
+          this.state.types_lesson.map(e => {
+            return {
+              id: e.id,
+              name: e.name,
+              selected: false,
+              amount_hours: ''
+            }
+          })//this.clearForm();
         } else {
-          this.props.alert(this.getAlert(false, "Such group already exist! Rename, please."));
+          this.props.alert(this.getAlert(false, "Such curriculum already exist! Rename, please."));
         }
       });
     }
@@ -82,23 +90,59 @@ class CreateGroup extends Component {
           selectedSpec: this.state.specs[0].id
         });
     }
+
+    changeSelection(e) {
+      let id = +e.target.getAttribute('data-id');
+      let types_lesson = this.state.types_lesson.map(e => {
+          e.selected = e.id === id ? !e.selected : e.selected;
+          if (!e.selected) e.amount_hours = ''; 
+          return {
+              id: e.id,
+              name: e.name,
+              selected: e.selected,
+              amount_hours: e.amount_hours
+          };
+      });
+      this.setState({ types_lesson: types_lesson });
+    }
+
+    changeAmount(e) {
+      let value = +e.target.value;
+      let type = +e.target.name;
+      let types_lesson = this.state.types_lesson.map(e => {
+          e.amount_hours = (e.id === type) ? value : e.amount_hours;
+          return {
+              id: e.id,
+              name: e.name,
+              selected: e.selected,
+              amount_hours: e.amount_hours
+          };
+      });
+      this.setState({ types_lesson: types_lesson });
+    }
   
     render() {
       return (
         <div>
             <Modal show={this.props.show} onHide={this.props.hide}>
-                <Modal.Header closeButton><Modal.Title>Create group</Modal.Title></Modal.Header>
+                <Modal.Header closeButton><Modal.Title>Create curriculum</Modal.Title></Modal.Header>
                 <Modal.Body>
-                  <InputText name="newGroupName" label="Group name" placeholder="XX-11" 
-                             value={this.state.newGroupName} change={this.onChange} 
-                             refProp={el => this.inputGroupName = el}/>
                   <SpecialtySelect value={this.state.selectedSpec}
                                    change={this.onChange}
                                    specs={this.state.specs}/>
-                  <YearSelect change={this.onChange} refProp={el => this.inputYear = el}/>
-                  <AmountStudentsInput change={this.onChange} refProp={el => this.inputAmount = el} />
+                  <SemesterSelect value={this.state.selectedSemester}
+                                   change={this.onChange}
+                                   semesters={this.state.semesters}/>
+                  <SubjectSelect value={this.state.selectedSubject}
+                                   change={this.onChange}
+                                   subjects={this.state.subjects}/>
+                  <TeacherSelect value={this.state.selectedTeacher}
+                                   change={this.onChange}
+                                   teachers={this.state.teachers}/>
+                  <AmountHours change={this.changeSelection} amount={this.changeAmount} types_lesson={this.state.types_lesson}/>
+
                 </Modal.Body>
-                <ModalFooter action={this.createGroup} hide={this.props.hide} submitText="Create"/>
+                <ModalFooter action={this.createCurriculum} hide={this.props.hide} submitText="Create"/>
             </Modal>
             {this.state.alert}
         </div>
@@ -117,22 +161,52 @@ class CreateGroup extends Component {
       </div>
   );
 
-  const YearSelect = (props) => (
-     <div className="form-group">
-        <label htmlFor="selectedYear">Year</label>
-            <select name="selectedYear" className="form-control" onChange={props.change} ref={props.refProp}>
-                {[1,2,3,4,5,6].map(el => (
-                    <option value={el} key={el}>{el}</option>
+  const SemesterSelect = (props) => (
+      <div className="form-group">
+          <label htmlFor="selectedSemester">Semester</label>
+            <select name="selectedSemester" className="form-control" value={props.value} onChange={props.change}>
+                {props.semesters.map(e => (
+                    <option value={e.number_semester} key={e.number_semester}>{e.number_semester}</option>
                 ))}
             </select>
       </div>
   );
 
-  const AmountStudentsInput = (props) => (
-      <div className="form-group">
-        <label htmlFor="selectedAmount">Amount of students</label>
-        <input type="number" name="selectedAmount" className="form-control" onChange={props.change} ref={props.refProp} placeholder="25"/>
-      </div>
+ const SubjectSelect = (props) => (
+    <div className="form-group">
+        <label htmlFor="selectedSubject">Subject</label>
+          <select name="selectedSubject" className="form-control" value={props.value} onChange={props.change}>
+              {props.subjects.map(e => (
+                  <option value={e.id} key={e.id}>{e.subject_name}</option>
+              ))}
+          </select>
+    </div>
   );
 
-export default CreateGroup;
+  const TeacherSelect = (props) => (
+    <div className="form-group">
+        <label htmlFor="selectedTeacher">Teacher</label>
+          <select name="selectedTeacher" className="form-control" value={props.value} onChange={props.change}>
+              {props.teachers.map(e => (
+                  <option value={e.id} key={e.id}>{e.surname} {e.name[0]}.{e.lastname[0]}. | {e.position}</option>
+              ))}
+          </select>
+    </div>
+  );
+
+  const AmountHours = (props) => (
+    <div className="form-group">
+        <label htmlFor="selectedTeacher">Types lesson and amount hours</label>
+        {props.types_lesson.map(e => (
+          <div className="checkbox" key={e.id}>
+            <label><input type="checkbox" data-id={e.id} selected={e.selected} onChange={props.change}/>{e.name} </label>
+            {e.selected ? (
+              <input type="number" name={e.id} value={e.amount} onChange={props.amount} className="input-text" placeholder="Amount hours"/>
+              ) : (<div className="no-choosen"></div>)}
+          </div>
+        ))}
+    </div>
+  );
+
+
+export default CreateCurriculum;
