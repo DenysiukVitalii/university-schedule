@@ -302,6 +302,27 @@ app.get('/types_lesson', async(req, res) => {
     res.json(types);
 });
 
+app.delete('/delete_curriculum', (req, res, next) => {
+    var data = req.body;
+    console.log(data.id);
+    admin.deleteAmountHours(data.id, function(err, info) {
+        if (err) {
+            next(err);
+            return res.json({ success: false });
+        }
+        admin.deleteCurriculum(data.id, function(err, info) {
+            if (err) {
+                next(err);
+                return res.json({ success: false });
+            }
+            console.log(info);
+            admin.sendResponse(true, res);
+        });
+        console.log(info);
+    });
+
+});
+
 // -- for quizzzy
 app.get('/get_tasks', async(req, res) => {
     let tasks = await admin.getTasks();

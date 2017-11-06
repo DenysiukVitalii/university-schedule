@@ -9,6 +9,7 @@ module.exports = {
 
     insert: (table) => `INSERT INTO ${table} SET ?`,
     delete: (table, id) => `DELETE FROM ${table} WHERE id = '${id}'`,
+    delete_parent: (table, id, idParent) => `DELETE FROM ${table} WHERE ${idParent} = '${id}'`,
 
     findBySpecname: (spec_name) => `SELECT * FROM Specialty WHERE spec_name = '${spec_name}'`,
     findByGroup: (group) => `SELECT * FROM Un_group WHERE id = '${group}'`,

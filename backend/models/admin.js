@@ -55,6 +55,10 @@ module.exports = {
     addTypesLesson: (data, callback) => 
                      request.insertData(data, queries.insert(table.amount_hours), callback),
     getTypesLesson: () => request.getData(queries.getTypesLesson),
+    deleteAmountHours: (idCurriculum, callback) => 
+                        request.find(queries.delete_parent(table.amount_hours, idCurriculum, 'curriculumID'), callback),
+    deleteCurriculum: (idCurriculum, callback) => 
+                       request.find(queries.delete(table.curriculum, idCurriculum), callback),
     sendResponse: (success, res) => (success) ? res.json({ success: true }) : res.json({ success: false })
 }
 
