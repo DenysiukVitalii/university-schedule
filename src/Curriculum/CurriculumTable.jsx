@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-//import SweetAlert from 'react-bootstrap-sweetalert';
+import SweetAlert from 'react-bootstrap-sweetalert';
 import myfetch from '../myfetch';
 import CreateCurriculum from './CreateCurriculum';
 //import EditCurriculum from './EditCurriculum';
@@ -20,6 +20,7 @@ class CurriculumTable extends Component {
     this.hideAlert = this.hideAlert.bind(this);
     this.dataAfterCreate = this.dataAfterCreate.bind(this);
     //this.dataAfterEdit = this.dataAfterEdit.bind(this);
+    this.deleteCurriculum = this.deleteCurriculum.bind(this);
   }
 
   componentDidMount() {
@@ -98,15 +99,18 @@ class CurriculumTable extends Component {
   onChange(e) {
     this.setState({[e.target.name]: e.target.value});
   }
- /* deleteGroup(item) {
-    myfetch('delete_group', 'delete', item)
+  
+  deleteCurriculum(item) {
+    let obj = {id: item.id};
+    console.log(obj);
+    myfetch('delete_curriculum', 'delete', obj)
     .then((data) => {
       if (data.success) {
-        this.setState({groups: this.deletedItem(item) });
+        this.setState({ curriculum: this.deletedItem(obj) });
       } else {
         const getError = () => (
           <SweetAlert error title="Error" onConfirm={this.hideAlert}>
-            You can't delete this group!
+            You can't delete this curriculum!
           </SweetAlert>
         );
         this.setState({
@@ -117,12 +121,12 @@ class CurriculumTable extends Component {
   }
 
   deletedItem(item) {
-    let groups = this.state.groups;
-    let ids = groups.map(i => i.id);
+    let curriculum = this.state.curriculum;
+    let ids = curriculum.map(i => i.id);
     let index = ids.indexOf(item.id);
-    groups.splice(index, 1);
-    return groups;
-  }*/
+    curriculum.splice(index, 1);
+    return curriculum;
+  }
 
   closeCreateModal() {
     this.setState({ createModal: false });
@@ -205,7 +209,7 @@ class CurriculumTable extends Component {
           types_lesson: this.state.types_lesson
         };
     if (this.state.curriculum.length) {
-      table =<Table curriculum={this.state.curriculum}/>;
+      table = <Table curriculum={this.state.curriculum} delete={this.deleteCurriculum}/>;
     } else {
       table = <div className="text-center">Select parameters for curriculum</div>;
     }
@@ -285,7 +289,7 @@ const Table = props => (
                 </td>
                 <td width="30%">
                     <button className="btn btn-warning" onClick={() => props.openEditModal(e)}>Edit</button>
-                    <button className="btn btn-danger" onClick={() => props.deleteGroup(e)}>Delete</button>
+                    <button className="btn btn-danger" onClick={() => props.delete(e)}>Delete</button>
                 </td>
               </tr>
             ))}
