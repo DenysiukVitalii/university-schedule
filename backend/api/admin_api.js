@@ -253,7 +253,7 @@ app.post('/get_curriculum', async(req, res) => {
         el.types_lesson = JSON.parse(types).types_lesson;
         return el;
     });
-    console.log(curriculum);
+    console.log(curriculum.types_lesson);
     res.json(curriculum);
 });
 
@@ -279,7 +279,7 @@ app.post('/create_curriculum', (req, res) => {
                 types_lesson = types_lesson.map(e => {
                     e.type_lessonID = e.id;
                     delete e.id;
-                    delete e.name;
+                    delete e.type_lesson;
                     e.curriculumID = info.insertId;
                     return e;
                 });
@@ -318,6 +318,22 @@ app.delete('/delete_curriculum', (req, res, next) => {
         });
     });
 
+});
+
+app.put('/edit_curriculum', (req, res) => {
+    var data = req.body;
+    console.log(data);
+    admin.findByCurriculum(data, function(err, rows, fields) {
+        if (rows.length == 1) {
+            admin.sendResponse(false, res);
+        } else {
+            admin.editGroup(data, function(err, info) {
+                if (err) throw err;
+                console.log(info);
+                admin.sendResponse(true, res);
+            });
+        };
+    });
 });
 
 // -- for quizzzy

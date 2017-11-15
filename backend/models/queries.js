@@ -43,8 +43,10 @@ module.exports = {
         'teacher', concat(Teachers.surname, ' ', left(Teachers.name, 1), '.', left(Teachers.lastname, 1), '.'),
         'types_lesson', json_array(
               (select GROUP_CONCAT('\`', 
-                                      json_object('type_lesson',TypeLesson.name, 
-                                                  'amount_hours', AmountHours.amount_hours), '\`'
+                                      json_object('type_lesson',TypeLesson.type_lesson, 
+                                                  'amount_hours', AmountHours.amount_hours,
+                                                  'selected', true,
+                                                  'id', AmountHours.curriculumID), '\`'
               )
               from AmountHours
               join TypeLesson on TypeLesson.id = AmountHours.type_lessonID
