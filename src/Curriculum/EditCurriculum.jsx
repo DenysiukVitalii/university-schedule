@@ -1,26 +1,29 @@
 import React, { Component } from 'react';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import { Modal } from 'react-bootstrap';
-import myfetch from '../myfetch';
+//import myfetch from '../myfetch';
 import ModalFooter from '../shared/ModalFooter';
-import InputText from '../shared/InputText';
+//import InputText from '../shared/InputText';
 
-class EditGroup extends Component {
+class EditCurriculum extends Component {
     constructor(props) {
         super(props);
-        this.state = {specs: [], groupName: '', newName: '', selectedSpec: '', selectedYear: '' , selectedAmount: ''};
+        this.state = {subjects: [], teachers: [], types_lesson: [],
+                      selectedSubject: '', selectedTeacher: '', id_curriculum: ''};
         this.onChange = this.onChange.bind(this);
-        this.editGroup = this.editGroup.bind(this);
+        this.changeSelection = this.changeSelection.bind(this);
+        this.changeAmount = this.changeAmount.bind(this);
+        this.editCurriculum = this.editCurriculum.bind(this);
     }
 
     componentWillReceiveProps(nextProps) {
         this.setState({
-            specs: nextProps.specialties,
-            groupName: nextProps.item.id,
-            newName: nextProps.item.id,
-            selectedSpec: nextProps.item.specialtyID,
-            selectedYear: nextProps.item.course,
-            selectedAmount: nextProps.item.amount_students
+            subjects: nextProps.data.subjects,
+            teachers: nextProps.data.teachers,
+            selectedSubject: nextProps.item.subject_id,
+            selectedTeacher: nextProps.item.teacher_id,
+            id_curriculum: nextProps.item.id,
+            types_lesson: nextProps.item.types_lesson
         });
     }
 
@@ -28,28 +31,9 @@ class EditGroup extends Component {
       this.setState({[e.target.name]: e.target.value});
     }
 
-    validation() {
-      let group = this.state.newName,
-          groupRegex = /^[a-zA-Z]{2}-[0-9]{2}$/,
-          amount = this.state.selectedAmount;
-      return (!group || !groupRegex.test(group) || !amount) ? false : true;
-    }
-  
-    editGroup() {
-      if (this.validation() === false) {
-        this.props.alert(this.getAlert(false, "Fill all fields correctly, please!"));
-        return;
-      } 
-
-      let item = {
-        id: this.state.groupName,
-        newName: this.state.newName.toUpperCase(),
-        specialtyID: +this.state.selectedSpec,
-        course: +this.state.selectedYear,
-        amount_students: +this.state.selectedAmount
-      };
-     
-      myfetch('edit_group', 'put', item)
+    editCurriculum() {
+      console.log(this.state.types_lesson);
+      /*myfetch('edit_group', 'put', item)
       .then( data => { 
         if (data.success) {
           this.props.alert(this.getAlert(true, 'You edited group!'));
@@ -57,7 +41,7 @@ class EditGroup extends Component {
         } else {
           this.props.alert(this.getAlert(false, "Such group already exist! Rename, please."));
         }
-      });
+      });*/
     }
 
     getAlert(state, message) {
@@ -71,6 +55,36 @@ class EditGroup extends Component {
           </SweetAlert>
         );
     }
+
+    changeSelection(e) {
+      let id = +e.target.getAttribute('data-id');
+      let types_lesson = this.state.types_lesson.map(e => {
+          e.selected = e.id === id ? !e.selected : e.selected;
+          if (!e.selected) e.amount_hours = ''; 
+          return {
+              id: e.id,
+              type_lesson: e.type_lesson,
+              selected: e.selected,
+              amount_hours: e.amount_hours
+          };
+      });
+      this.setState({ types_lesson: types_lesson });
+    }
+
+    changeAmount(e) {
+      let value = +e.target.value;
+      let type = +e.target.name;
+      let types_lesson = this.state.types_lesson.map(e => {
+          e.amount_hours = (e.id === type) ? value : e.amount_hours;
+          return {
+              id: e.id,
+              type_lesson: e.type_lesson,
+              selected: e.selected,
+              amount_hours: e.amount_hours
+          };
+      });
+      this.setState({ types_lesson: types_lesson });
+    }
   
     render() {
       return (
@@ -78,15 +92,19 @@ class EditGroup extends Component {
             <Modal show={this.props.show} onHide={this.props.hide}>
                 <Modal.Header closeButton><Modal.Title>Edit group</Modal.Title></Modal.Header>
                 <Modal.Body>
-                  <InputText name="newName" label="Group name" placeholder="XX-11" 
-                             value={this.state.groupName} change={this.onChange} />
-                  <SpecialtySelect value={this.state.selectedSpec}
-                                   change={this.onChange}
-                                   specs={this.state.specs}/>
-                  <YearSelect value={this.state.selectedYear} change={this.onChange}/>
-                  <AmountStudentsInput value={this.state.selectedAmount} change={this.onChange} />
+                  <SubjectSelect value={this.state.selectedSubject}
+                                  change={this.onChange}
+                                  subjects={this.state.subjects}/>
+                  <TeacherSelect value={this.state.selectedTeacher}
+                                  change={this.onChange}
+                                  teachers={this.state.teachers}/>
+                  <form id="amountHoursForm">
+                  <AmountHours change={this.changeSelection} amount={this.changeAmount} 
+                               types_lesson={this.state.types_lesson}/>
+                  </form>
+
                 </Modal.Body>
-                <ModalFooter action={this.editGroup} hide={this.props.hide} submitText="Edit"/>
+                <ModalFooter action={this.editCurriculum} hide={this.props.hide} submitText="Edit"/>
             </Modal>
             {this.state.alert}
         </div>
@@ -94,33 +112,43 @@ class EditGroup extends Component {
     }
   }
 
-  const SpecialtySelect = (props) => (
-     <div className="form-group">
-          <label htmlFor="selectedSpec">Specialty</label>
-            <select name="selectedSpec" className="form-control" value={props.value} onChange={props.change}>
-                {props.specs.map(e => (
-                    <option value={e.id} key={e.id}>{e.spec_name}</option>
-                ))}
-            </select>
-      </div>
+  const SubjectSelect = (props) => (
+    <div className="form-group">
+        <label htmlFor="selectedSubject">Subject</label>
+          <select name="selectedSubject" className="form-control" value={props.value} onChange={props.change}>
+              {props.subjects.map(e => (
+                  <option value={e.id} key={e.id}>{e.subject_name}</option>
+              ))}
+          </select>
+    </div>
   );
 
-  const YearSelect = (props) => (
-     <div className="form-group">
-        <label htmlFor="selectedYear">Year</label>
-            <select name="selectedYear" className="form-control" value={props.value} onChange={props.change}>
-                {[1,2,3,4,5,6].map(el => (
-                    <option value={el} key={el}>{el}</option>
-                ))}
-            </select>
-      </div>
+  const TeacherSelect = (props) => (
+    <div className="form-group">
+        <label htmlFor="selectedTeacher">Teacher</label>
+          <select name="selectedTeacher" className="form-control" value={props.value} onChange={props.change}>
+              {props.teachers.map(e => (
+                  <option value={e.id} key={e.id}>{e.surname} {e.name[0]}.{e.lastname[0]}. | {e.position}</option>
+              ))}
+          </select>
+    </div>
   );
 
-  const AmountStudentsInput = (props) => (
-      <div className="form-group">
-        <label htmlFor="selectedAmount">Amount of students</label>
-        <input type="number" name="selectedAmount" className="form-control" defaultValue={props.value}              onChange={props.change} min="1" max="45" placeholder="25"/>
-      </div>
-  );
+ const AmountHours = (props) => (
+   <div className="form-group">
+       <label>Types lesson and amount hours</label>
+       {props.types_lesson.map(e => (
+         <div className="checkbox" key={e.id}>
+           <label><input type="checkbox" 
+                         data-id={e.id} 
+                         defaultChecked={e.selected}
+                         onChange={props.change}/>{e.type_lesson}</label>
+           {e.selected ? (
+             <input type="number" name={e.id} defaultValue={e.amount_hours} onChange={props.amount} className="input-text" placeholder="Amount hours"/>
+             ) : (<div className="no-choosen"></div>)}
+         </div>
+       ))}
+   </div>
+ );
 
-export default EditGroup;
+export default EditCurriculum;

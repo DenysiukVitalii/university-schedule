@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import myfetch from '../myfetch';
 import CreateCurriculum from './CreateCurriculum';
-//import EditCurriculum from './EditCurriculum';
+import EditCurriculum from './EditCurriculum';
 import Header from '../shared/Header';
 
 class CurriculumTable extends Component {
@@ -15,11 +15,11 @@ class CurriculumTable extends Component {
     this.getCurriculum = this.getCurriculum.bind(this);
     this.openCreateModal = this.openCreateModal.bind(this);
     this.closeCreateModal = this.closeCreateModal.bind(this);
-    //this.closeEditModal = this.closeEditModal.bind(this);
+    this.closeEditModal = this.closeEditModal.bind(this);
     this.callAlert = this.callAlert.bind(this); 
     this.hideAlert = this.hideAlert.bind(this);
     this.dataAfterCreate = this.dataAfterCreate.bind(this);
-    //this.dataAfterEdit = this.dataAfterEdit.bind(this);
+    this.dataAfterEdit = this.dataAfterEdit.bind(this);
     this.deleteCurriculum = this.deleteCurriculum.bind(this);
   }
 
@@ -74,6 +74,7 @@ class CurriculumTable extends Component {
   getTypesLesson() {
     myfetch('types_lesson')
     .then( data => { 
+      console.log(data);
       data.forEach(e => {
         e.selected = false;
         e.amount_hours = '';
@@ -91,6 +92,7 @@ class CurriculumTable extends Component {
     }
     myfetch('get_curriculum', 'post', item)
     .then( data => { 
+      console.log(data);
       this.setState({ curriculum: data });
     }).catch(error => {console.log('Error!', error);});
   }
@@ -140,14 +142,27 @@ class CurriculumTable extends Component {
     })
   }
 
- /* closeEditModal() {
-    this.setState({ editModal: false, currentItem: '' });
+  closeEditModal() {
+    this.setState({ editModal: false });
   }
 
   async openEditModal(item) {
-    await this.setState({ editModal: true, currentItem: item });
+    console.log(item);
+    let currentItem = item;
+    let selected_types = currentItem.types_lesson.map(i => i.type_lesson);
+    let default_types = this.state.types_lesson.map(i => i.type_lesson);
+    if (selected_types.length !== default_types.length) {
+      for (let i = 0; i < default_types.length; i++) {
+        if (!~selected_types.indexOf(default_types[i])) {
+          currentItem.types_lesson.push(this.state.types_lesson[i]);
+        }
+      }
+    }
+    currentItem.types_lesson.forEach((e, i) => e.id = i + 1);
+    
+    await this.setState({ editModal: true, currentItem: currentItem });
   }
-*/
+
   // methods for alert
   hideAlert(state) {
     if (!state) {
@@ -173,8 +188,8 @@ class CurriculumTable extends Component {
     this.getCurriculum();
   }
 
-/*  dataAfterEdit(data) {
-    let groups = this.state.groups;
+  dataAfterEdit(data) {
+    /*let groups = this.state.groups;
     let specs = this.state.specs;
     groups = groups.map(e => {
       if (e.id === data.id)  {
@@ -188,8 +203,9 @@ class CurriculumTable extends Component {
         return e;
       }
     });
-    this.setState({groups: groups});
-  }*/
+    this.setState({groups: groups});*/
+    console.log('edited');
+  }
 
   render() {
     let table = null, 
@@ -207,7 +223,8 @@ class CurriculumTable extends Component {
           types_lesson: this.state.types_lesson
         };
     if (this.state.curriculum.length) {
-      table = <Table curriculum={this.state.curriculum} delete={this.deleteCurriculum}/>;
+      table = <Table curriculum={this.state.curriculum} delete={this.deleteCurriculum} 
+                     openEditModal={(e) => this.openEditModal(e)}/>;
     } else {
       table = <div className="text-center">No data! Select other parameters for curriculum</div>;
     }
@@ -245,6 +262,10 @@ class CurriculumTable extends Component {
                           alert={this.callAlert} hideAlert={this.hideAlert}
                           response={this.dataAfterCreate} data={data}
                           selected={selected} />
+        <EditCurriculum show={this.state.editModal} hide={this.closeEditModal} 
+                        alert={this.callAlert} hideAlert={(e) => this.hideAlert(e)}
+                        item={this.state.currentItem} response={this.dataAfterEdit}
+                        data={data} />
         
       </div>
     );
@@ -262,21 +283,22 @@ const Table = props => (
                 <td>
                   <table>
                       <tbody>
-                        {e.types_lesson.map((i, index) => (
+                        {e.types_lesson.map((i, index) =>
+                          i.amount_hours ? (
                           <tr key={index}>
                             <td>
                              {i.type_lesson}
                             </td>
                           </tr>
-                        ))}
+                        ): null)}
                        </tbody>
                   </table>
                 </td>
                 <td>
                   <table>
                       <tbody>
-                        {e.types_lesson.map((i, index) => (
-                          <tr key={index}>
+                        {e.types_lesson.map((i, index) => 
+                          (<tr key={index}>
                             <td>
                               {i.amount_hours}
                             </td>

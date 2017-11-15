@@ -76,7 +76,7 @@ class CreateCurriculum extends Component {
       let types_lesson = this.state.types_lesson.map(e => { 
         return {
           id: e.id,
-          name: e.name,
+          type_lesson: e.type_lesson,
           selected: false,
           amount_hours: ''
         }
@@ -92,7 +92,7 @@ class CreateCurriculum extends Component {
           if (!e.selected) e.amount_hours = ''; 
           return {
               id: e.id,
-              name: e.name,
+              type_lesson: e.type_lesson,
               selected: e.selected,
               amount_hours: e.amount_hours
           };
@@ -107,7 +107,7 @@ class CreateCurriculum extends Component {
           e.amount_hours = (e.id === type) ? value : e.amount_hours;
           return {
               id: e.id,
-              name: e.name,
+              type_lesson: e.type_lesson,
               selected: e.selected,
               amount_hours: e.amount_hours
           };
@@ -192,13 +192,13 @@ class CreateCurriculum extends Component {
 
   const AmountHours = (props) => (
     <div className="form-group">
-        <label htmlFor="selectedTeacher">Types lesson and amount hours</label>
+        <label>Types lesson and amount hours</label>
         {props.types_lesson.map(e => (
           <div className="checkbox" key={e.id}>
             <label><input type="checkbox" 
                           data-id={e.id} 
                           defaultChecked={e.selected}
-                          onChange={props.change}/>{e.name}</label>
+                          onChange={props.change}/>{e.type_lesson}</label>
             {e.selected ? (
               <input type="number" name={e.id} value={e.amount} onChange={props.amount} className="input-text" placeholder="Amount hours"/>
               ) : (<div className="no-choosen"></div>)}
