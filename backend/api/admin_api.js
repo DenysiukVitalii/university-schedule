@@ -304,7 +304,6 @@ app.get('/types_lesson', async(req, res) => {
 
 app.delete('/delete_curriculum', (req, res, next) => {
     var data = req.body;
-    console.log(data.id);
     admin.deleteAmountHours(data.id, function(err, info) {
         if (err) {
             next(err);
@@ -315,10 +314,8 @@ app.delete('/delete_curriculum', (req, res, next) => {
                 next(err);
                 return res.json({ success: false });
             }
-            console.log(info);
             admin.sendResponse(true, res);
         });
-        console.log(info);
     });
 
 });

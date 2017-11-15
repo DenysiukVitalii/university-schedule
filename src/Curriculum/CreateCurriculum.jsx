@@ -38,7 +38,7 @@ class CreateCurriculum extends Component {
     onChange(e) {
       this.setState({[e.target.name]: +e.target.value});
     }
-  
+
     createCurriculum() {
       let item = {
         specialtyID: this.state.selectedSpec,
@@ -47,21 +47,13 @@ class CreateCurriculum extends Component {
         teacherID: this.state.selectedTeacher,
         types_lesson: this.state.types_lesson
       };
-      console.log(item);
-   
-     myfetch('create_curriculum', 'post', item)
+
+      myfetch('create_curriculum', 'post', item)
       .then( data => { 
-        if (data.success) {
+        if (data.success) { 
+          this.clearForm();
           this.props.alert(this.getAlert(true, 'You create new curriculum!'));
-          this.props.response(item);  
-          this.state.types_lesson.map(e => {
-            return {
-              id: e.id,
-              name: e.name,
-              selected: false,
-              amount_hours: ''
-            }
-          })//this.clearForm();
+          this.props.response(item); 
         } else {
           this.props.alert(this.getAlert(false, "Such curriculum already exist! Rename, please."));
         }
@@ -81,14 +73,16 @@ class CreateCurriculum extends Component {
     }
 
     clearForm() {
-        this.inputGroupName.value = "";
-        this.inputAmount.value = "";
-        this.inputYear.value = '1';
-        this.setState({
-          selectedYear: '1',
-          newGroupName: '',
-          selectedSpec: this.state.specs[0].id
-        });
+      let types_lesson = this.state.types_lesson.map(e => { 
+        return {
+          id: e.id,
+          name: e.name,
+          selected: false,
+          amount_hours: ''
+        }
+      });
+      this.setState({types_lesson: types_lesson});
+      document.getElementById("amountHoursForm").reset();
     }
 
     changeSelection(e) {
@@ -139,7 +133,9 @@ class CreateCurriculum extends Component {
                   <TeacherSelect value={this.state.selectedTeacher}
                                    change={this.onChange}
                                    teachers={this.state.teachers}/>
-                  <AmountHours change={this.changeSelection} amount={this.changeAmount} types_lesson={this.state.types_lesson}/>
+                  <form id="amountHoursForm">
+                   <AmountHours change={this.changeSelection} amount={this.changeAmount} types_lesson={this.state.types_lesson}/>
+                  </form>
 
                 </Modal.Body>
                 <ModalFooter action={this.createCurriculum} hide={this.props.hide} submitText="Create"/>
@@ -199,7 +195,10 @@ class CreateCurriculum extends Component {
         <label htmlFor="selectedTeacher">Types lesson and amount hours</label>
         {props.types_lesson.map(e => (
           <div className="checkbox" key={e.id}>
-            <label><input type="checkbox" data-id={e.id} selected={e.selected} onChange={props.change}/>{e.name} </label>
+            <label><input type="checkbox" 
+                          data-id={e.id} 
+                          defaultChecked={e.selected}
+                          onChange={props.change}/>{e.name}</label>
             {e.selected ? (
               <input type="number" name={e.id} value={e.amount} onChange={props.amount} className="input-text" placeholder="Amount hours"/>
               ) : (<div className="no-choosen"></div>)}

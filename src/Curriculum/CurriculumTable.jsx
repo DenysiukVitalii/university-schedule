@@ -89,8 +89,7 @@ class CurriculumTable extends Component {
       specialtyID: +this.state.selectedSpec,
       semesterID: +this.state.selectedSemester
     }
-    console.log(item);
-   myfetch('get_curriculum', 'post', item)
+    myfetch('get_curriculum', 'post', item)
     .then( data => { 
       this.setState({ curriculum: data });
     }).catch(error => {console.log('Error!', error);});
@@ -102,7 +101,6 @@ class CurriculumTable extends Component {
   
   deleteCurriculum(item) {
     let obj = {id: item.id};
-    console.log(obj);
     myfetch('delete_curriculum', 'delete', obj)
     .then((data) => {
       if (data.success) {
@@ -211,7 +209,7 @@ class CurriculumTable extends Component {
     if (this.state.curriculum.length) {
       table = <Table curriculum={this.state.curriculum} delete={this.deleteCurriculum}/>;
     } else {
-      table = <div className="text-center">Select parameters for curriculum</div>;
+      table = <div className="text-center">No data! Select other parameters for curriculum</div>;
     }
 
     return (
