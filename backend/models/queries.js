@@ -24,6 +24,7 @@ module.exports = {
                                                                    and semesterID = ${curriculum.semesterID}
                                                                    and subjectID = ${curriculum.subjectID}
                                                                    and teacherID = ${curriculum.teacherID}`,
+    findByEditCurriculum: (curriculum) => `SELECT * FROM Сurriculums where subjectID = ${curriculum.subjectID}`,
     editSpecialty: (spec) => `UPDATE Specialty 
                               SET spec_name = '${spec.spec_name}' 
                               WHERE id = ${spec.id}`,
@@ -54,5 +55,13 @@ module.exports = {
       from Сurriculums
       join Subjects on Subjects.id = Сurriculums.subjectID
       join Teachers on Teachers.id = Сurriculums.teacherID
-      WHERE Сurriculums.semesterID = ${data.semesterID} and Сurriculums.specialtyID = ${data.specialtyID};`
+      WHERE Сurriculums.semesterID = ${data.semesterID} and Сurriculums.specialtyID = ${data.specialtyID};`,
+    editCurriculum: (curriculum) => `UPDATE Сurriculums SET subjectID = '${curriculum.subjectID}',
+                                                            teacherID = '${curriculum.teacherID}'  
+                                                        WHERE id = '${curriculum.id}'`,
+    editTypesLesson: (types_lesson) => `UPDATE AmountHours SET amount_hours = ${types_lesson.amount_hours}
+                                                        WHERE curriculumID = ${types_lesson.curriculumID}
+                                                        and type_lessonID = ${types_lesson.type_lessonID}`,
+    deleteTypesLesson: (type_lesson) => `DELETE FROM AmountHours WHERE curriculumID = ${type_lesson.curriculumID}
+                                                                   and type_lessonID = ${type_lesson.type_lessonID}`
 } 

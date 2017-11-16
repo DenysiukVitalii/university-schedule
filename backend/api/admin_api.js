@@ -284,7 +284,6 @@ app.post('/create_curriculum', (req, res) => {
                     return e;
                 });
                 types_lesson = types_lesson.filter(e => e.amount_hours !== '');
-                console.log(types_lesson);
                 types_lesson.forEach(e => {
                     admin.addTypesLesson(e, function(err, info) {
                         if (err) throw err;
@@ -322,14 +321,42 @@ app.delete('/delete_curriculum', (req, res, next) => {
 
 app.put('/edit_curriculum', (req, res) => {
     var data = req.body;
-    console.log(data);
-    admin.findByCurriculum(data, function(err, rows, fields) {
-        if (rows.length == 1) {
+    let types_lesson = data.types_lesson;
+    delete data.types_lesson;
+    //console.log(data);
+    types_lesson = types_lesson.map(e => {
+        if (e.type_lesson === "Lecture") e.id = 1;
+        if (e.type_lesson === "Practice") e.id = 2;
+        if (e.type_lesson === "Laboratory") e.id = 3;
+        return {
+          curriculumID: e.curriculumID,
+          type_lessonID: e.id,
+          amount_hours: e.amount_hours
+        }
+    });
+    types_lesson.forEach(e => e.curriculumID = data.id);
+    admin.findByEditCurriculum(data, function(err, rows, fields) {
+        if (rows.length == 1 && rows[0].id !== data.id) {
             admin.sendResponse(false, res);
         } else {
-            admin.editGroup(data, function(err, info) {
+            admin.editCurriculum(data, function(err, info) {
                 if (err) throw err;
-                console.log(info);
+                types_lesson.forEach(e => {
+                    if (e.amount_hours === "") {
+                        admin.deleteTypesLesson(e, function(err, info) {
+                            if (err) throw err;
+                        });
+                    } else {
+                        admin.editTypesLesson(e, function(err, info) {
+                            if (err) throw err;
+                            if (info.affectedRows === 0) {
+                                admin.addTypesLesson(e, function(err, info) {
+                                    if (err) throw err;
+                                });
+                            }
+                        });
+                    }
+                });
                 admin.sendResponse(true, res);
             });
         };
