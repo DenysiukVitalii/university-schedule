@@ -86,6 +86,7 @@ class CurriculumTable extends Component {
   }
 
   getCurriculum() {
+    console.log("update");
     let item = {
       specialtyID: +this.state.selectedSpec,
       semesterID: +this.state.selectedSemester
@@ -189,7 +190,7 @@ class CurriculumTable extends Component {
   }
 
   dataAfterEdit(data) {
-    this.getCurriculum();
+    this.setState({ curriculum: [] });
   }
 
   render() {
