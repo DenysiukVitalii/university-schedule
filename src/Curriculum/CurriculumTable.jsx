@@ -189,22 +189,7 @@ class CurriculumTable extends Component {
   }
 
   dataAfterEdit(data) {
-    /*let groups = this.state.groups;
-    let specs = this.state.specs;
-    groups = groups.map(e => {
-      if (e.id === data.id)  {
-        data.id = data.newName;
-        delete data.newName;
-        specs.forEach(spec => {
-          if (data.specialtyID === spec.id) data.spec_name = spec.spec_name;
-        });
-        return data;
-      } else {
-        return e;
-      }
-    });
-    this.setState({groups: groups});*/
-    console.log('edited');
+    this.getCurriculum();
   }
 
   render() {

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import { Modal } from 'react-bootstrap';
-//import myfetch from '../myfetch';
+import myfetch from '../myfetch';
 import ModalFooter from '../shared/ModalFooter';
 //import InputText from '../shared/InputText';
 
@@ -32,16 +32,36 @@ class EditCurriculum extends Component {
     }
 
     editCurriculum() {
-      console.log(this.state.types_lesson);
-      /*myfetch('edit_group', 'put', item)
+      let item = {
+        id: this.state.id_curriculum,
+        subjectID: +this.state.selectedSubject,
+        teacherID: +this.state.selectedTeacher,
+        types_lesson: this.state.types_lesson
+      }
+      console.log(item);
+      myfetch('edit_curriculum', 'put', item)
       .then( data => { 
         if (data.success) {
+          this.clearForm();
           this.props.alert(this.getAlert(true, 'You edited group!'));
           this.props.response(item);
         } else {
           this.props.alert(this.getAlert(false, "Such group already exist! Rename, please."));
         }
-      });*/
+      });
+    }
+
+    clearForm() {
+      let types_lesson = this.state.types_lesson.map(e => { 
+        return {
+          id: e.id,
+          type_lesson: e.type_lesson,
+          selected: false,
+          amount_hours: ''
+        }
+      });
+      this.setState({types_lesson: types_lesson});
+      document.getElementById("amountHoursForm").reset();
     }
 
     getAlert(state, message) {
