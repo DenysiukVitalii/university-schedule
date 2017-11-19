@@ -76,6 +76,12 @@ header {
     align-items: center;
 }
 
+.btn-danger,
+.btn-warning {
+    padding: 2px 5px;
+    margin: 5px 5px;
+}
+
 .btn-danger {
     color: #fff;
     background-color: #d9534f;
@@ -106,8 +112,7 @@ header {
 .table>tfoot>tr>th,
 .table>thead>tr>td,
 .table>thead>tr>th {
-    padding: 2px;
-    line-height: 4.428571;
+    padding: 3px;
     vertical-align: middle;
     border-top: 1px solid #ddd;
 }

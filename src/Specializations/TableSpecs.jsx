@@ -4,6 +4,8 @@ import myfetch from '../myfetch';
 import CreateSpec from './CreateSpec';
 import EditSpec from './EditSpec';
 import Header from '../shared/Header';
+import FaPencil from 'react-icons/lib/fa/pencil';
+import FaTrash from 'react-icons/lib/fa/trash';
 
 class TableSpecs extends Component {
   constructor() {
@@ -117,8 +119,8 @@ class TableSpecs extends Component {
                           <td>{e.id}</td>
                           <td>{e.spec_name}</td>
                           <td width="25%">
-                              <button className="btn btn-warning" onClick={() => this.openEditModal(e)}>Edit</button>
-                              <button className="btn btn-danger" onClick={() => this.deleteSpecialty(e)}>Delete</button>
+                              <button className="btn btn-warning" onClick={() => this.openEditModal(e)}><FaPencil/></button>
+                              <button className="btn btn-danger" onClick={() => this.deleteSpecialty(e)}><FaTrash/></button>
                           </td>
                         </tr>
                       ))}
