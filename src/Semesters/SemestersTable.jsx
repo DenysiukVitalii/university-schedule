@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import myfetch from '../myfetch';
 import EditSemester from './EditSemester';
 import SimpleHeader from '../shared/SimpleHeader';
+import FaPencil from 'react-icons/lib/fa/pencil';
 
 class SemestersTable extends Component {
   constructor() {
@@ -87,7 +88,7 @@ const Table = props => (
                 <td>{e.init_data.split('-').reverse().join('.')}</td>
                 <td>{e.end_data.split('-').reverse().join('.')}</td>
                 <td width="30%">
-                    <button className="btn btn-warning" onClick={() => props.openEditModal(e)}>Edit</button>
+                    <button className="btn btn-warning" onClick={() => props.openEditModal(e)}><FaPencil/></button>
                 </td>
               </tr>
             ))}

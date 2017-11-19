@@ -4,6 +4,7 @@ import myfetch from '../myfetch';
 import CreateSubject from './CreateSubject';
 import EditSubject from './EditSubject';
 import Header from '../shared/Header';
+import Actions from '../shared/Actions';
 
 class SubjectsTable extends Component {
   constructor() {
@@ -132,10 +133,8 @@ const Table = props => (
       {props.subjects.map(e => (
               <tr key={e.id} align="center">
                 <td>{e.subject_name}</td>
-                <td width="30%">
-                    <button className="btn btn-warning" onClick={() => props.openEditModal(e)}>Edit</button>
-                    <button className="btn btn-danger" onClick={() => props.deleteSubject(e)}>Delete</button>
-                </td>
+                <Actions edit={() => props.openEditModal(e)}
+                         delete={() => props.deleteSubject(e)}/>
               </tr>
             ))}
       </tbody>

@@ -4,6 +4,7 @@ import myfetch from '../myfetch';
 import CreateGroup from './CreateGroup';
 import EditGroup from './EditGroup';
 import Header from '../shared/Header';
+import Actions from '../shared/Actions';
 
 class GroupsTable extends Component {
   constructor() {
@@ -154,10 +155,8 @@ const Table = props => (
                 <td>{e.spec_name}</td>
                 <td>{e.course}</td>
                 <td>{e.amount_students}</td>
-                <td width="30%">
-                    <button className="btn btn-warning" onClick={() => props.openEditModal(e)}>Edit</button>
-                    <button className="btn btn-danger" onClick={() => props.deleteGroup(e)}>Delete</button>
-                </td>
+                <Actions edit={() => props.openEditModal(e)}
+                          delete={() => props.deleteGroup(e)}/>
               </tr>
             ))}
       </tbody>

@@ -19,7 +19,7 @@ class CreateSpec extends Component {
 
     validation() {
       let spec_name = this.state.spec_name,
-          nameRegex = /^[a-zA-Z]{3,40}$/;
+          nameRegex = /^[a-zA-Z\s]{3,40}$/;
       return (!spec_name || !nameRegex.test(spec_name)) ? false : true;
     }
   

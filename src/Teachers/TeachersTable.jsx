@@ -4,6 +4,7 @@ import myfetch from '../myfetch';
 import CreateTeacher from './CreateTeacher';
 import EditTeacher from './EditTeacher';
 import Header from '../shared/Header';
+import Actions from '../shared/Actions';
 
 class TeachersTable extends Component {
   constructor() {
@@ -136,10 +137,8 @@ const Table = props => (
                 <td>{e.position}</td>
                 <td>{e.rank}</td>
                 <td>{e.phone}</td>
-                <td width="30%">
-                    <button className="btn btn-warning" onClick={() => props.openEditModal(e)}>Edit</button>
-                    <button className="btn btn-danger" onClick={() => props.deleteTeacher(e)}>Delete</button>
-                </td>
+                <Actions edit={() => props.openEditModal(e)}
+                         delete={() => props.deleteTeacher(e)}/>
               </tr>
             ))}
       </tbody>

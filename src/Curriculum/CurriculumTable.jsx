@@ -4,6 +4,7 @@ import myfetch from '../myfetch';
 import CreateCurriculum from './CreateCurriculum';
 import EditCurriculum from './EditCurriculum';
 import Header from '../shared/Header';
+import Actions from '../shared/Actions';
 
 class CurriculumTable extends Component {
   constructor() {
@@ -293,10 +294,8 @@ const Table = props => (
                       </tbody>
                   </table>
                 </td>
-                <td width="30%">
-                    <button className="btn btn-warning" onClick={() => props.openEditModal(e)}>Edit</button>
-                    <button className="btn btn-danger" onClick={() => props.delete(e)}>Delete</button>
-                </td>
+                <Actions edit={() => props.openEditModal(e)}
+                          delete={() => props.delete(e)}/>
               </tr>
             ))}
       </tbody>
