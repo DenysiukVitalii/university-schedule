@@ -1,6 +1,5 @@
 let app = require('express')();
-let collector = require('../models/specialty/collector');
-let admin = require('../models/admin');
+let collector = require('../models/specialty');
 
 app.get('/all_specs', async(req, res) => {
     let specs = await collector.getSpecialties();
@@ -12,12 +11,12 @@ app.post('/create_spec', (req, res) => {
     console.log(data);
     collector.findBySpecname(data.spec_name, function(err, rows, fields) {
         if (rows.length == 1) {
-            admin.sendResponse(false, res);
+            res.json({ success: false });
         } else {
             collector.addSpecialty(data, function(err, info) {
                 if (err) throw err;
                 console.log(info);
-                admin.sendResponse(true, res);
+                res.json({ success: true });
             });
         };
     });
@@ -32,7 +31,7 @@ app.delete('/delete_spec', (req, res, next) => {
             return res.json({ success: false });
         }
         console.log(info);
-        admin.sendResponse(true, res);
+        res.json({ success: true });
     });
 });
 
@@ -41,12 +40,12 @@ app.put('/edit_spec', (req, res) => {
     console.log(data);
     collector.findBySpecname(data.spec_name, function(err, rows, fields) {
         if (rows.length == 1) {
-            admin.sendResponse(false, res);
+            res.json({ success: false });
         } else {
             collector.editSpecialty(data, function(err, info) {
                 if (err) throw err;
                 console.log(info);
-                admin.sendResponse(true, res);
+                res.json({ success: true });
             });
         };
     });

@@ -1,6 +1,5 @@
 let app = require('express')();
-let admin = require('../models/admin');
-let collector = require('../models/group/collector');
+let collector = require('../models/group');
 
 app.get('/', async(req, res) => {
     let groups = await collector.getGroups();

@@ -1,9 +1,9 @@
 let app = require('express')();
-let admin = require('../models/admin');
+let collector = require('../models/curriculum');
 
 app.post('/get_curriculum', async(req, res) => {
     var data = req.body;
-    let curriculum = await admin.getCurriculum(data);
+    let curriculum = await collector.getCurriculum(data);
     curriculum = curriculum.map(el => JSON.parse(el.curriculum));
     curriculum = curriculum.map(el => {
         let types = el.types_lesson;
@@ -14,7 +14,6 @@ app.post('/get_curriculum', async(req, res) => {
         el.types_lesson = JSON.parse(types).types_lesson;
         return el;
     });
-    console.log(curriculum.types_lesson);
     res.json(curriculum);
 });
 
@@ -26,11 +25,11 @@ app.post('/create_curriculum', (req, res) => {
         delete e.selected;
         return e;
     })
-    admin.findByCurriculum(data, function(err, rows, fields) {
+    collector.findByCurriculum(data, function(err, rows, fields) {
         if (rows.length == 1) {
             admin.sendResponse(false, res);
         } else {
-            admin.addCurriculum(data, function(err, info) {
+            collector.addCurriculum(data, function(err, info) {
                 if (err) throw err;
                 console.log(info);
                 types_lesson = types_lesson.map(e => {
@@ -42,7 +41,7 @@ app.post('/create_curriculum', (req, res) => {
                 });
                 types_lesson = types_lesson.filter(e => e.amount_hours !== '');
                 types_lesson.forEach(e => {
-                    admin.addTypesLesson(e, function(err, info) {
+                    collector.addTypesLesson(e, function(err, info) {
                         if (err) throw err;
                         console.log(info);
                     });
@@ -54,18 +53,18 @@ app.post('/create_curriculum', (req, res) => {
 });
 
 app.get('/types_lesson', async(req, res) => {
-    let types = await admin.getTypesLesson();
+    let types = await collector.getTypesLesson();
     res.json(types);
 });
 
 app.delete('/delete_curriculum', (req, res, next) => {
     var data = req.body;
-    admin.deleteAmountHours(data.id, function(err, info) {
+    collector.deleteAmountHours(data.id, function(err, info) {
         if (err) {
             next(err);
             return res.json({ success: false });
         }
-        admin.deleteCurriculum(data.id, function(err, info) {
+        collector.deleteCurriculum(data.id, function(err, info) {
             if (err) {
                 next(err);
                 return res.json({ success: false });
@@ -80,7 +79,6 @@ app.put('/edit_curriculum', (req, res) => {
     var data = req.body;
     let types_lesson = data.types_lesson;
     delete data.types_lesson;
-    //console.log(data);
     types_lesson = types_lesson.map(e => {
         if (e.type_lesson === "Lecture") e.id = 1;
         if (e.type_lesson === "Practice") e.id = 2;
@@ -92,22 +90,22 @@ app.put('/edit_curriculum', (req, res) => {
         }
     });
     types_lesson.forEach(e => e.curriculumID = data.id);
-    admin.findByEditCurriculum(data, function(err, rows, fields) {
+    collector.findByEditCurriculum(data, function(err, rows, fields) {
         if (rows.length == 1 && rows[0].id !== data.id) {
             admin.sendResponse(false, res);
         } else {
-            admin.editCurriculum(data, function(err, info) {
+            collector.editCurriculum(data, function(err, info) {
                 if (err) throw err;
                 types_lesson.forEach(e => {
                     if (e.amount_hours === "") {
-                        admin.deleteTypesLesson(e, function(err, info) {
+                        collector.deleteTypesLesson(e, function(err, info) {
                             if (err) throw err;
                         });
                     } else {
-                        admin.editTypesLesson(e, function(err, info) {
+                        collector.editTypesLesson(e, function(err, info) {
                             if (err) throw err;
                             if (info.affectedRows === 0) {
-                                admin.addTypesLesson(e, function(err, info) {
+                                collector.addTypesLesson(e, function(err, info) {
                                     if (err) throw err;
                                 });
                             }
