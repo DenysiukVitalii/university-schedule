@@ -2,7 +2,6 @@ module.exports = {
     getSubjects: "SELECT * FROM Subjects ORDER BY id ASC",
     getGroups: `select Un_group.id, specialtyID, spec_name, course, amount_students from Un_group
                 join Specialty on Un_group.specialtyID = Specialty.id ORDER BY id DESC`,
-    getSpecialties: "SELECT * FROM Specialty ORDER BY id ASC",
     getTeachers: "SELECT * FROM Teachers ORDER BY id ASC",
     getSemesters: "SELECT * FROM Semesters ORDER BY number_semester ASC",
     getTypesLesson: "SELECT * FROM TypeLesson ORDER BY id ASC",
@@ -11,7 +10,6 @@ module.exports = {
     delete: (table, id) => `DELETE FROM ${table} WHERE id = '${id}'`,
     delete_parent: (table, id, idParent) => `DELETE FROM ${table} WHERE ${idParent} = '${id}'`,
 
-    findBySpecname: (spec_name) => `SELECT * FROM Specialty WHERE spec_name = '${spec_name}'`,
     findByGroup: (group) => `SELECT * FROM Un_group WHERE id = '${group}'`,
     findBySubject: (subject) => `SELECT * FROM Subjects WHERE subject_name = '${subject}'`,
     findByTeacher: (teacher) => `SELECT * FROM Teachers WHERE name = '${teacher.name}'
@@ -25,9 +23,6 @@ module.exports = {
                                                                    and subjectID = ${curriculum.subjectID}
                                                                    and teacherID = ${curriculum.teacherID}`,
     findByEditCurriculum: (curriculum) => `SELECT * FROM Сurriculums where subjectID = ${curriculum.subjectID}`,
-    editSpecialty: (spec) => `UPDATE Specialty 
-                              SET spec_name = '${spec.spec_name}' 
-                              WHERE id = ${spec.id}`,
     editGroup: (group) => `UPDATE Un_group SET id = '${group.newName}', specialtyID = ${group.specialtyID}, course = ${group.course}, amount_students = ${group.amount_students} WHERE id = '${group.id}'`,
     editSubject: (subject) => `UPDATE Subjects SET subject_name = '${subject.subject_name}' WHERE id = '${subject.id}'`,
     editTeacher: (teacher) => `UPDATE Teachers SET name = '${teacher.name}', surname = '${teacher.surname}',

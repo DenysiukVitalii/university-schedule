@@ -3,36 +3,6 @@ const queries = require('./queries');
 const table = require('./tables');
 
 module.exports = {
-    getSpecialties: () => request.getData(queries.getSpecialties),
-    addSpecialty: (data, callback) => 
-                   request.insertData(data, queries.insert(table.specialties), callback),
-    deleteSpecialty: (idSpecialty, callback) => 
-                      request.find(queries.delete(table.specialties, idSpecialty), callback),
-    editSpecialty: (data, callback) => 
-                    request.find(queries.editSpecialty(data), callback),
-    findBySpecname: (spec_name, callback) => 
-                     request.find(queries.findBySpecname(spec_name), callback),
-
-    getGroups: () => request.getData(queries.getGroups),
-    addGroup: (data, callback) => 
-               request.insertData(data, queries.insert(table.groups), callback),
-    deleteGroup: (idGroup, callback) => 
-                  request.find(queries.delete(table.groups, idGroup), callback),
-    editGroup: (data, callback) => 
-                request.find(queries.editGroup(data), callback),
-    findByGroup: (group, callback) => 
-                  request.find(queries.findByGroup(group), callback),
-
-    getSubjects: () => request.getData(queries.getSubjects),
-    addSubject: (data, callback) => 
-                 request.insertData(data, queries.insert(table.subjects), callback),
-    deleteSubject: (idSubject, callback) => 
-                    request.find(queries.delete(table.subjects, idSubject), callback),
-    editSubject: (data, callback) => 
-                  request.find(queries.editSubject(data), callback),
-    findBySubject: (subject, callback) => 
-                    request.find(queries.findBySubject(subject), callback),
-
     getTeachers: () => request.getData(queries.getTeachers),
     addTeacher: (data, callback) => 
                  request.insertData(data, queries.insert(table.teachers), callback),
