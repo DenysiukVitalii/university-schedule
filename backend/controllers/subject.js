@@ -1,5 +1,5 @@
 let app = require('express')();
-let collector = require('../models/subject');
+let collector = require('../collectors/subject');
 
 app.get('/subjects', async(req, res) => {
     let subjects = await collector.getSubjects();
@@ -12,12 +12,12 @@ app.post('/create_subject', (req, res) => {
     collector.findBySubject(data.subject_name, function(err, rows, fields) {
         console.log(rows.length);
         if (rows.length == 1) {
-            admin.sendResponse(false, res);
+            res.json({ success: false });
         } else {
             collector.addSubject(data, function(err, info) {
                 if (err) throw err;
                 console.log(info);
-                admin.sendResponse(true, res);
+                res.json({ success: true });
             });
         };
     });
@@ -32,7 +32,7 @@ app.delete('/delete_subject', (req, res, next) => {
             return res.json({ success: false });
         }
         console.log(info);
-        admin.sendResponse(true, res);
+        res.json({ success: true });
     });
 });
 
@@ -41,12 +41,12 @@ app.put('/edit_subject', (req, res) => {
     console.log(data);
     collector.findBySubject(data, function(err, rows, fields) {
         if (rows.length == 1) {
-            admin.sendResponse(false, res);
+            res.json({ success: false });
         } else {
             collector.editSubject(data, function(err, info) {
                 if (err) throw err;
                 console.log(info);
-                admin.sendResponse(true, res);
+                res.json({ success: true });
             });
         };
     });

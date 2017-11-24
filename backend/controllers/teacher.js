@@ -1,5 +1,5 @@
 let app = require('express')();
-let collector = require('../models/teacher');
+let collector = require('../collectors/teacher');
 
 app.get('/teachers', async(req, res) => {
     let teachers = await collector.getTeachers();
@@ -12,12 +12,12 @@ app.post('/create_teacher', (req, res) => {
     collector.findByTeacher(data, function(err, rows, fields) {
         console.log(rows.length);
         if (rows.length == 1) {
-            admin.sendResponse(false, res);
+            res.json({ success: false });
         } else {
             collector.addTeacher(data, function(err, info) {
                 if (err) throw err;
                 console.log(info);
-                admin.sendResponse(true, res);
+                res.json({ success: true });
             });
         };
     });
@@ -32,7 +32,7 @@ app.delete('/delete_teacher', (req, res, next) => {
             return res.json({ success: false });
         }
         console.log(info);
-        admin.sendResponse(true, res);
+        res.json({ success: true });
     });
 });
 
@@ -41,12 +41,12 @@ app.put('/edit_teacher', (req, res) => {
     console.log(data);
     collector.findByTeacher(data, function(err, rows, fields) {
         if (rows.length == 1) {
-            admin.sendResponse(false, res);
+            res.json({ success: false });
         } else {
             collector.editTeacher(data, function(err, info) {
                 if (err) throw err;
                 console.log(info);
-                admin.sendResponse(true, res);
+                res.json({ success: true });
             });
         };
     });

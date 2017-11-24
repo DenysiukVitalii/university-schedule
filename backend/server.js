@@ -14,7 +14,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/', express.static(__dirname));
 
 // Import API Routes
-app.use(require('./api/admin_api'));
+app.use(require('./api'));
 
 let port = process.env.PORT || 8080;
 

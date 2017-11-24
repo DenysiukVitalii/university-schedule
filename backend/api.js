@@ -8,6 +8,6 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use(require('../controllers'));
+app.use(require('./controllers'));
 
 module.exports = app;

@@ -1,5 +1,5 @@
 let app = require('express')();
-let collector = require('../models/curriculum');
+let collector = require('../collectors/curriculum');
 
 app.post('/get_curriculum', async(req, res) => {
     var data = req.body;
@@ -27,7 +27,7 @@ app.post('/create_curriculum', (req, res) => {
     })
     collector.findByCurriculum(data, function(err, rows, fields) {
         if (rows.length == 1) {
-            admin.sendResponse(false, res);
+            res.json({ success: false });
         } else {
             collector.addCurriculum(data, function(err, info) {
                 if (err) throw err;
@@ -46,7 +46,7 @@ app.post('/create_curriculum', (req, res) => {
                         console.log(info);
                     });
                 });
-                admin.sendResponse(true, res);
+                res.json({ success: true });
             });
         };
     });
@@ -69,7 +69,7 @@ app.delete('/delete_curriculum', (req, res, next) => {
                 next(err);
                 return res.json({ success: false });
             }
-            admin.sendResponse(true, res);
+            res.json({ success: true });
         });
     });
 
@@ -92,7 +92,7 @@ app.put('/edit_curriculum', (req, res) => {
     types_lesson.forEach(e => e.curriculumID = data.id);
     collector.findByEditCurriculum(data, function(err, rows, fields) {
         if (rows.length == 1 && rows[0].id !== data.id) {
-            admin.sendResponse(false, res);
+            res.json({ success: false });
         } else {
             collector.editCurriculum(data, function(err, info) {
                 if (err) throw err;
@@ -112,7 +112,7 @@ app.put('/edit_curriculum', (req, res) => {
                         });
                     }
                 });
-                admin.sendResponse(true, res);
+                res.json({ success: true });
             });
         };
     });

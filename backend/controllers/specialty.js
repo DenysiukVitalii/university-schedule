@@ -1,5 +1,5 @@
 let app = require('express')();
-let collector = require('../models/specialty');
+let collector = require('../collectors/specialty');
 
 app.get('/all_specs', async(req, res) => {
     let specs = await collector.getSpecialties();

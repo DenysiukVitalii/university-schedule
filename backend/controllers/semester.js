@@ -1,5 +1,5 @@
 let app = require('express')();
-let collector = require('../models/semester');
+let collector = require('../collectors/semester');
 
 app.get('/semesters', async(req, res) => {
     let semesters = await collector.getSemesters();
@@ -17,7 +17,7 @@ app.put('/edit_semester', (req, res) => {
     collector.editSemester(data, function(err, info) {
         if (err) throw err;
         console.log(info);
-        admin.sendResponse(true, res);
+        res.json({ success: true });
     });
 });
 

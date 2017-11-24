@@ -1,5 +1,5 @@
 let app = require('express')();
-let collector = require('../models/group');
+let collector = require('../collectors/group');
 
 app.get('/', async(req, res) => {
     let groups = await collector.getGroups();
@@ -15,7 +15,7 @@ app.delete('/delete_group', (req, res, next) => {
             return res.json({ success: false });
         }
         console.log(info);
-        admin.sendResponse(true, res);
+        res.json({ success: true });
     });
 });
 
@@ -25,12 +25,12 @@ app.post('/create_group', (req, res) => {
     collector.findByGroup(data.id, function(err, rows, fields) {
         console.log(rows.length);
         if (rows.length == 1) {
-            admin.sendResponse(false, res);
+            res.json({ success: false });
         } else {
             collector.addGroup(data, function(err, info) {
                 if (err) throw err;
                 console.log(info);
-                admin.sendResponse(true, res);
+                res.json({ success: true });
             });
         };
     });
@@ -41,12 +41,12 @@ app.put('/edit_group', (req, res) => {
     console.log(data);
     collector.findByGroup(data.newName, function(err, rows, fields) {
         if (rows.length == 1 && data.newName !== data.id) {
-            admin.sendResponse(false, res);
+            res.json({ success: false });
         } else {
             collector.editGroup(data, function(err, info) {
                 if (err) throw err;
                 console.log(info);
-                admin.sendResponse(true, res);
+                res.json({ success: true });
             });
         };
     });
