@@ -7,8 +7,12 @@ app.get('/all_specs', async(req, res) => {
 });
 
 app.post('/create_spec', (req, res) => {
-    var data = req.body;
+    let data = req.body;
     console.log(data);
+    addSpecialty(data, res);
+});
+
+function addSpecialty(data, res) {
     collector.findBySpecname(data.spec_name, function(err, rows, fields) {
         if (rows.length == 1) {
             res.json({ success: false });
@@ -20,11 +24,14 @@ app.post('/create_spec', (req, res) => {
             });
         };
     });
-});
+}
 
 app.delete('/delete_spec', (req, res, next) => {
-    var data = req.body;
-    console.log(data.id);
+    let data = req.body;
+    deleteSpecialty(data, res, next);
+});
+
+function deleteSpecialty(data, res, next) {
     collector.deleteSpecialty(data.id, function(err, info) {
         if (err) {
             next(err);
@@ -33,11 +40,14 @@ app.delete('/delete_spec', (req, res, next) => {
         console.log(info);
         res.json({ success: true });
     });
-});
+}
 
 app.put('/edit_spec', (req, res) => {
-    var data = req.body;
-    console.log(data);
+    let data = req.body;
+    editSpecialty(data, res);
+});
+
+function editSpecialty(data, res) {
     collector.findBySpecname(data.spec_name, function(err, rows, fields) {
         if (rows.length == 1) {
             res.json({ success: false });
@@ -49,6 +59,6 @@ app.put('/edit_spec', (req, res) => {
             });
         };
     });
-});
+}
 
 module.exports = app;
