@@ -22,6 +22,7 @@ class Admin extends Component {
             <li><Link to="/subjects" className="btn">Subjects</Link></li>
             <li><Link to="/semesters" className="btn">Semesters</Link></li>
             <li><Link to="/curriculum" className="btn">Curriculum</Link></li>
+            <li><Link to="/schedule" className="btn">Schedule</Link></li>
           </ul>
         </main>
       </div>
