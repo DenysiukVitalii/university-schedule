@@ -1,26 +1,15 @@
 import React, { Component } from 'react';
-//import SweetAlert from 'react-bootstrap-sweetalert';
+import SweetAlert from 'react-bootstrap-sweetalert';
 import myfetch from '../myfetch';
-/*import CreateCurriculum from './CreateCurriculum';
-import EditCurriculum from './EditCurriculum';
-import Actions from '../shared/Actions';*/
 import SimpleHeader from '../shared/SimpleHeader';
-import Select from '../shared/Select';
-import FaTrash from 'react-icons/lib/fa/trash';
+import Table from './Table';
+import ParamsForm from './ParamsForm';
 
 class ScheduleTable extends Component {
   constructor() {
     super();
-    this.state = {
-      schedule: [], 
-      specs: [],
-      groups: [],
-      semesters: [],
-      days: [],
-      selectedSpec: '', 
-      selectedGroup: '',
-      selectedSemester: '',
-      selectedWeek: 1
+    this.state = {schedule: [], specs: [], groups: [], semesters: [], days: [],
+      selectedSpec: '', selectedGroup: '', selectedSemester: '', selectedWeek: 1
     };
     this.onChange = this.onChange.bind(this);
     this.getSchedule = this.getSchedule.bind(this);
@@ -86,9 +75,6 @@ class ScheduleTable extends Component {
       semesterID: +this.state.selectedSemester,
       number_week: +this.state.selectedWeek
     }
-
-    console.log('get schedule');
-
     myfetch('get_schedule', 'post', obj)
     .then( data => {  
       console.log(data);
@@ -98,89 +84,62 @@ class ScheduleTable extends Component {
     }).catch(error => {console.log('Error!', error);});
   }
 
-  deleteLesson(id) {
-    let obj = {id: id};
-    console.log(obj);
+  deleteLesson(item) {
+    let obj = {id: item.id};
+    myfetch('delete_lesson', 'delete', obj)
+    .then( data => {  
+      if (data.success) {
+        this.setState({schedule: this.deletedItem(item) });
+      } else {
+        const getError = () => (
+          <SweetAlert error title="Error" onConfirm={this.hideAlert}>
+            You can't delete this lesson!
+          </SweetAlert>
+        );
+        this.setState({
+          alert: getError()
+        });
+      }
+    }).catch(error => {console.log('Error!', error);});
+  }
 
+  deletedItem(item) {
+    let schedule = this.state.schedule;
+    let day = schedule.filter(e => e.day === item.day)[0];
+    let ids = day.schedule.map(i => i.number_lesson);
+    let index = ids.indexOf(item.number_lesson);
+    schedule[day.dayID - 1].schedule[index] = {number_lesson: index + 1};
+    return schedule;
   }
 
   render() {
+    let params = {
+      specs: this.state.specs,
+      groups: this.state.groups,
+      semesters: this.state.semesters,
+      selectedSpec: this.state.selectedSpec,
+      selectedSemester: this.state.selectedSemester,
+      selectedWeek: this.state.selectedWeek,
+      change: this.onChange,
+      submit: this.getSchedule
+    };
+    let table = {
+      days: this.state.days,
+      schedule: this.state.schedule,
+      deleteLesson: (e) => this.deleteLesson(e)
+    }
+    let scheduleTable = this.state.schedule.length ? <Table params={table}/> : 
+                   <p className="text-center">Select params for get schedule</p>;
     return (
       <div className="container">
         <SimpleHeader title="Schedule" />
         <main>
-          <ParamsForm specs={this.state.specs} groups={this.state.groups} 
-                      semesters={this.state.semesters}  
-                      selectedSpec={this.state.selectedSpec} 
-                      selectedGroup={this.state.selectedGroup} 
-                      selectedSemester={this.state.selectedSemester} 
-                      selectedWeek={this.state.selectedWeek} 
-                      change={this.onChange} submit={this.getSchedule}/>
-          <div className="table-responsive">
-            <table className="table table-bordered text-center" id="schedule-table">
-              <thead className="blue-background bold">
-                <tr>
-                  <td>#</td>
-                  {this.state.days.map(e => <td key={e.id}>{e.day}</td>)}
-                </tr>
-              </thead>
-              <tbody>
-              
-                <tr className="text-center">
-                  <td>
-                    <table>
-                      <tbody>
-                        {[1,2,3,4,5].map(e => <tr key={e}>
-                          <td>{e}</td>
-                        </tr>)} 
-                      </tbody>
-                    </table>
-
-                  </td>
-                  
-                  {Object.keys(this.state.schedule).map(day => 
-                    <td key={day}>
-                      <table>
-                        <tbody>
-                          {this.state.schedule[day].map(e => <tr key={e.number_lesson}>
-                            <td key={e.number_lesson}>
-                              <div className="lesson">
-                                <p><strong>{e.subject_name}</strong></p>
-                                <p><i>{e.type_lesson}</i> {e.place}</p>
-                                <p>{e.teacher}</p>
-                              </div>
-                              {e.subject_name ? <button className="btn btn-danger" onClick={() => this.deleteLesson(e.id)}><FaTrash/></button> : <span></span>}
-                            </td>
-                          </tr>)}
-                        </tbody>
-                      </table>
-                    </td>)}
-                </tr>
-              </tbody>
-            </table>
-          </div>
+          <ParamsForm params={params}/>
+          {scheduleTable}
         </main>
       </div>
     );
   }
 }
-
-const ParamsForm = (props) => (
-  <section className="params-form">
-      <Select title="Specialty" name="selectedSpec" selected={props.selectedSpec} change={props.change}
-              data={props.specs.map(e => (<option value={e.id} key={e.id}>{e.spec_name}</option>))}/>  
-      <Select title="Groups" name="selectedGroup" selected={props.selectedGroup} change={props.change}
-              data={props.groups.map(e => (<option value={e.id} key={e.id}>{e.id}</option>))}/> 
-      <Select title="Semester" name="selectedSemester" selected={props.selectedSemester} change={props.change}
-              data={props.semesters.map(e => (
-                    <option value={e.number_semester} key={e.number_semester}>{e.number_semester}</option>
-                    ))}/>
-      <Select title="Week" name="selectedWeek" selected={props.selectedWeek} change={props.change}
-              data={[1,2].map(e => (<option value={e} key={e}>{e}</option>))}/>
-      <div className="text-center">
-        <button className="btn" onClick={props.submit}>Get schedule</button>
-      </div>   
-  </section>
-);
 
 export default ScheduleTable;
