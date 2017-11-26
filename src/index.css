@@ -9,22 +9,12 @@ body {
 }
 
 .container {
-    padding-right: 15px;
-    padding-left: 15px;
+    padding-right: 5px;
+    padding-left: 5px;
     margin-right: auto;
     margin-left: auto;
-}
-
-@media (min-width: 768px) {
-    .container {
-        width: 750px;
-    }
-}
-
-@media screen and (min-width: 992px) {
-    .container {
-        width: 970px;
-    }
+    max-width: 1200px;
+    overflow: hidden;
 }
 
 .text-center {
@@ -37,6 +27,10 @@ body {
 
 .bold {
     font-weight: bold;
+}
+
+.italic {
+    font-style: italic;
 }
 
 .blue-background {
@@ -183,6 +177,38 @@ input:valid {
     margin-top: 0;
 }
 
-#schedule-table td {
-    height: 70px;
+#schedule-table tbody td {
+    height: 120px;
+}
+
+#schedule-table table {
+    width: 100%;
+}
+
+#schedule-table table tr {
+    border-bottom: 1px solid #006064;
+}
+
+#schedule-table tr td {
+    padding: 0;
+    position: relative;
+}
+
+#schedule-table tbody tr td:first-child {
+    width: 30px;
+}
+
+#schedule-table .lesson p {
+    margin: 0;
+    text-align: left;
+}
+
+#schedule-table .lesson {
+    margin: 0 5px;
+}
+
+#schedule-table tr td button {
+    position: absolute;
+    bottom: 0;
+    right: -5px;
 }

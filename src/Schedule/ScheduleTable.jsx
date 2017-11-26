@@ -6,6 +6,7 @@ import EditCurriculum from './EditCurriculum';
 import Actions from '../shared/Actions';*/
 import SimpleHeader from '../shared/SimpleHeader';
 import Select from '../shared/Select';
+import FaTrash from 'react-icons/lib/fa/trash';
 
 class ScheduleTable extends Component {
   constructor() {
@@ -97,6 +98,12 @@ class ScheduleTable extends Component {
     }).catch(error => {console.log('Error!', error);});
   }
 
+  deleteLesson(id) {
+    let obj = {id: id};
+    console.log(obj);
+
+  }
+
   render() {
     return (
       <div className="container">
@@ -109,20 +116,49 @@ class ScheduleTable extends Component {
                       selectedSemester={this.state.selectedSemester} 
                       selectedWeek={this.state.selectedWeek} 
                       change={this.onChange} submit={this.getSchedule}/>
-          <table className="table table-hover text-center" id="schedule-table">
-            <thead className="blue-background bold">
-              <tr>
-                <td>#</td>
-                {this.state.days.map(e => <td key={e.id}>{e.day}</td>)}
-              </tr>
-            </thead>
-            <tbody>
-              {[1,2,3,4,5].map(e => <tr key={e}>
-                  <td>{e}</td>
-                  {this.state.days.map(e => <td key={e.id}></td>)}
-                </tr>)} 
-            </tbody>
-          </table>
+          <div className="table-responsive">
+            <table className="table table-bordered text-center" id="schedule-table">
+              <thead className="blue-background bold">
+                <tr>
+                  <td>#</td>
+                  {this.state.days.map(e => <td key={e.id}>{e.day}</td>)}
+                </tr>
+              </thead>
+              <tbody>
+              
+                <tr className="text-center">
+                  <td>
+                    <table>
+                      <tbody>
+                        {[1,2,3,4,5].map(e => <tr key={e}>
+                          <td>{e}</td>
+                        </tr>)} 
+                      </tbody>
+                    </table>
+
+                  </td>
+                  
+                  {Object.keys(this.state.schedule).map(day => 
+                    <td key={day}>
+                      <table>
+                        <tbody>
+                          {this.state.schedule[day].map(e => <tr key={e.number_lesson}>
+                            <td key={e.number_lesson}>
+                              <div className="lesson">
+                                <p><strong>{e.subject_name}</strong></p>
+                                <p><i>{e.type_lesson}</i> {e.place}</p>
+                                <p>{e.teacher}</p>
+                              </div>
+                              {e.subject_name ? <button className="btn btn-danger" onClick={() => this.deleteLesson(e.id)}><FaTrash/></button> : <span></span>}
+                            </td>
+                          </tr>)}
+                        </tbody>
+                      </table>
+                    </td>)}
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </main>
       </div>
     );

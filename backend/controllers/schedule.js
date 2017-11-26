@@ -25,7 +25,7 @@ app.post('/get_schedule', async(req, res) => {
     console.log(schedule);
     schedule = schedule_builder(schedule, days);
     console.log(schedule);
-    //res.json(groups);
+    res.json(schedule);
 });
 
 module.exports = app;
