@@ -220,7 +220,7 @@ class CurriculumTable extends Component {
       <div className="container">
         <Header title="Curriculum" button="Create curriculum" click={this.openCreateModal}/>
         <main>
-          <section className="get_curriculum">
+          <section className="params-form">
             <div className="form-group">
                 <label htmlFor="selectedSpec">Specialty</label>
                   <select name="selectedSpec" className="form-control" value={this.state.selectedSpec} onChange={this.onChange}>
