@@ -18,14 +18,23 @@ app.get('/get_days', async(req, res) => {
 
 app.post('/get_schedule', async(req, res) => {
     let data = req.body;
-    console.log(data);
     let days = await collector.getDays();
-    console.log(days);
     let schedule = await collector.getSchedule(data);
-    console.log(schedule);
     schedule = schedule_builder(schedule, days);
     console.log(schedule);
     res.json(schedule);
+});
+
+app.delete('/delete_lesson', (req, res, next) => {
+    let data = req.body;
+    collector.deleteLesson(data.id, function(err, info) {
+        if (err) {
+            next(err);
+            return res.json({ success: false });
+        }
+        console.log(info);
+        res.json({ success: true });
+    });
 });
 
 module.exports = app;
