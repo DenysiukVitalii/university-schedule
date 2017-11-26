@@ -14,18 +14,21 @@ class ScheduleTable extends Component {
       schedule: [], 
       specs: [],
       groups: [],
-      semesters: [], 
+      semesters: [],
+      days: [],
       selectedSpec: '', 
       selectedGroup: '',
       selectedSemester: '',
-      selectedWeek: ''
+      selectedWeek: 1
     };
     this.onChange = this.onChange.bind(this);
+    this.getSchedule = this.getSchedule.bind(this);
   }
 
   componentDidMount() {
     this.getSpecialties();
     this.getSemesters();
+    this.getDays();
   }
 
   getSpecialties() {
@@ -49,6 +52,13 @@ class ScheduleTable extends Component {
       });
     }).catch(error => {console.log('Error!', error);});
   }
+
+  getDays() {
+    myfetch('get_days')
+    .then( data => {  
+      this.setState({ days: data });
+    }).catch(error => {console.log('Error!', error);});
+  }
   
   getSemesters() {
     myfetch('semesters')
@@ -70,7 +80,21 @@ class ScheduleTable extends Component {
   }
 
   getSchedule() {
+    const obj = {
+      groupID: this.state.selectedGroup,
+      semesterID: +this.state.selectedSemester,
+      number_week: +this.state.selectedWeek
+    }
+
     console.log('get schedule');
+
+    myfetch('get_schedule', 'post', obj)
+    .then( data => {  
+      console.log(data);
+      this.setState({ 
+        schedule: data
+      });
+    }).catch(error => {console.log('Error!', error);});
   }
 
   render() {
@@ -85,6 +109,20 @@ class ScheduleTable extends Component {
                       selectedSemester={this.state.selectedSemester} 
                       selectedWeek={this.state.selectedWeek} 
                       change={this.onChange} submit={this.getSchedule}/>
+          <table className="table table-hover text-center" id="schedule-table">
+            <thead className="blue-background bold">
+              <tr>
+                <td>#</td>
+                {this.state.days.map(e => <td key={e.id}>{e.day}</td>)}
+              </tr>
+            </thead>
+            <tbody>
+              {[1,2,3,4,5].map(e => <tr key={e}>
+                  <td>{e}</td>
+                  {this.state.days.map(e => <td key={e.id}></td>)}
+                </tr>)} 
+            </tbody>
+          </table>
         </main>
       </div>
     );

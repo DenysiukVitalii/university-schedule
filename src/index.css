@@ -182,3 +182,7 @@ input:valid {
     align-items: center;
     margin-top: 0;
 }
+
+#schedule-table td {
+    height: 70px;
+}
