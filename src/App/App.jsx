@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { InputAutocomplete } from 'input-autocomplete'
-//import logo from './logo.svg';
 import './App.css';
 import myfetch from '../myfetch';
 

@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import myfetch from '../myfetch';
-import SimpleHeader from '../shared/SimpleHeader';
+import Header from '../shared/Header';
 import Table from './Table';
 import ParamsForm from './ParamsForm';
+
 
 class ScheduleTable extends Component {
   constructor() {
@@ -132,7 +133,7 @@ class ScheduleTable extends Component {
                    <p className="text-center">Select params for get schedule</p>;
     return (
       <div className="container">
-        <SimpleHeader title="Schedule" />
+        <Header title="Schedule" button="Create schedule" click={this.createSchedule} />
         <main>
           <ParamsForm params={params}/>
           {scheduleTable}
