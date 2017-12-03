@@ -1,10 +1,11 @@
 import React from 'react';
 import FaTrash from 'react-icons/lib/fa/trash';
+import FaPlus from 'react-icons/lib/fa/plus';
 
 const Table = (props) => (
     <div className="table-responsive">
         <table className="table table-bordered text-center" id="schedule-table">
-        <THead days={props.params.days} />
+        <THead days={props.params.days} addLesson={(e) => props.params.addLesson(e)} />
         <TBody schedule={props.params.schedule} deleteLesson={(e) => props.params.deleteLesson(e)}/>
         </table>
     </div>
@@ -59,7 +60,9 @@ const Schedule = (props) => (
       <thead className="blue-background bold">
         <tr>
           <td>#</td>
-          {props.days.map(e => <td key={e.id}>{e.day}</td>)}
+          {props.days.map(e => <td key={e.id}>{e.day} 
+              <button className="btn btn-warning" onClick={() => props.addLesson(e)}><FaPlus /></button>
+           </td>)}
         </tr>
       </thead>
   );

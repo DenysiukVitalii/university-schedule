@@ -207,8 +207,23 @@ input:valid {
     margin: 0 5px;
 }
 
-#schedule-table tr td button {
+#schedule-table tr td button.btn-danger {
     position: absolute;
     bottom: 0;
     right: -5px;
+}
+
+#schedule-table tr td button.btn-warning {
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin: 0;
+}
+
+#schedule-table tr {
+    height: 27px;
+}
+
+.lesson p {
+    max-width: 169px;
 }

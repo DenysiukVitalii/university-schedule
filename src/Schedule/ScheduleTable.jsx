@@ -1,19 +1,25 @@
 import React, { Component } from 'react';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import myfetch from '../myfetch';
-import Header from '../shared/Header';
+import SimpleHeader from '../shared/SimpleHeader';
 import Table from './Table';
 import ParamsForm from './ParamsForm';
+import CreateSchedule from './CreateSchedule';
 
 
 class ScheduleTable extends Component {
   constructor() {
     super();
     this.state = {schedule: [], specs: [], groups: [], semesters: [], days: [],
-      selectedSpec: '', selectedGroup: '', selectedSemester: '', selectedWeek: 1
+      selectedSpec: '', selectedGroup: '', selectedSemester: '', selectedWeek: 1,
+      selectedDay: '', createModal: false, alert: null
     };
     this.onChange = this.onChange.bind(this);
     this.getSchedule = this.getSchedule.bind(this);
+    this.openCreateModal = this.openCreateModal.bind(this);
+    this.closeCreateModal = this.closeCreateModal.bind(this);
+    this.addLesson = this.addLesson.bind(this);
+    this.dataAfterCreate = this.dataAfterCreate.bind(this);
   }
 
   componentDidMount() {
@@ -113,6 +119,45 @@ class ScheduleTable extends Component {
     return schedule;
   }
 
+  closeCreateModal() {
+    this.setState({ createModal: false });
+  }
+
+  async openCreateModal() {
+    await this.setState({ createModal: true });
+  }
+
+  // methods for alert
+  hideAlert(state) {
+    if (!state) {
+      this.setState({
+        alert: null
+      });
+    } else {
+      this.setState({
+        alert: null,
+        editModal: false
+      });
+    }
+    
+  }
+
+  callAlert(value) {
+    this.setState({
+      alert: value
+    });
+  }
+
+  dataAfterCreate(data) {
+    this.getSchedule();
+  }
+
+  addLesson(day) {
+    console.log(day);
+    this.setState({selectedDay: day.id});
+    this.openCreateModal();
+  }
+
   render() {
     let params = {
       specs: this.state.specs,
@@ -127,17 +172,28 @@ class ScheduleTable extends Component {
     let table = {
       days: this.state.days,
       schedule: this.state.schedule,
-      deleteLesson: (e) => this.deleteLesson(e)
+      deleteLesson: (e) => this.deleteLesson(e),
+      addLesson: (e) => this.addLesson(e)
     }
     let scheduleTable = this.state.schedule.length ? <Table params={table}/> : 
                    <p className="text-center">Select params for get schedule</p>;
+    let selected = {
+      spec: this.state.selectedSpec,
+      group: this.state.selectedGroup,
+      semester: this.state.selectedSemester, 
+      week: this.state.selectedWeek
+    }
     return (
       <div className="container">
-        <Header title="Schedule" button="Create schedule" click={this.createSchedule} />
+        <SimpleHeader title="Schedule" />
         <main>
           <ParamsForm params={params}/>
           {scheduleTable}
         </main>
+        <CreateSchedule show={this.state.createModal} hide={this.closeCreateModal}
+                          alert={this.callAlert} hideAlert={this.hideAlert}
+                          response={this.dataAfterCreate}
+                          day={this.state.selectedDay} />
       </div>
     );
   }
