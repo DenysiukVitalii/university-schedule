@@ -8,7 +8,7 @@ import ModalFooter from '../shared/ModalFooter';
 class CreateSchedule extends Component {
     constructor(props) {
         super(props);
-        this.state = {day1: ''};
+        this.state = {day: ''};
         this.onChange = this.onChange.bind(this);
         this.createSchedule = this.createSchedule.bind(this);
     }
@@ -24,8 +24,6 @@ class CreateSchedule extends Component {
     }
 
     createSchedule() {
-      console.log('create');
-      console.log(this.state.day);
     }
 
     getAlert(state, message) {
@@ -47,7 +45,7 @@ class CreateSchedule extends Component {
             <Modal show={this.props.show} onHide={this.props.hide}>
                 <Modal.Header closeButton><Modal.Title>Create schedule</Modal.Title></Modal.Header>
                 <Modal.Body>
-                    day: {this.state.day}
+                    
                 </Modal.Body>
                 <ModalFooter action={this.createSchedule} hide={this.props.hide} submitText="Create"/>
             </Modal>

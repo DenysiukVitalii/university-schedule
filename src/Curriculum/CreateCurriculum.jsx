@@ -3,6 +3,7 @@ import SweetAlert from 'react-bootstrap-sweetalert';
 import { Modal } from 'react-bootstrap';
 import myfetch from '../myfetch';
 import ModalFooter from '../shared/ModalFooter';
+import Select from '../shared/Select';
 //import InputText from '../shared/InputText';
 
 class CreateCurriculum extends Component {
@@ -29,10 +30,6 @@ class CreateCurriculum extends Component {
             selectedSubject: nextProps.selected.subject,
             selectedTeacher: nextProps.selected.teacher
         });
-    }
-    
-    componentWillMount() {
-      this.selectedCheckboxes = new Set();
     }
 
     onChange(e) {
@@ -121,18 +118,29 @@ class CreateCurriculum extends Component {
             <Modal show={this.props.show} onHide={this.props.hide}>
                 <Modal.Header closeButton><Modal.Title>Create curriculum</Modal.Title></Modal.Header>
                 <Modal.Body>
-                  <SpecialtySelect value={this.state.selectedSpec}
-                                   change={this.onChange}
-                                   specs={this.state.specs}/>
-                  <SemesterSelect value={this.state.selectedSemester}
-                                   change={this.onChange}
-                                   semesters={this.state.semesters}/>
-                  <SubjectSelect value={this.state.selectedSubject}
-                                   change={this.onChange}
-                                   subjects={this.state.subjects}/>
-                  <TeacherSelect value={this.state.selectedTeacher}
-                                   change={this.onChange}
-                                   teachers={this.state.teachers}/>
+                  <Select title="Specialty" name="selectedSpec" 
+                        selected={this.state.selectedSpec} 
+                        change={this.onChange}
+                        data={this.state.specs.map(e => (<option value={e.id} key={e.id}>{e.spec_name}</option>))}/>
+                  <Select title="Semester" name="selectedSemester" 
+                        selected={this.state.selectedSemester} 
+                        change={this.onChange}
+                        data={this.state.semesters
+                              .map(e => (<option value={e.number_semester} 
+                                                 key={e.number_semester}>{e.number_semester}</option>))}/>
+                  <Select title="Subject" name="selectedSubject" 
+                        selected={this.state.selectedSubject} 
+                        change={this.onChange}
+                        data={this.state.subjects
+                              .map(e => (<option value={e.id} key={e.id}>{e.subject_name}</option>))}/>
+                  <Select title="Teacher" name="selectedTeacher" 
+                        selected={this.state.selectedTeacher} 
+                        change={this.onChange}
+                        data={this.state.teachers.map(e => (
+                          <option value={e.id} 
+                                  key={e.id}>{e.surname} {e.name[0]}.{e.lastname[0]}. | {e.position}</option>
+                        ))}/>
+
                   <form id="amountHoursForm">
                    <AmountHours change={this.changeSelection} amount={this.changeAmount} types_lesson={this.state.types_lesson}/>
                   </form>
@@ -145,50 +153,6 @@ class CreateCurriculum extends Component {
       )
     }
   }
-
-  const SpecialtySelect = (props) => (
-     <div className="form-group">
-          <label htmlFor="selectedSpec">Specialty</label>
-            <select name="selectedSpec" className="form-control" value={props.value} onChange={props.change}>
-                {props.specs.map(e => (
-                    <option value={e.id} key={e.id}>{e.spec_name}</option>
-                ))}
-            </select>
-      </div>
-  );
-
-  const SemesterSelect = (props) => (
-      <div className="form-group">
-          <label htmlFor="selectedSemester">Semester</label>
-            <select name="selectedSemester" className="form-control" value={props.value} onChange={props.change}>
-                {props.semesters.map(e => (
-                    <option value={e.number_semester} key={e.number_semester}>{e.number_semester}</option>
-                ))}
-            </select>
-      </div>
-  );
-
- const SubjectSelect = (props) => (
-    <div className="form-group">
-        <label htmlFor="selectedSubject">Subject</label>
-          <select name="selectedSubject" className="form-control" value={props.value} onChange={props.change}>
-              {props.subjects.map(e => (
-                  <option value={e.id} key={e.id}>{e.subject_name}</option>
-              ))}
-          </select>
-    </div>
-  );
-
-  const TeacherSelect = (props) => (
-    <div className="form-group">
-        <label htmlFor="selectedTeacher">Teacher</label>
-          <select name="selectedTeacher" className="form-control" value={props.value} onChange={props.change}>
-              {props.teachers.map(e => (
-                  <option value={e.id} key={e.id}>{e.surname} {e.name[0]}.{e.lastname[0]}. | {e.position}</option>
-              ))}
-          </select>
-    </div>
-  );
 
   const AmountHours = (props) => (
     <div className="form-group">
