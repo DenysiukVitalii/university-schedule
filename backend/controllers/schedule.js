@@ -37,4 +37,21 @@ app.delete('/delete_lesson', (req, res, next) => {
     });
 });
 
+app.post('/get_curr_by_spec', async(req, res) => {
+    let data = req.body;
+    console.log("subjects");
+    console.log(data);
+    let curriculum = await collector.getCurriculumBySpec(data);
+    let types_lesson = await collector.getTypesLessonByCurriculum(data);
+    console.log(curriculum);
+    console.log(types_lesson);
+    //res.json(curriculum);
+});
+
+app.post('/get_types_lesson_by_curr', async(req, res) => {
+    let data = req.body;
+    //console.log(types_lesson);
+    //res.json(types_lesson);
+});
+
 module.exports = app;

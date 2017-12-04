@@ -18,5 +18,9 @@ module.exports = {
                     join Semesters on Schedules.semesterID = Semesters.number_semester
                     where Schedules.groupID = '${data.groupID}' 
                     and Schedules.semesterID = '${data.semesterID}' 
-                    and Schedules.number_week = '${data.number_week}'`
+                    and Schedules.number_week = '${data.number_week}'`,
+   getCurriculumBySpec: (data) => `SELECT * FROM getCurriculumBySpec WHERE 
+                                   semesterID = '${data.semesterID}'
+                                   and specialtyID = '${data.specialtyID}';`,
+   getTypesLessonByCurriculum: (data) => `SELECT * FROM getTypesLessonByCurriculum`
 }

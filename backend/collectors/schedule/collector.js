@@ -27,4 +27,15 @@ collector.deleteLesson = (id, callback) => {
     return res;
 }
 
+collector.getCurriculumBySpec = (params, callback) => {
+    const data = request.getData(queries.getCurriculumBySpec(params));
+    return data;
+}
+
+collector.getTypesLessonByCurriculum = (params, callback) => {
+    const data = request.getData(queries.getTypesLessonByCurriculum(params));
+    return data;
+}
+
+
 module.exports = collector;
