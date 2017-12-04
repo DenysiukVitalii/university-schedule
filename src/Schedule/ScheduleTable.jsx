@@ -10,7 +10,7 @@ import CreateSchedule from './CreateSchedule';
 class ScheduleTable extends Component {
   constructor() {
     super();
-    this.state = {schedule: [], specs: [], groups: [], semesters: [], days: [],
+    this.state = {schedule: [], specs: [], groups: [], semesters: [], days: [], subjects: [],
       selectedSpec: '', selectedGroup: '', selectedSemester: '', selectedWeek: 1,
       selectedDay: '', createModal: false, alert: null
     };
@@ -64,6 +64,19 @@ class ScheduleTable extends Component {
         semesters: data, 
         selectedSemester: data[0].number_semester 
       });
+    }).catch(error => {console.log('Error!', error);});
+  }
+
+  getSubjects() {
+    let obj = {
+      semesterID: this.state.selectedSemester,
+      specialtyID: this.state.selectedSpec
+    };
+
+    myfetch('get_curr_by_spec', 'post', obj)
+    .then( data => {  
+      console.log(data);
+      this.setState({subjects: data})
     }).catch(error => {console.log('Error!', error);});
   }
 
@@ -124,6 +137,7 @@ class ScheduleTable extends Component {
   }
 
   async openCreateModal() {
+    await this.getSubjects();
     await this.setState({ createModal: true });
   }
 
@@ -154,7 +168,7 @@ class ScheduleTable extends Component {
 
   addLesson(day) {
     console.log(day);
-    this.setState({selectedDay: day.id});
+    this.setState({selectedDay: day});
     this.openCreateModal();
   }
 
@@ -177,11 +191,20 @@ class ScheduleTable extends Component {
     }
     let scheduleTable = this.state.schedule.length ? <Table params={table}/> : 
                    <p className="text-center">Select params for get schedule</p>;
+    let available_lessons = [];
+    if (this.state.schedule.length && this.state.selectedDay) {
+      available_lessons = this.state.schedule[this.state.selectedDay.id - 1].schedule;
+      available_lessons = available_lessons.filter(e => !e.hasOwnProperty('id'))
+                                           .map(e => e.number_lesson);
+    } 
     let selected = {
       spec: this.state.selectedSpec,
       group: this.state.selectedGroup,
       semester: this.state.selectedSemester, 
-      week: this.state.selectedWeek
+      week: this.state.selectedWeek,
+      day: this.state.selectedDay,
+      subjects: this.state.subjects,
+      available_lessons: available_lessons
     }
     return (
       <div className="container">
@@ -193,7 +216,7 @@ class ScheduleTable extends Component {
         <CreateSchedule show={this.state.createModal} hide={this.closeCreateModal}
                           alert={this.callAlert} hideAlert={this.hideAlert}
                           response={this.dataAfterCreate}
-                          day={this.state.selectedDay} />
+                          selected={selected} />
       </div>
     );
   }
