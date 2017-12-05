@@ -18,6 +18,8 @@ class ScheduleTable extends Component {
     this.getSchedule = this.getSchedule.bind(this);
     this.openCreateModal = this.openCreateModal.bind(this);
     this.closeCreateModal = this.closeCreateModal.bind(this);
+    this.callAlert = this.callAlert.bind(this); 
+    this.hideAlert = this.hideAlert.bind(this);
     this.addLesson = this.addLesson.bind(this);
     this.dataAfterCreate = this.dataAfterCreate.bind(this);
   }
@@ -163,7 +165,7 @@ class ScheduleTable extends Component {
     });
   }
 
-  dataAfterCreate(data) {
+  dataAfterCreate() {
     this.getSchedule();
   }
 
@@ -216,6 +218,7 @@ class ScheduleTable extends Component {
         <main>
           <ParamsForm params={params}/>
           {scheduleTable}
+          {this.state.alert}
         </main>
         <CreateSchedule show={this.state.createModal} hide={this.closeCreateModal}
                           alert={this.callAlert} hideAlert={this.hideAlert}

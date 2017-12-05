@@ -73,7 +73,17 @@ class CreateSchedule extends Component {
       myfetch('add_lesson', 'post', obj)
       .then( response => {  
         console.log(response);
-      }).catch(error => {console.log('Error!', error);});
+        if (response.success) { 
+          this.props.alert(this.getAlert(true, 'You add new lesson!'));
+          this.props.response(); 
+        } else {
+          if (response.hasOwnProperty('free_teacher')) {
+            this.props.alert(this.getAlert(false, "Such teacher is busy! Change day or number lesson, please."));
+          } else {
+            this.props.alert(this.getAlert(false, "Such audience is busy! Change audience, please."));
+          }
+        }
+      });
     }
 
     getAlert(state, message) {
@@ -125,6 +135,7 @@ class CreateSchedule extends Component {
                 </Modal.Body>
                 <ModalFooter action={this.createSchedule} hide={this.props.hide} submitText="Create"/>
             </Modal>
+            {this.state.alert}
         </div>
       )
     }
