@@ -1,6 +1,7 @@
 let app = require('express')();
 let collector = require('../collectors/schedule');
 let schedule_builder = require('./schedule-builder');
+let zipCTL = require('./zipCTL');
 
 app.post('/get_groups_by_spec', async(req, res) => {
     let data = req.body;
@@ -43,9 +44,9 @@ app.post('/get_curr_by_spec', async(req, res) => {
     console.log(data);
     let curriculum = await collector.getCurriculumBySpec(data);
     let types_lesson = await collector.getTypesLessonByCurriculum(data);
-    console.log(curriculum);
-    console.log(types_lesson);
-    //res.json(curriculum);
+    let result = zipCTL(curriculum, types_lesson);
+    console.log(result);
+    res.json(result);
 });
 
 app.post('/get_types_lesson_by_curr', async(req, res) => {
