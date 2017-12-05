@@ -27,7 +27,8 @@ class CreateSchedule extends Component {
             subjects: nextProps.selected.subjects,
             selectedSubject: nextProps.selected.subjects[0],
             available_lessons: nextProps.selected.available_lessons,
-            selectedNumLesson: nextProps.selected.available_lessons[0]
+            selectedNumLesson: nextProps.selected.subjects[0],
+            types_lesson: nextProps.selected.subjects[0]
         });
     }
 
@@ -47,8 +48,7 @@ class CreateSchedule extends Component {
     }
 
     createSchedule() {
-      console.log(this.state.selectedSubject);
-      console.log(this.state.selectedNumLesson);
+      console.log(this.state.selectedTypeLesson);
     }
 
     getAlert(state, message) {
@@ -85,12 +85,12 @@ class CreateSchedule extends Component {
                           data={this.state.subjects
                                 .map(e => (<option value={e.id} 
                                      key={e.id}>{e.subject_name} | {e.teacher}</option>))}/>
-                  <Select title="Types lesson" name="selectedTypeLesson" 
+                  {/*<Select title="Types lesson" name="selectedTypeLesson" 
                           selected={this.state.selectedTypeLesson} 
                           change={this.onChange}
-                          data={this.state.types_lesson
+                          data={this.state.subjects[0].types_lesson
                                 .map(e => (<option value={e.id} 
-                                     key={e.id}>{e.type_lesson}</option>))}/>
+                                     key={e.id}>{e.type_lesson}</option>))}/>*/}
                   
                  
                 </Modal.Body>
