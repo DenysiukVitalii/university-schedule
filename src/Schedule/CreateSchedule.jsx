@@ -9,10 +9,10 @@ import Select from '../shared/Select';
 class CreateSchedule extends Component {
     constructor(props) {
         super(props);
-        this.state = {subjects: [], available_lessons: [], types_lesson: [], 
+        this.state = {subjects: [], available_lessons: [], types_lesson: [], audiences: [],
                       day: '', semester: '', spec: '', group: '', week: '',
                       selectedSubject: null, selectedNumLesson: null,
-                      selectedTypeLesson: null};
+                      selectedTypeLesson: null, selectedAudience: null};
         this.onChange = this.onChange.bind(this);
         this.createSchedule = this.createSchedule.bind(this);
     }
@@ -25,11 +25,21 @@ class CreateSchedule extends Component {
             semester: nextProps.selected.semester,
             week: nextProps.selected.week,
             subjects: nextProps.selected.subjects,
-            selectedSubject: nextProps.selected.subjects[0],
+            selectedSubject: nextProps.selected.selectedSubject,
             available_lessons: nextProps.selected.available_lessons,
-            selectedNumLesson: nextProps.selected.subjects[0],
-            types_lesson: nextProps.selected.subjects[0]
+            selectedNumLesson: nextProps.selected.available_lessons[0],
+            types_lesson: nextProps.selected.types_lesson,
+            selectedTypeLesson: nextProps.selected.selectedTypeLesson
         });
+        if (nextProps.show) this.getAudiences();
+    }
+
+    getAudiences() {
+      myfetch('get_audiences')
+      .then( data => {  
+        console.log(data);
+        this.setState({ audiences: data, selectedAudience: data[0].id });
+      }).catch(error => {console.log('Error!', error);});
     }
 
     onChange(e) {
@@ -48,7 +58,10 @@ class CreateSchedule extends Component {
     }
 
     createSchedule() {
+      console.log(this.state.selectedNumLesson);
+      console.log(this.state.selectedSubject);
       console.log(this.state.selectedTypeLesson);
+      console.log(this.state.selectedAudience);
     }
 
     getAlert(state, message) {
@@ -74,7 +87,7 @@ class CreateSchedule extends Component {
                   </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                <Select title="Number lesson" name="selectedNumLesson" 
+                  <Select title="Number lesson" name="selectedNumLesson" 
                           selected={this.state.selectedNumLesson} 
                           change={this.onChange}
                           data={this.state.available_lessons
@@ -85,13 +98,17 @@ class CreateSchedule extends Component {
                           data={this.state.subjects
                                 .map(e => (<option value={e.id} 
                                      key={e.id}>{e.subject_name} | {e.teacher}</option>))}/>
-                  {/*<Select title="Types lesson" name="selectedTypeLesson" 
+                  <Select title="Types lesson" name="selectedTypeLesson" 
                           selected={this.state.selectedTypeLesson} 
                           change={this.onChange}
-                          data={this.state.subjects[0].types_lesson
+                          data={this.state.types_lesson ? this.state.types_lesson
                                 .map(e => (<option value={e.id} 
-                                     key={e.id}>{e.type_lesson}</option>))}/>*/}
-                  
+                                     key={e.id}>{e.type_lesson}({e.amount_hours} hours)</option>)) : <option value="0">no data</option>}/>
+                  <Select title="Audience" name="selectedAudience" 
+                          selected={this.state.selectedAudience ? this.state.selectedAudience : 1} 
+                          change={this.onChange}
+                          data={this.state.audiences
+                                .map(e => (<option value={e.id} key={e.id}>{e.number_audience}-{e.building}</option>))}/>
                  
                 </Modal.Body>
                 <ModalFooter action={this.createSchedule} hide={this.props.hide} submitText="Create"/>

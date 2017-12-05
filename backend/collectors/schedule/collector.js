@@ -4,6 +4,7 @@ const queries = require('./queries');
 
 const DAYS_TABLE = 'Date_day';
 const SCHEDULE_TABLE = 'Schedules';
+const AUDIENCE_TABLE = 'Audience';
 let collector = {};
 
 collector.getGroupsBySpec = (specID) => {
@@ -32,10 +33,19 @@ collector.getCurriculumBySpec = (params, callback) => {
     return data;
 }
 
+collector.getTypesLesson = (callback) => {
+    const data = request.getData(queries.getTypesLesson());
+    return data;
+}
+
 collector.getTypesLessonByCurriculum = (params, callback) => {
     const data = request.getData(queries.getTypesLessonByCurriculum(params));
     return data;
 }
 
+collector.getAudiences = () => {
+    const data = request.getData(c_queries.get(AUDIENCE_TABLE));
+    return data;
+}
 
 module.exports = collector;

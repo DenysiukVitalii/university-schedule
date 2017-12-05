@@ -204,7 +204,10 @@ class ScheduleTable extends Component {
       week: this.state.selectedWeek,
       day: this.state.selectedDay,
       subjects: this.state.subjects,
-      available_lessons: available_lessons
+      available_lessons: available_lessons,
+      selectedSubject: this.state.subjects.length ? this.state.subjects[0].id : undefined,
+      types_lesson: this.state.subjects.length ? this.state.subjects[0].types_lesson : undefined,
+      selectedTypeLesson: this.state.subjects.length ? this.state.subjects[0].types_lesson[0].id : undefined
     }
     return (
       <div className="container">

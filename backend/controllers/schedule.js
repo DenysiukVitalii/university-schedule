@@ -43,7 +43,7 @@ app.post('/get_curr_by_spec', async(req, res) => {
     console.log("subjects");
     console.log(data);
     let curriculum = await collector.getCurriculumBySpec(data);
-    let types_lesson = await collector.getTypesLessonByCurriculum(data);
+    let types_lesson = await collector.getTypesLesson();
     let result = zipCTL(curriculum, types_lesson);
     console.log(result);
     res.json(result);
@@ -51,8 +51,15 @@ app.post('/get_curr_by_spec', async(req, res) => {
 
 app.post('/get_types_lesson_by_curr', async(req, res) => {
     let data = req.body;
-    //console.log(types_lesson);
-    //res.json(types_lesson);
+    let types_lesson = await collector.getTypesLessonByCurriculum(data);
+    console.log(types_lesson);
+    res.json(types_lesson);
+});
+
+app.get('/get_audiences', async(req, res) => {
+    let audiences = await collector.getAudiences();
+    console.log(audiences);
+    res.json(audiences);
 });
 
 module.exports = app;

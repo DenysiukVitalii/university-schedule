@@ -22,5 +22,7 @@ module.exports = {
    getCurriculumBySpec: (data) => `SELECT * FROM getCurriculumBySpec WHERE 
                                    semesterID = '${data.semesterID}'
                                    and specialtyID = '${data.specialtyID}';`,
-   getTypesLessonByCurriculum: (data) => `SELECT * FROM getTypesLessonByCurriculum`
+   getTypesLessonByCurriculum: (data) => `SELECT * FROM getTypesLessonByCurriculum 
+                              where curriculumID = '${data.curriculumID}'`,
+   getTypesLesson: (data) => `SELECT * FROM getTypesLessonByCurriculum`
 }
