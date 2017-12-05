@@ -87,6 +87,7 @@ class ScheduleTable extends Component {
     } else {
       this.setState({[e.target.name]: e.target.value});
     }
+    this.setState({schedule: []});
   }
 
   getSchedule() {

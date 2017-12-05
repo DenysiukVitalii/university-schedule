@@ -48,4 +48,22 @@ collector.getAudiences = () => {
     return data;
 }
 
+collector.checkAvailableTeacher = (params, callback) => {
+    const query = queries.checkAvailableTeacher(params);
+    const req = request.find(query, callback);
+    return req;
+}
+
+collector.checkAvailableAudience = (params, callback) => {
+    const query = queries.checkAvailableAudience(params);
+    const req = request.find(query, callback);
+    return req;
+}
+
+collector.addLesson = (data, callback) => {
+    const query = c_queries.insert(SCHEDULE_TABLE);
+    const req = request.insertData(data, query, callback);
+    return req;
+}
+
 module.exports = collector;

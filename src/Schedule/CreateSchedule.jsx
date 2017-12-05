@@ -58,10 +58,22 @@ class CreateSchedule extends Component {
     }
 
     createSchedule() {
-      console.log(this.state.selectedNumLesson);
-      console.log(this.state.selectedSubject);
-      console.log(this.state.selectedTypeLesson);
-      console.log(this.state.selectedAudience);
+      let obj = {
+        groupID: this.state.group,
+        semesterID: this.state.semester,
+        number_week: this.state.week,
+        dayID: this.state.day.id,
+        subjectID: this.state.subjects.filter(e => e.id === this.state.selectedSubject)[0].subjectID,
+        teacherID: this.state.subjects.filter(e => e.id === this.state.selectedSubject)[0].teacherID,
+        type_lessonID: this.state.selectedTypeLesson,
+        audienceID: this.state.selectedAudience,
+        number_lesson: this.state.selectedNumLesson
+      }
+      console.log(obj);
+      myfetch('add_lesson', 'post', obj)
+      .then( response => {  
+        console.log(response);
+      }).catch(error => {console.log('Error!', error);});
     }
 
     getAlert(state, message) {

@@ -62,4 +62,30 @@ app.get('/get_audiences', async(req, res) => {
     res.json(audiences);
 });
 
+app.post('/add_lesson', (req, res) => {
+    var data = req.body;
+    console.log(data);
+    collector.checkAvailableTeacher(data, function(err, rows, fields) {
+        console.log('entry collector');
+        if (rows.length == 1) {
+            res.json({ free_teacher: false });
+        } else {
+            console.log('free teacher');
+            collector.checkAvailableAudience(data, function(err, rows, fields) {
+                console.log(rows.length);
+                if (rows.length == 1) {
+                    res.json({ free_audience: false });
+                } else {
+                    console.log('free audience');
+                    collector.addLesson(data, function(err, info) {
+                        if (err) throw err;
+                        console.log(info);
+                        res.json({ success: true });
+                    });
+                };
+            });
+        };
+    });
+});
+
 module.exports = app;
