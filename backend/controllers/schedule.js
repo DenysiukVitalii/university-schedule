@@ -65,23 +65,29 @@ app.get('/get_audiences', async(req, res) => {
 app.post('/add_lesson', (req, res) => {
     var data = req.body;
     console.log(data);
+    let data2 = {};
+    for (var key in data) {
+        data2[key] = data[key];
+    }
+    data2.number_week = 2;
     collector.checkAvailableTeacher(data, function(err, rows, fields) {
-        console.log('entry collector');
         if (rows.length == 1) {
             res.json({ free_teacher: false });
         } else {
-            console.log('free teacher');
             collector.checkAvailableAudience(data, function(err, rows, fields) {
                 console.log(rows.length);
                 if (rows.length == 1) {
                     res.json({ free_audience: false });
                 } else {
-                    console.log('free audience');
                     collector.addLesson(data, function(err, info) {
                         if (err) throw err;
                         console.log(info);
-                        res.json({ success: true });
+                        collector.addLesson(data2, function(err, info) {
+                            if (err) throw err;
+                            console.log(info);
+                        });
                     });
+                    res.json({ success: true });
                 };
             });
         };
