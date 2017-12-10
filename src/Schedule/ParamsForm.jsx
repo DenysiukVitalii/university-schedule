@@ -15,7 +15,7 @@ const ParamsForm = (props) => (
                 selected={props.params.selectedSemester} 
                 change={props.params.change}
                 data={props.params.semesters.map(e => (
-                        <option value={e.number_semester} key={e.number_semester}>{e.number_semester}</option>
+                        <option value={e} key={e}>{e}</option>
                         ))}/>
         <Select title="Week" name="selectedWeek" 
                 selected={props.params.selectedWeek} 

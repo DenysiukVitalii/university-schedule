@@ -26,18 +26,18 @@ class ScheduleTable extends Component {
 
   componentDidMount() {
     this.getSpecialties();
-    this.getSemesters();
     this.getDays();
+    
   }
 
-  getSpecialties() {
+   getSpecialties() {
     myfetch('all_specs')
     .then( data => { 
       this.setState({ 
         specs: data, 
         selectedSpec: data[0].id 
       });
-      this.getGroups(data[0].id);
+     this.getGroups(data[0].id);
     }).catch(error => {console.log('Error!', error);});
   }
 
@@ -49,6 +49,9 @@ class ScheduleTable extends Component {
         groups: data,
         selectedGroup: data[0].id
       });
+      let year = data.filter(e => e.id === data[0].id)[0].course;
+      let available_semesters = [year * 2 - 1, year * 2];
+      this.setState({semesters: available_semesters, selectedSemester: available_semesters[0]});
     }).catch(error => {console.log('Error!', error);});
   }
 
@@ -59,22 +62,12 @@ class ScheduleTable extends Component {
     }).catch(error => {console.log('Error!', error);});
   }
   
-  getSemesters() {
-    myfetch('semesters')
-    .then( data => {  
-      this.setState({ 
-        semesters: data, 
-        selectedSemester: data[0].number_semester 
-      });
-    }).catch(error => {console.log('Error!', error);});
-  }
-
   getSubjects() {
     let obj = {
-      semesterID: this.state.selectedSemester,
-      specialtyID: this.state.selectedSpec
+      semesterID: +this.state.selectedSemester,
+      specialtyID: +this.state.selectedSpec
     };
-
+    console.log(obj);
     myfetch('get_curr_by_spec', 'post', obj)
     .then( data => {  
       console.log(data);
@@ -83,9 +76,17 @@ class ScheduleTable extends Component {
   }
 
   onChange(e) {
+    let value = e.target.value;
     if (e.target.name === 'selectedSpec') {
-      this.setState({[e.target.name]: e.target.value});
-      this.getGroups(e.target.value);
+      this.setState({[e.target.name]: value});
+      this.getGroups(value);
+    } else
+    if (e.target.name === 'selectedGroup') {
+      this.setState({[e.target.name]: value});
+      let year = this.state.groups.filter(e => e.id === value)[0].course;
+      console.log(year);
+      let available_semesters = [year * 2 - 1, year * 2];
+      this.setState({semesters: available_semesters, selectedSemester: available_semesters[0]});
     } else {
       this.setState({[e.target.name]: e.target.value});
     }

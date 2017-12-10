@@ -153,7 +153,7 @@ const Table = props => (
               <tr key={e.id} align="center">
                 <td>{e.id}</td>
                 <td>{e.spec_name}</td>
-                <td>{e.course}</td>
+                <td><b>{e.course}</b> <i>({e.course * 2 - 1}, {e.course * 2})</i></td>
                 <td>{e.amount_students}</td>
                 <Actions edit={() => props.openEditModal(e)}
                           delete={() => props.deleteGroup(e)}/>
@@ -168,7 +168,7 @@ const Thead = () => (
       <tr>
           <td>Group</td>
           <td>Specialty</td>
-          <td>Year</td>          
+          <td>Year (Semesters)</td>          
           <td>Amount students</td>
           <td>Actions</td>
       </tr>

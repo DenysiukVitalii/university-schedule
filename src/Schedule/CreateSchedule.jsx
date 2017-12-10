@@ -61,7 +61,7 @@ class CreateSchedule extends Component {
       let obj = {
         groupID: this.state.group,
         semesterID: this.state.semester,
-        number_week: this.state.week,
+        number_week: +this.state.week,
         dayID: this.state.day.id,
         subjectID: this.state.subjects.filter(e => e.id === this.state.selectedSubject)[0].subjectID,
         teacherID: this.state.subjects.filter(e => e.id === this.state.selectedSubject)[0].teacherID,
