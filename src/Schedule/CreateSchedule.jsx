@@ -37,7 +37,6 @@ class CreateSchedule extends Component {
     getAudiences() {
       myfetch('get_audiences')
       .then( data => {  
-        console.log(data);
         this.setState({ audiences: data, selectedAudience: data[0].id });
       }).catch(error => {console.log('Error!', error);});
     }
@@ -58,6 +57,10 @@ class CreateSchedule extends Component {
     }
 
     createSchedule() {
+      if (!this.state.subjects || !this.state.selectedTypeLesson) {
+        this.props.alert(this.getAlert(false, "Curriculum is empty! Fill curriculum!"));
+        return;
+      }
       let obj = {
         groupID: this.state.group,
         semesterID: this.state.semester,
@@ -69,7 +72,7 @@ class CreateSchedule extends Component {
         audienceID: this.state.selectedAudience,
         number_lesson: this.state.selectedNumLesson
       }
-      console.log(obj);
+      
       myfetch('add_lesson', 'post', obj)
       .then( response => {  
         console.log(response);
@@ -117,20 +120,21 @@ class CreateSchedule extends Component {
                   <Select title="Subject/Teacher" name="selectedSubject" 
                           selected={this.state.selectedSubject} 
                           change={this.onChange}
-                          data={this.state.subjects
-                                .map(e => (<option value={e.id} 
-                                     key={e.id}>{e.subject_name} | {e.teacher}</option>))}/>
+                          data={this.state.subjects.length ? 
+                                this.state.subjects.map(e => 
+                                (<option value={e.id} key={e.id}>{e.subject_name} | {e.teacher}</option>)):
+                                <option value="0">no data, curriculum is empty</option>}/>
                   <Select title="Types lesson" name="selectedTypeLesson" 
                           selected={this.state.selectedTypeLesson} 
                           change={this.onChange}
-                          data={this.state.types_lesson ? this.state.types_lesson
-                                .map(e => (<option value={e.id} 
-                                     key={e.id}>{e.type_lesson}({e.amount_hours} hours)</option>)) : <option value="0">no data</option>}/>
+                          data={this.state.types_lesson ? 
+                                this.state.types_lesson.map(e => 
+                                (<option value={e.id} key={e.id}>{e.type_lesson}({e.amount_hours} hours)</option>)): <option value="0">no data, curriculum is empty</option>}/>
                   <Select title="Audience" name="selectedAudience" 
                           selected={this.state.selectedAudience ? this.state.selectedAudience : 1} 
                           change={this.onChange}
-                          data={this.state.audiences
-                                .map(e => (<option value={e.id} key={e.id}>{e.number_audience}-{e.building}</option>))}/>
+                          data={this.state.audiences.map(e => 
+                               (<option value={e.id} key={e.id}>{e.number_audience}-{e.building}</option>))}/>
                  
                 </Modal.Body>
                 <ModalFooter action={this.createSchedule} hide={this.props.hide} submitText="Create"/>
