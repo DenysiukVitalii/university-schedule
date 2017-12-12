@@ -227,3 +227,16 @@ input:valid {
 .lesson p {
     max-width: 169px;
 }
+
+.main-groups {
+    display: flex;
+    flex-direction: row;
+}
+
+.main-groups aside {
+    width: 20%;
+}
+
+.main-groups table {
+    width: 80%;
+}

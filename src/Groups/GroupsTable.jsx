@@ -9,7 +9,8 @@ import Actions from '../shared/Actions';
 class GroupsTable extends Component {
   constructor() {
     super();
-    this.state = {groups: [], specs: [], createModal: false, editModal: false, currentItem: '', alert: null};
+    this.state = {groups: [], specs: [], createModal: false, editModal: false,
+                  currentItem: '', alert: null, filter_spec: 0, filter_year: 0, amount: 'unsort'};
     this.openCreateModal = this.openCreateModal.bind(this);
     this.closeCreateModal = this.closeCreateModal.bind(this);
     this.closeEditModal = this.closeEditModal.bind(this);
@@ -17,6 +18,9 @@ class GroupsTable extends Component {
     this.hideAlert = this.hideAlert.bind(this);
     this.dataAfterCreate = this.dataAfterCreate.bind(this);
     this.dataAfterEdit = this.dataAfterEdit.bind(this);
+    this.specFilterChange = this.specFilterChange.bind(this);
+    this.yearFilterChange = this.yearFilterChange.bind(this);
+    this.maxAmountFilterChange = this.maxAmountFilterChange.bind(this);
   }
 
   componentDidMount() {
@@ -123,16 +127,118 @@ class GroupsTable extends Component {
     this.setState({groups: groups});
   }
 
+  specFilterChange(e) {
+    let id = +e.target.getAttribute('data-id');
+    this.setState({filter_spec: id});
+  }
+
+  yearFilterChange(e) {
+    let id = +e.target.getAttribute('data-id');
+    this.setState({filter_year: id});
+  }
+
+  maxAmountFilterChange(e) {
+    let amount = e.target.getAttribute('data-id');
+    this.setState({amount: amount});
+  }
+
   render() {
+    let filteredGroups = (() => {
+      if (this.state.filter_spec !== 0 && this.state.filter_year !== 0) {
+        return this.state.groups.filter(e => e.specialtyID === this.state.filter_spec && e.course === this.state.filter_year)
+      } else
+      if (this.state.filter_spec !== 0) {
+        return this.state.groups.filter(e => e.specialtyID === this.state.filter_spec)
+      } else 
+      if (this.state.filter_year !== 0) {
+         return this.state.groups.filter(e => e.course === this.state.filter_year)
+      } else 
+      if (this.state.amount.length) {
+        console.log(this.state.amount );
+        if (this.state.amount === 'unsort') {
+          return this.state.groups;
+        } else
+        if (this.state.amount === 'max') {
+          return this.state.groups.sort((a, b) => b.amount_students - a.amount_students);
+        } else 
+        if (this.state.amount === 'min') {
+          return this.state.groups.sort((a, b) => a.amount_students - b.amount_students);
+        } 
+      } else {
+        return this.state.groups;
+      }
+    })();
+    console.log(filteredGroups);
     return (
       <div className="container">
         <Header title="Groups" button="Create group" click={this.openCreateModal}/>
-        <main>
-          <Table groups={this.state.groups} 
+
+        <main className="main-groups">
+          <aside>
+            <div className="form-group">
+                <label>Specialty filter</label>
+                <div className="radio">
+                  <label><input type="radio" 
+                                name="optradio"
+                                data-id={0}
+                                defaultChecked={true}
+                                onChange={this.specFilterChange}/>All</label>
+                </div>
+                {this.state.specs.map(e => (
+                  <div className="radio" key={e.id}>
+                    <label><input type="radio" 
+                                  name="optradio"
+                                  data-id={e.id} 
+                                  onChange={this.specFilterChange}/>{e.spec_name}</label>
+                  </div>
+                ))}
+               
+            </div>
+            <div className="form-group">
+                <label>Year filter</label>
+                <div className="radio">
+                  <label><input type="radio" 
+                                name="yearradio"
+                                data-id={0}
+                                defaultChecked={true}
+                                onChange={this.yearFilterChange}/>All</label>
+                </div>
+                {[1,2,3,4,5,6].map(e => (
+                  <div className="radio" key={e}>
+                    <label><input type="radio" 
+                                  name="yearradio"
+                                  data-id={e} 
+                                  onChange={this.yearFilterChange}/>{e}</label>
+                  </div>
+                ))}
+               
+            </div>
+            <label>Sort by amount students</label>
+            <div className="radio">
+              <label><input type="radio"
+                            name="sortradio" 
+                            data-id={'unsort'}
+                            defaultChecked={true}
+                            onChange={this.maxAmountFilterChange}/>Unsort</label>
+            </div>
+            <div className="radio">
+              <label><input type="radio"
+                            name="sortradio" 
+                            data-id={'max'}
+                            onChange={this.maxAmountFilterChange}/>Max -> Min</label>
+            </div>
+            <div className="radio">
+              <label><input type="radio" 
+                            name="sortradio" 
+                            data-id={'min'}
+                            onChange={this.maxAmountFilterChange}/>Min -> Max</label>
+            </div>
+          </aside>
+          <Table groups={filteredGroups} 
                   openEditModal={(e) => this.openEditModal(e)}
                   deleteGroup={(e) => this.deleteGroup(e)}/>
-          {this.state.alert}
         </main>
+        {this.state.alert}
         <CreateGroup show={this.state.createModal} hide={this.closeCreateModal}
                     alert={this.callAlert} hideAlert={this.hideAlert}
                     response={this.dataAfterCreate} specialties={this.state.specs} />
