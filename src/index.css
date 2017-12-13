@@ -240,3 +240,27 @@ input:valid {
 .main-groups table {
     width: 80%;
 }
+
+.main-groups aside input[type="text"] {
+    width: 70%;
+}
+
+.admin-zones {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.admin-zones div {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #006064;
+    margin: 0 20px;
+    padding: 20px;
+}
+
+.admin-zones div p {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #006064;
+}

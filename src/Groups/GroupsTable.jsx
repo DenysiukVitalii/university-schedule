@@ -5,12 +5,14 @@ import CreateGroup from './CreateGroup';
 import EditGroup from './EditGroup';
 import Header from '../shared/Header';
 import Actions from '../shared/Actions';
+import InputText from '../shared/InputText';
 
 class GroupsTable extends Component {
   constructor() {
     super();
     this.state = {groups: [], specs: [], createModal: false, editModal: false,
-                  currentItem: '', alert: null, filter_spec: 0, filter_year: 0, amount: 'unsort'};
+                  currentItem: '', alert: null, filter_spec: 0, filter_year: 0,
+                  amount: 'unsort', search_group: ''};
     this.openCreateModal = this.openCreateModal.bind(this);
     this.closeCreateModal = this.closeCreateModal.bind(this);
     this.closeEditModal = this.closeEditModal.bind(this);
@@ -21,6 +23,7 @@ class GroupsTable extends Component {
     this.specFilterChange = this.specFilterChange.bind(this);
     this.yearFilterChange = this.yearFilterChange.bind(this);
     this.maxAmountFilterChange = this.maxAmountFilterChange.bind(this);
+    this.onSearchChange = this.onSearchChange.bind(this);
   }
 
   componentDidMount() {
@@ -142,39 +145,48 @@ class GroupsTable extends Component {
     this.setState({amount: amount});
   }
 
+  onSearchChange(e) {
+    this.setState({[e.target.name]: e.target.value});
+  }
+
   render() {
+    let groups = this.state.groups.slice();
     let filteredGroups = (() => {
-      if (this.state.filter_spec !== 0 && this.state.filter_year !== 0) {
-        return this.state.groups.filter(e => e.specialtyID === this.state.filter_spec && e.course === this.state.filter_year)
+      if (this.state.filter_spec && this.state.filter_year) {
+        return groups.filter(e => e.specialtyID === this.state.filter_spec && e.course === this.state.filter_year)
       } else
-      if (this.state.filter_spec !== 0) {
-        return this.state.groups.filter(e => e.specialtyID === this.state.filter_spec)
+      if (this.state.filter_spec) {
+        return groups.filter(e => e.specialtyID === this.state.filter_spec)
+      } else 
+      if (this.state.search_group !== '') {
+        return groups.filter(e => e.id.indexOf(this.state.search_group) !== -1)
       } else 
       if (this.state.filter_year !== 0) {
-         return this.state.groups.filter(e => e.course === this.state.filter_year)
+         return groups.filter(e => e.course === this.state.filter_year)
       } else 
       if (this.state.amount.length) {
-        console.log(this.state.amount );
         if (this.state.amount === 'unsort') {
           return this.state.groups;
         } else
         if (this.state.amount === 'max') {
-          return this.state.groups.sort((a, b) => b.amount_students - a.amount_students);
+          return groups.sort((a, b) => b.amount_students - a.amount_students);
         } else 
         if (this.state.amount === 'min') {
-          return this.state.groups.sort((a, b) => a.amount_students - b.amount_students);
+          return groups.sort((a, b) => a.amount_students - b.amount_students);
         } 
       } else {
         return this.state.groups;
       }
     })();
-    console.log(filteredGroups);
     return (
       <div className="container">
         <Header title="Groups" button="Create group" click={this.openCreateModal}/>
 
         <main className="main-groups">
           <aside>
+            <InputText name="search_group" label="Search group" placeholder="Searching..." 
+                      value={this.state.search_group} change={this.onSearchChange} 
+                      refProp={el => this.inputSearchGroup = el}/>
             <div className="form-group">
                 <label>Specialty filter</label>
                 <div className="radio">

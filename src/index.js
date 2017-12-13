@@ -14,6 +14,7 @@ import SubjectsTable from './Subjects/SubjectsTable';
 import SemestersTable from './Semesters/SemestersTable';
 import CurriculumTable from './Curriculum/CurriculumTable';
 import ScheduleTable from './Schedule/ScheduleTable';
+import AudiencesTable from './Audiences/AudiencesTable';
 import CreateSpec from './Specializations/CreateSpec';
 
 ReactDOM.render(( 
@@ -30,6 +31,7 @@ ReactDOM.render((
        <Route path='/semesters' component={SemestersTable}/>
        <Route path='/curriculum' component={CurriculumTable}/>
        <Route path='/schedule' component={ScheduleTable}/>
+       <Route path='/audiences' component={AudiencesTable}/>
      </Switch>
     </BrowserRouter>
 ), document.getElementById('root'));

@@ -14,16 +14,25 @@ class Admin extends Component {
           <h1>Admin Page</h1>
           <Link to="/" className="btn">Home</Link>
         </header>
-        <main> 
-          <ul className="admin-items">
-            <li><Link to="/specs" className="btn">Specializations</Link></li>
-            <li><Link to="/groups" className="btn">Groups</Link></li>
-            <li><Link to="/teachers" className="btn">Teachers</Link></li>
-            <li><Link to="/subjects" className="btn">Subjects</Link></li>
-            <li><Link to="/semesters" className="btn">Semesters</Link></li>
-            <li><Link to="/curriculum" className="btn">Curriculum</Link></li>
-            <li><Link to="/schedule" className="btn">Schedule</Link></li>
-          </ul>
+        <main>
+          <div className="admin-zones">
+            <div className="personal-zone text-center">
+              <h2>Educational zone</h2>
+              <p>Here you can choose one of educational thing.<br/> All items belong to manage educational process.</p>
+              <Link to="/specs" className="btn">Specializations</Link>
+              <Link to="/groups" className="btn">Groups</Link>
+              <Link to="/teachers" className="btn">Teachers</Link>
+              <Link to="/subjects" className="btn">Subjects</Link>
+            </div>
+            <div className="curriculum-zone text-center">
+              <h2>Curriculum zone</h2>
+              <p>Here you can choose one of curriculum thing.<br/> All items belong to manage curriculum process.</p>
+              <Link to="/audiences" className="btn">Audiences</Link>
+              <Link to="/semesters" className="btn">Semesters</Link>
+              <Link to="/curriculum" className="btn">Curriculum</Link>
+              <Link to="/schedule" className="btn">Schedule</Link>
+            </div>
+          </div>
         </main>
       </div>
     );
