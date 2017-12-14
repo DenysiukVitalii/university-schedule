@@ -92,6 +92,7 @@ class CurriculumTable extends Component {
       specialtyID: +this.state.selectedSpec,
       semesterID: +this.state.selectedSemester
     }
+    console.log(item);
     myfetch('get_curriculum', 'post', item)
     .then( data => { 
       console.log(data);
@@ -136,12 +137,12 @@ class CurriculumTable extends Component {
 
   async openCreateModal() {
     await this.setState({ createModal: true });
-    /*this.setState({
+    this.setState({
       selectedSemester: this.state.semesters[0].number_semester,
       selectedSpec: this.state.specs[0].id, 
       selectedSubject: this.state.subjects[0].id,
       selectedTeacher: this.state.teachers[0].id,
-    })*/
+    })
   }
 
   closeEditModal() {

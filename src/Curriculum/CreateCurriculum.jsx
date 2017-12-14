@@ -45,6 +45,8 @@ class CreateCurriculum extends Component {
         types_lesson: this.state.types_lesson
       };
 
+      console.log(item);
+
       myfetch('create_curriculum', 'post', item)
       .then( data => { 
         if (data.success) { 

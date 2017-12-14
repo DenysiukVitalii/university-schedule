@@ -151,7 +151,12 @@ class GroupsTable extends Component {
 
   render() {
     let groups = this.state.groups.slice();
-    let filteredGroups = (() => {
+    let filteredGroups = filter(this.state.filter_spec, 
+                                this.state.filter_year, 
+                                this.state.search_group, 
+                                this.state.amount, 
+                                groups);
+                               /* (() => {
       if (this.state.filter_spec && this.state.filter_year) {
         return groups.filter(e => e.specialtyID === this.state.filter_spec && e.course === this.state.filter_year)
       } else
@@ -177,7 +182,7 @@ class GroupsTable extends Component {
       } else {
         return this.state.groups;
       }
-    })();
+    })();*/
     return (
       <div className="container">
         <Header title="Groups" button="Create group" click={this.openCreateModal}/>
@@ -292,5 +297,33 @@ const Thead = () => (
       </tr>
     </thead>
   )
-
+  
+  const filter = (filter_spec, filter_year, search_group, amount, groups) => {
+    if (filter_spec && filter_year) {
+      return groups.filter(e => e.specialtyID === filter_spec && e.course === filter_year)
+    } else
+    if (filter_spec) {
+      return groups.filter(e => e.specialtyID === filter_spec)
+    } else 
+    if (search_group !== '') {
+      return groups.filter(e => e.id.indexOf(search_group) !== -1)
+    } else 
+    if (filter_year !== 0) {
+       return groups.filter(e => e.course === filter_year)
+    } else 
+    if (amount.length) {
+      if (amount === 'unsort') {
+        return groups;
+      } else
+      if (amount === 'max') {
+        return groups.sort((a, b) => b.amount_students - a.amount_students);
+      } else 
+      if (amount === 'min') {
+        return groups.sort((a, b) => a.amount_students - b.amount_students);
+      } 
+    } else {
+      return groups;
+    }
+  };
+  
 export default GroupsTable;
